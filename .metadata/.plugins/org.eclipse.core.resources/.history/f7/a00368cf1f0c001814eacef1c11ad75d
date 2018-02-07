@@ -1,0 +1,64 @@
+package service;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import utils.ErrorJSON;
+
+public class UserServices 
+{
+	public static JSONObject logout(String key)
+	{
+		if(key == null)
+		{
+			return ErrorJSON.defaultJsonError("Wrong parameters", -1);
+		}
+		
+	}
+	public static JSONObject login(String login, String pwd)
+	{
+		if(login==null || pwd == null)
+			return ErrorJSON.defaultJsonError("Missing parameters", -1);
+		try
+		{
+			if(!base_de_donnees.UserTools.userExists(login))
+				return ErrorJSON.defaultJsonError("User does not exist", 1003);
+			if(!base_de_donnees.UserTools.checkPwd(login,pwd))
+				return ErrorJSON.defaultJsonError("Incorrect login/password", 1004);
+			String key = base_de_donnees.ConnexionBd.insererConnexion(login, pwd);
+			
+			JSONObject reponse = new JSONObject ();
+			reponse.put("status","ok");
+			return reponse;
+		}
+		catch(SQLQueryException e)
+		{
+			
+		}
+		catch(JSONException e)
+		{
+			
+		}
+	}
+	
+	
+	public static JSONObject createUser (String login , String pwd , String prenom , String nom , String email)
+	{
+		if(login==null || pwd == null)
+			return ErrorJSON.defaultJsonError("Missing parameters", -1);
+		if(base_de_donnees.UserTools.userExists(login))
+			return ErrorJSON.defaultJsonError("User exists", 1001);
+		try
+		{
+				base_de_donnees.UserTools.insererUser(login , pwd , prenom , nom , email);
+		}
+		catch (SQLQueryException e)
+		{
+			return ErrorJSON.defaultJsonError("Error BD",1002);
+		}
+		JSONObject reponse = new JSONObject ();
+		reponse.put("status","ok");
+		return reponse;
+	}
+		
+}

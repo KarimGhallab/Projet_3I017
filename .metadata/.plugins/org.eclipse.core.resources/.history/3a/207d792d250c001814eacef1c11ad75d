@@ -1,0 +1,14 @@
+package servlet.user;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CreateUser extends HttpServlet
+{
+
+	public static doGet(HttpServletRequest request, HttpServletResponse response)
+	{
+		String login = request.getParameter("login");
+	}
+}

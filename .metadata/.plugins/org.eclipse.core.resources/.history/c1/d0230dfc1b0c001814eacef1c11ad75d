@@ -1,0 +1,22 @@
+package service.UserServices;
+
+import org.json.JSONObject;
+
+public class CreateUser 
+{
+	public static JSONObject createUser (String login , String pwd , String prenom , String nom , String email)
+	{
+		if(login==null || pwd == null)
+			return ErrorJSON.defaultJsonError("Missing parameters", -1);
+		if(!service.UserServices.userExists(login))
+			return defaultJsonError("User does not exist", 1001);
+		try{
+				base_de_donnees.insererUser(login , pwd , prenom , nom , email);
+		}catch (SQLQueryException e){
+			return defaultJsonError("Error BD",1002);
+		}
+		JSONObject reponse = new JSONObject ();
+		reponse.put("status","ok");
+		return reponse;
+	}
+}

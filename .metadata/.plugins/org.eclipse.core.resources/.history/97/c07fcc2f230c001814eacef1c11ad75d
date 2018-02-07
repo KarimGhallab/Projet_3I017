@@ -1,0 +1,28 @@
+package service;
+
+import org.json.JSONObject;
+
+import base_de_donnees.ConnexionBd;
+import base_de_donnees.MessageTools;
+import utils.ErrorJSON;
+
+public class MessageServices 
+{
+	public static JSONObject addMessage(String key , String message)
+	{
+		if(key==null || message == null)
+			return ErrorJSON.defaultJsonError("Missing parameters", -1);
+		try
+		{
+			if(!ConnexionBd.isConnection(key))
+			{
+				return ErrorJSON.defaultJsonError("Not Connected", 1005);
+			}
+			if(MessageTools.addMessage())
+		}
+		catch()
+		{
+			
+		}
+	}
+}

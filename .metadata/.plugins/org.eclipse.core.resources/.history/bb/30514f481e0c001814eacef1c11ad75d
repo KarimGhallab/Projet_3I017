@@ -1,0 +1,12 @@
+package base_de_donnees;
+
+public class ConnexionBd {
+	public static boolean insererConnexion(String login , String pwd)
+	{
+		return true;
+	}
+	public static boolean checkPwd(String login , String pwd)
+	{
+		
+	}
+}

@@ -1,0 +1,25 @@
+package servlet.user;
+
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CreateUser extends HttpServlet
+{
+
+	public static doGet(HttpServletRequest request, HttpServletResponse response)
+	{
+		String login = request.getParameter("login");
+		String pwd = request.getParameter("pwd");
+		String nom = request.getParameter("nom");
+		String prenom = request.getParameter("prenom");
+		String email = request.getParameter("email");
+		
+		service.UserServices.createUser(login, pwd, prenom, prenom, email);
+		
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/plain");
+	}
+}

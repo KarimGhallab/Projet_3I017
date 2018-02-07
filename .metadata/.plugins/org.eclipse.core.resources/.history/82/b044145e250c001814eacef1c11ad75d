@@ -1,0 +1,20 @@
+package servlet.user;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CreateUser extends HttpServlet
+{
+
+	public static doGet(HttpServletRequest request, HttpServletResponse response)
+	{
+		String login = request.getParameter("login");
+		String pwd = request.getParameter("pwd");
+		String nom = request.getParameter("nom");
+		String prenom = request.getParameter("prenom");
+		String email = request.getParameter("email");
+		
+		return service.UserServices.createUser(login, pwd, prenom, prenom, email);
+	}
+}

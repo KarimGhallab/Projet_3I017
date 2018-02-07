@@ -1,0 +1,5 @@
+package base_de_donnees;
+
+public class MessageTools {
+	public static void addMessage()
+}

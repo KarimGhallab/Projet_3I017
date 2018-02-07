@@ -1,0 +1,14 @@
+package service.UserServices;
+
+import org.json.JSONObject;
+
+public class CreateUser 
+{
+	public static JSONObject createUser (String login , String pwd)
+	{
+		if(login==null || pwd == null)
+			return defaultJsonError("Missing parameters", -1);
+		if(!service.UserServices.userExists(login))
+			return defaultJsonError("User does not exist", 102);
+	}
+}

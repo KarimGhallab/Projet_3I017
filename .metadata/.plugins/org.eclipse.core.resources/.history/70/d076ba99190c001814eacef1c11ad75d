@@ -1,0 +1,6 @@
+package service.UserServices;
+
+public class CreateUser 
+{
+	public static JSONObject createUser (String login , String pwd)
+}

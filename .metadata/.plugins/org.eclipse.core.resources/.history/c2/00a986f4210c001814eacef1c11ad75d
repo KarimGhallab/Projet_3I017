@@ -1,0 +1,9 @@
+package service;
+
+public class MessageServices 
+{
+	public static JSONObject addMessage(String key , String Message)
+	{
+		
+	}
+}

@@ -1,0 +1,13 @@
+package base_de_donnees;
+
+public class UserTools 
+{
+	
+	
+	public static boolean userExists (String login)
+	{
+		return true;
+	}
+	
+	public static boolean insererUser(login , pwd , prenom , nom , email);
+}

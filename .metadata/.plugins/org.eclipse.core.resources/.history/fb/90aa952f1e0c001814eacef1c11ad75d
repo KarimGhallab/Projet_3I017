@@ -1,0 +1,5 @@
+package base_de_donnees;
+
+public class ConnexionBd {
+
+}

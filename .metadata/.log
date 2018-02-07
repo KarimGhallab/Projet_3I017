@@ -1,0 +1,28 @@
+!SESSION 2018-02-07 15:52:45.026 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.8.0_45
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=fr_FR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-07 15:53:12.221
+!MESSAGE System property http.proxyHost is not set but should be proxy.ufr-info-p6.jussieu.fr.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-07 15:53:12.227
+!MESSAGE System property http.proxyPort is not set but should be 3128.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-07 15:53:12.228
+!MESSAGE System property https.proxyHost is not set but should be proxy.ufr-info-p6.jussieu.fr.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-07 15:53:12.229
+!MESSAGE System property https.proxyPort is not set but should be 3128.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-07 15:53:12.232
+!MESSAGE System property https.proxyHost is not set but should be proxy.ufr-info-p6.jussieu.fr.
+
+!ENTRY org.eclipse.core.net 1 0 2018-02-07 15:53:12.233
+!MESSAGE System property https.proxyPort is not set but should be 3128.
+
+!ENTRY org.eclipse.wst.common.project.facet.core 4 0 2018-02-07 15:58:45.875
+!MESSAGE Project facet wst.jsdt.web has not been defined. It is used in plugin org.eclipse.jst.server.core.
