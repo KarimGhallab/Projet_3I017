@@ -3,7 +3,6 @@ package base_de_donnees;
 public class UserTools 
 {
 	
-	
 	public static boolean userExists (String login)
 	{
 		return true;

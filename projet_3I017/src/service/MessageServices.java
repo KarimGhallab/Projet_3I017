@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import base_de_donnees.ConnexionBd;
 import base_de_donnees.MessageTools;
 import base_de_donnees.UserTools;
+import utils.Data;
 import utils.ErrorJSON;
 import utils.ServiceTools;
 
@@ -16,23 +17,21 @@ public class MessageServices
 	public static JSONObject addMessage(String key , String message)
 	{
 		if(key == null || message == null)
-			return ErrorJSON.defaultJsonError("Missing parameters", -1);
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
 		{
 			if(!ConnexionBd.isConnection(key))
-			{
-				return ErrorJSON.defaultJsonError("Not Connected", 1005);
-			}
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+			
 			String login = UserTools.getLogin(key);
 			if(! MessageTools.addMessage(login , message))
-			{
-				return ErrorJSON.defaultJsonError("error Bd", 1006);
-			}
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+			
 			return ServiceTools.serviceAccepted().put("added_message", message);
 		}
 		catch(JSONException e)
 		{
-			return ErrorJSON.defaultJsonError("Error Json", 101);
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
 		}
 	}
 }
