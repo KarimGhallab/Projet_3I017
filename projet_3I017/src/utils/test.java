@@ -14,13 +14,16 @@ public class test {
 		String message = "Le message trop cool de Jason";
 		
 		// Test du service createUser
-		System.out.println(service.UserServices.createUser(login, pwd, prenom, nom, email));
+		System.out.println("Test createUser");
+		System.out.println(service.UserServices.createUser(login, pwd, prenom, nom, email) + "\n");
 		
 		// Test du service login
-		System.out.println(service.UserServices.login(login, pwd));
+		System.out.println("Test login");
+		System.out.println(service.UserServices.login(login, pwd) + "\n");
 		
 		// Test du service addMessage
-		System.out.println(service.MessageServices.addMessage(key, message));
+		System.out.println("Test addMessage");
+		System.out.println(service.MessageServices.addMessage(key, message) + "\n");
 	}
 
 }

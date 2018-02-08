@@ -38,8 +38,6 @@ public class UserServices
 				return ErrorJSON.defaultJsonError("Json Error", 101);
 			}
 		
-		
-		
 	}
 	
 	

@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"> 
 <web-app> 
-	<display-name>Projet - 3I017</display-name> 
+	<display-name>Projet - 3I017</display-name>
+	 
 	<servlet> 
 		<servlet-name>createUser</servlet-name> 
 		<servlet-class>servlet.user.CreateUser</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>login</servlet-name> 
+		<servlet-class>servlet.user.login</servlet-class> 
 	</servlet> 
+	<servlet> 
+		<servlet-name>addMessage</servlet-name> 
+		<servlet-class>servlet.message.AddMessage</servlet-class> 
+	</servlet> 
+	 
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
 		<url-pattern>/user/createUser</url-pattern> 
-	</servlet-mapping> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>createUser</servlet-name> 
+		<url-pattern>/user/login</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>addMessage</servlet-name> 
+		<url-pattern>/message/addMessage</url-pattern> 
+	</servlet-mapping>
+	 
 </web-app>

@@ -15,7 +15,7 @@ public class MessageServices
 {
 	public static JSONObject addMessage(String key , String message)
 	{
-		if(key==null || message == null)
+		if(key == null || message == null)
 			return ErrorJSON.defaultJsonError("Missing parameters", -1);
 		try
 		{
