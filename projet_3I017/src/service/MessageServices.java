@@ -1,10 +1,8 @@
 package service;
 
 import java.sql.SQLException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import base_de_donnees.ConnexionBd;
 import base_de_donnees.MessageTools;
 import base_de_donnees.UserTools;

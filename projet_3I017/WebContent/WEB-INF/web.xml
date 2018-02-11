@@ -9,8 +9,12 @@
 	</servlet>
 	<servlet> 
 		<servlet-name>login</servlet-name> 
-		<servlet-class>servlet.user.login</servlet-class> 
-	</servlet> 
+		<servlet-class>servlet.user.Login</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>logout</servlet-name> 
+		<servlet-class>servlet.user.Logout</servlet-class> 
+	</servlet>  
 	<servlet> 
 		<servlet-name>addMessage</servlet-name> 
 		<servlet-class>servlet.message.AddMessage</servlet-class> 
@@ -21,8 +25,12 @@
 		<url-pattern>/user/createUser</url-pattern> 
 	</servlet-mapping>
 	<servlet-mapping> 
-		<servlet-name>createUser</servlet-name> 
+		<servlet-name>login</servlet-name> 
 		<url-pattern>/user/login</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>logout</servlet-name> 
+		<url-pattern>/user/logout</url-pattern> 
 	</servlet-mapping>
 	<servlet-mapping> 
 		<servlet-name>addMessage</servlet-name> 

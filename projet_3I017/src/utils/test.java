@@ -20,6 +20,10 @@ public class test {
 		// Test du service login
 		System.out.println("Test login");
 		System.out.println(service.UserServices.login(login, pwd) + "\n");
+
+		// Test du service logout
+		System.out.println("Test logout");
+		System.out.println(service.UserServices.logout(key) + "\n");
 		
 		// Test du service addMessage
 		System.out.println("Test addMessage");

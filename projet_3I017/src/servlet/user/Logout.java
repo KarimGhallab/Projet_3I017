@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-public class Logout extends HttpServlet {
+public class Logout extends HttpServlet 
+{
 	
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String key = request.getParameter("key");
 		JSONObject json = service.UserServices.logout(key);
@@ -22,6 +23,7 @@ public class Logout extends HttpServlet {
 		response.setContentType("text/plain");
 		out.println(json.toString());
 	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);
