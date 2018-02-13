@@ -24,4 +24,18 @@ public class UserTools
 	{
 		return "toto";
 	}
+	public static boolean addFriend(String user , String Friend)
+	{
+		return true;
+	}
+
+	public static boolean removeFriend(String idUser, String idFriend)
+	{
+		return true;
+	}
+	
+	public static String listFriend(String idUser)
+	{
+		return "Lonely for now";
+	}
 }
