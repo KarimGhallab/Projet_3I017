@@ -3,6 +3,7 @@
 <web-app> 
 	<display-name>Projet - 3I017</display-name>
 	 
+	 <!-- Servlet User -->
 	<servlet> 
 		<servlet-name>createUser</servlet-name> 
 		<servlet-class>servlet.user.CreateUser</servlet-class> 
@@ -14,12 +15,37 @@
 	<servlet> 
 		<servlet-name>logout</servlet-name> 
 		<servlet-class>servlet.user.Logout</servlet-class> 
-	</servlet>  
+	</servlet>
+	
+	<!-- Servlet Friend -->  
 	<servlet> 
+		<servlet-name>addFriend</servlet-name> 
+		<servlet-class>servlet.friend.AddFriend</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>removeFriend</servlet-name> 
+		<servlet-class>servlet.friend.RemoveFriend</servlet-class> 
+	</servlet> 
+	<servlet> 
+		<servlet-name>listriend</servlet-name> 
+		<servlet-class>servlet.friend.ListFriend</servlet-class> 
+	</servlet>  
+	 
+	 <!-- Servlet Message -->
+	 <servlet> 
 		<servlet-name>addMessage</servlet-name> 
 		<servlet-class>servlet.message.AddMessage</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>removeMessage</servlet-name> 
+		<servlet-class>servlet.message.RemoveMessage</servlet-class> 
 	</servlet> 
-	 
+	<servlet> 
+		<servlet-name>listMessage</servlet-name> 
+		<servlet-class>servlet.message.ListMessage</servlet-class> 
+	</servlet>  
+	
+	 <!-- Servlet-mapping User -->
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
 		<url-pattern>/user/createUser</url-pattern> 
@@ -32,9 +58,32 @@
 		<servlet-name>logout</servlet-name> 
 		<url-pattern>/user/logout</url-pattern> 
 	</servlet-mapping>
+	
+	<!-- Servlet-mapping Friend -->
+	<servlet-mapping> 
+		<servlet-name>addFriend</servlet-name> 
+		<url-pattern>/friend/addFriend</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>removeFriend</servlet-name> 
+		<url-pattern>/friend/removeFriend</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>listFriend</servlet-name> 
+		<url-pattern>/friend/listFriend</url-pattern> 
+	</servlet-mapping>
+	
+	<!-- Servlet-mapping Message -->
 	<servlet-mapping> 
 		<servlet-name>addMessage</servlet-name> 
 		<url-pattern>/message/addMessage</url-pattern> 
 	</servlet-mapping>
-	 
+	<servlet-mapping> 
+		<servlet-name>removeMessage</servlet-name> 
+		<url-pattern>/message/removeMessage</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>listMessage</servlet-name> 
+		<url-pattern>/message/listMessage</url-pattern> 
+	</servlet-mapping>
 </web-app>

@@ -2,14 +2,13 @@ package service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import base_de_donnees.ConnexionBd;
 import base_de_donnees.UserTools;
 import utils.Data;
 import utils.ErrorJSON;
 import utils.ServiceTools;
 
-public class FriendServices {
+public class FriendServices 
+{
 	
 	public static JSONObject addFriend(String idUser , String idFriend , String key)
 	{
@@ -21,7 +20,7 @@ public class FriendServices {
 		if(!UserTools.userExists (idFriend))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_FRIEND_DOES_NOT_EXIST, Data.CODE_FRIEND_DOES_NOT_EXIST);
 		
-		if(!ConnexionBd.isConnection(key))
+		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
 		if(!UserTools.addFriend(idUser, idFriend))		// Ajout de la Friendship
@@ -40,7 +39,7 @@ public class FriendServices {
 		if(!UserTools.userExists (idFriend))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_FRIEND_DOES_NOT_EXIST, Data.CODE_FRIEND_DOES_NOT_EXIST);
 		
-		if(!ConnexionBd.isConnection(key))
+		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
 		if(!UserTools.removeFriend(idUser, idFriend))		//Supression de la Friendship

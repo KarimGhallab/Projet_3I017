@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-public class removeMessage {
+public class removeMessage
+{
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{

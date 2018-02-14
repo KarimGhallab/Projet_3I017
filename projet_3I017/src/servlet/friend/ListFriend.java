@@ -1,4 +1,4 @@
-package service.friend;
+package servlet.friend;
 
 import java.io.IOException;
 import java.io.PrintWriter;

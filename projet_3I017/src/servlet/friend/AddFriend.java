@@ -1,4 +1,4 @@
-package service.friend;
+package servlet.friend;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-public class RemoveFriend {
+public class AddFriend 
+{
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
@@ -17,7 +18,8 @@ public class RemoveFriend {
 		String idFriend = request.getParameter("idFriend");
 		String key = request.getParameter("key");
 		
-		JSONObject json = service.FriendServices.removeFriend(idUser , idFriend , key);
+		
+		JSONObject json = service.FriendServices.addFriend(idUser , idFriend , key);
 		PrintWriter out = response.getWriter();
 		
 		response.setContentType("text/plain");
