@@ -16,8 +16,10 @@ public class UserServices
 		if(!UserTools.isConnection(key))		// Utilisateur non connecté
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
-		UserTools.removeConnection(key);		//On enleve la connextion
-		return ServiceTools.serviceAccepted();
+		if(UserTools.removeConnection(key))		//On enleve la connextion
+			return ServiceTools.serviceAccepted();
+		else
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		
 		
 		
@@ -56,6 +58,6 @@ public class UserServices
 		if (res)
 			return ServiceTools.serviceAccepted();
 		else
-			return ErrorJSON.defaultJsonError("errorbd", 1);
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 	}
 }
