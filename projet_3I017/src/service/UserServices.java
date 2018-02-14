@@ -2,8 +2,7 @@ package service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import base_de_donnees.ConnexionBd;
+import base_de_donnees.UserTools;
 import utils.Data;
 import utils.ErrorJSON;
 import utils.ServiceTools;
@@ -14,10 +13,10 @@ public class UserServices
 	{
 		if(key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
-		if(!ConnexionBd.isConnection(key))		// Utilisateur non connecté
+		if(!UserTools.isConnection(key))		// Utilisateur non connecté
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
-		ConnexionBd.removeConnection(key);		//On enleve la connextion
+		UserTools.removeConnection(key);		//On enleve la connextion
 		return ServiceTools.serviceAccepted();
 		
 		
@@ -53,8 +52,10 @@ public class UserServices
 		if(base_de_donnees.UserTools.userExists(login))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_ALREADY_EXISTS, Data.CODE_USER_ALREADY_EXISTS);
 		
-		base_de_donnees.UserTools.insererUser(login , pwd , prenom , nom , email);
-		
-		return ServiceTools.serviceAccepted();
+		boolean res = base_de_donnees.UserTools.insererUser(login , pwd , prenom , nom , email);
+		if (res)
+			return ServiceTools.serviceAccepted();
+		else
+			return ErrorJSON.defaultJsonError("errorbd", 1);
 	}
 }
