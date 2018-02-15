@@ -30,10 +30,13 @@ public class DataBase
 		return dataSource.getConnection();
 	}
 	
-	public static Connection getMySQLConnection() throws SQLException
+	public static Connection getMySQLConnection() throws SQLException, ClassNotFoundException
 	{
 		if(DBStatic.mysql_pooling == false)
+		{
+			Class.forName("com.mysql.jdbc.Driver");
 			return DriverManager.getConnection("jdbc:mysql://" + DBStatic.mysql_host + "/" + DBStatic.mysql_db, DBStatic.mysql_username, DBStatic.mysql_password);
+		}
 		else
 		{
 			

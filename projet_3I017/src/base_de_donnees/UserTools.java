@@ -24,8 +24,9 @@ public class UserTools
 			}
 			return false;
 		} 
-		catch (SQLException e) 
+		catch (Exception e) 
 		{
+			System.err.println("Error userExists : " + e.getMessage());
 			return false;
 		}
 	}
@@ -47,8 +48,9 @@ public class UserTools
 			else
 				return true;
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
+			System.err.println("Error insererUser : " + e.getMessage());
 			return false;
 		}
 	}
@@ -61,7 +63,7 @@ public class UserTools
 			if(checkPwd(login, pwd))
 			{
 				String skey ="";
-				while (key_exists(skey = generate_key()))
+				while (keyExists(skey = generate_key()))
 				{
 					//tkt bro ça marche
 				}
@@ -79,7 +81,7 @@ public class UserTools
 				return null;
 			}
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			System.err.println("Error insererConnecion : " + e.getMessage());
 			return null;
@@ -87,7 +89,7 @@ public class UserTools
 		
 	}
 	
-	public static boolean key_exists(String key)
+	public static boolean keyExists(String key)
 	{
 	
 		Connection c;
@@ -103,8 +105,9 @@ public class UserTools
 			}
 			return false;
 		} 
-		catch (SQLException e) 
+		catch (Exception e) 
 		{
+			System.err.println("Error keyExists : " + e.getMessage());
 			return false;
 		}
 	}
@@ -129,8 +132,9 @@ public class UserTools
 			}
 			return null;
 		} 
-		catch (SQLException e) 
+		catch (Exception e) 
 		{
+			System.err.println("Error getLogin : " + e.getMessage());
 			return null;
 		}
 	}
@@ -150,8 +154,9 @@ public class UserTools
 			}
 			return -1;
 		} 
-		catch (SQLException e) 
+		catch (Exception e) 
 		{
+			System.err.println("Error getIdUser : " + e.getMessage());
 			return -1;
 		}
 	}
@@ -180,7 +185,7 @@ public class UserTools
 		return true;
 	}
 	
-	public static String generate_key()
+	private static String generate_key()
 	{
 		String key = UUID.randomUUID().toString().replaceAll("-", "");		//Génére une clé de 32 octets.
 		System.out.println(key.length());

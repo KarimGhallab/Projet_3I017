@@ -27,7 +27,7 @@
 		<servlet-class>servlet.friend.RemoveFriend</servlet-class> 
 	</servlet> 
 	<servlet> 
-		<servlet-name>listriend</servlet-name> 
+		<servlet-name>listFriend</servlet-name> 
 		<servlet-class>servlet.friend.ListFriend</servlet-class> 
 	</servlet>  
 	 
@@ -78,11 +78,11 @@
 		<servlet-name>addMessage</servlet-name> 
 		<url-pattern>/message/addMessage</url-pattern> 
 	</servlet-mapping>
-	<servlet-mapping> 
+	<servlet-mapping>
 		<servlet-name>removeMessage</servlet-name> 
 		<url-pattern>/message/removeMessage</url-pattern> 
 	</servlet-mapping>
-	<servlet-mapping> 
+	<servlet-mapping>
 		<servlet-name>listMessage</servlet-name> 
 		<url-pattern>/message/listMessage</url-pattern> 
 	</servlet-mapping>
