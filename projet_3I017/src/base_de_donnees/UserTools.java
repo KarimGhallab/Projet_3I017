@@ -32,7 +32,7 @@ public class UserTools
 	
 	public static boolean insererUser(String login , String pwd , String prenom , String nom , String email)
 	{
-		try 
+		try
 		{
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
@@ -251,9 +251,25 @@ public class UserTools
 			return -1;
 		}
 	}
-	public static boolean addFriend(String user , String Friend)
+	public static boolean addFriend(int idUser , int idFriend)
 	{
-		return true;
+		try
+		{
+			Connection c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "INSERT INTO friend(id_user, id_friend) VALUES(\""+idUser+"\", \""+idFriend+"\");";
+			System.out.println("Ajout ami : " + query);
+			int res = st.executeUpdate(query); 
+			if (res == 0)
+				return false;
+			else
+				return true;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error addFriend : " + e.getMessage());
+			return false;
+		}
 	}
 
 	public static boolean removeFriend(String idUser, String idFriend)

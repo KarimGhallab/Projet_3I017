@@ -23,7 +23,7 @@ public class FriendServices
 		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
-		if(!UserTools.addFriend(idUser, idFriend))		// Ajout de la Friendship
+		if(!UserTools.addFriend(Integer.parseInt(idUser), Integer.parseInt(idFriend)))		// Ajout de la Friendship
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		
 		return ServiceTools.serviceAccepted();
