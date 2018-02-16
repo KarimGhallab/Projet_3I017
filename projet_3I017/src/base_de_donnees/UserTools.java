@@ -8,7 +8,6 @@ import java.util.UUID;
 
 public class UserTools 
 {
-	
 	public static boolean userExists (String login)
 	{
 		Connection c;
@@ -54,6 +53,7 @@ public class UserTools
 			return false;
 		}
 	}
+	
 	public static String insererConnexion(String login , String pwd)
 	{
 		try 
@@ -62,19 +62,29 @@ public class UserTools
 			Statement st = c.createStatement();
 			if(checkPwd(login, pwd))
 			{
-				String skey ="";
-				while (keyExists(skey = generate_key()))
-				{
-					//tkt bro ça marche
-				}
 				int idUser = getIdUser(login);
-				String query = "INSERT INTO session(id_user , skey , root) VALUES(\""+idUser+"\", \""+skey+"\", \""+0+"\");";
-				System.out.println("Insertion utilisateur : " + query);
-				int res = st.executeUpdate(query);
-				if (res == 0)
-					return null;
+				if(hasSession(idUser))		// Il a déja une session, il faut mettre à jour la date
+				{
+					if(UserTools.updateDateSession(idUser))
+						return UserTools.getKey(idUser);
+					else
+						return null;
+				}
 				else
-					return skey;
+				{
+					String skey ="";
+					while (keyExists(skey = generate_key()))
+					{
+						//tkt bro ça marche
+					}
+					String query = "INSERT INTO session(id_user , skey , root) VALUES(\""+idUser+"\", \""+skey+"\", \""+0+"\");";
+					System.out.println("Insertion utilisateur : " + query);
+					int res = st.executeUpdate(query);
+					if (res == 0)
+						return null;
+					else
+						return skey;
+				}
 			}
 			else
 			{
@@ -89,6 +99,69 @@ public class UserTools
 		
 	}
 	
+	public static boolean updateDateSession(int idUser)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "UPDATE session SET sdate = NOW() WHERE id_user = \""+idUser+"\";";
+			if(st.executeUpdate(query) == 0)
+				return false;
+			return true;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error updateDateSession : " + e.getMessage());
+			return false;
+		}
+	}
+	
+	public static String getKey(int idUser)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT skey FROM session WHERE id_user = \""+idUser+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+			{
+				return rs.getString(1);
+			}
+			return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getKey : " + e.getMessage());
+			return null;
+		}
+	}
+	
+	public static boolean hasSession(int idUser)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM session WHERE id_user = \""+idUser+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+			{
+				return true;
+			}
+			return false;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error hasSession : " + e.getMessage());
+			return false;
+		}
+	}
+	
 	public static boolean keyExists(String key)
 	{
 	
@@ -97,7 +170,7 @@ public class UserTools
 		{
 			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
-			String query = "SELECT * FROM user WHERE skey= \""+key+"\";";
+			String query = "SELECT * FROM session WHERE skey= \""+key+"\";";
 			ResultSet rs = st.executeQuery(query);
 			if(rs.next())
 			{
@@ -108,7 +181,7 @@ public class UserTools
 		catch (Exception e) 
 		{
 			System.err.println("Error keyExists : " + e.getMessage());
-			return false;
+			return true;
 		}
 	}
 	
