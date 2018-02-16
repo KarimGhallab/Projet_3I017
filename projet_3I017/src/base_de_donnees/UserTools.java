@@ -18,9 +18,27 @@ public class UserTools
 			String query = "SELECT * FROM user WHERE login= \""+login+"\";";
 			ResultSet rs = st.executeQuery(query);
 			if(rs.next())
-			{
 				return true;
-			}
+			return false;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error userExists : " + e.getMessage());
+			return false;
+		}
+	}
+	
+	public static boolean userExists (int id)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM user WHERE id = \""+id+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return true;
 			return false;
 		} 
 		catch (Exception e) 
@@ -251,7 +269,7 @@ public class UserTools
 			return -1;
 		}
 	}
-	public static boolean addFriend(int idUser , int idFriend)
+	public static boolean addFriend(String idUser, String idFriend)
 	{
 		try
 		{
@@ -284,7 +302,24 @@ public class UserTools
 	
 	public static boolean isConnection(String key)
 	{
-		return false;
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM session WHERE skey= \""+key+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+			{
+				return true;
+			}
+			return false;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getIdUser : " + e.getMessage());
+			return false;
+		}
 	}
 	
 	public static boolean removeConnection(String key)
