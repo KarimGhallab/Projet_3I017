@@ -187,7 +187,25 @@ public class UserTools
 	
 	public static boolean checkPwd(String login , String pwd)
 	{
-		return true;
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM user WHERE login = \""+login+"\" AND pwd = PASSWORD(\""+pwd+"\");";
+			System.out.println(query);
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+			{
+				return true;
+			}
+			return false;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error checkPwd : " + e.getMessage());
+			return true;
+		}
 	}
 	
 	public static String getLogin(String key)

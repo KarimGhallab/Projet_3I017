@@ -12,7 +12,9 @@ public class Test {
 		String mail = "toto@chips.fr";
 		
 		System.out.println(service.UserServices.createUser(login, pwd, prenom, nom, mail).toString());
-		System.out.println(base_de_donnees.UserTools.userExists("Utilisateur existe ?" + login));
+		
+		System.out.println("Utilisateur existe : " + base_de_donnees.UserTools.userExists(login));
+		System.out.println("Mot de passe correcte : " + base_de_donnees.UserTools.checkPwd(login, pwd));
 		
 		System.out.println(base_de_donnees.UserTools.insererConnexion(login, pwd));
 	}
