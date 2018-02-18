@@ -4,10 +4,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserTools 
 {
+	/**
+	 *  teste si l'utilisateur existe dans la bd avec son login
+	 * @param login : le login de l'utilisateur
+	 * @return boolean 
+	 */
 	public static boolean userExists (String login)
 	{
 		Connection c;
@@ -28,6 +34,12 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * teste si l'utilisateur existe dans la bd avec son id
+	 * @param id
+	 * @return
+	 */
+	
 	public static boolean userExists (int id)
 	{
 		Connection c;
@@ -47,6 +59,16 @@ public class UserTools
 			return false;
 		}
 	}
+	
+	/**
+	 * Ajouter un uutilisateur dans la base de données
+	 * @param login 
+	 * @param pwd
+	 * @param prenom
+	 * @param nom
+	 * @param email
+	 * @return boolean
+	 */
 	
 	public static boolean insererUser(String login , String pwd , String prenom , String nom , String email)
 	{
@@ -72,6 +94,12 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * inserer une connexion s'il est pas connecté et mettre a jour les données de la connxion s'il est deja connecté 
+	 * @param login
+	 * @param pwd
+	 * @return la clé de la connection
+	 */
 	public static String insererConnexion(String login , String pwd)
 	{
 		try 
@@ -117,6 +145,11 @@ public class UserTools
 		
 	}
 	
+	/**
+	 * mettre a jour les données de connexion de l'utilisateur
+	 * @param idUser
+	 * @return boolean
+	 */
 	public static boolean updateDateSession(int idUser)
 	{
 		Connection c;
@@ -135,6 +168,12 @@ public class UserTools
 			return false;
 		}
 	}
+	
+	/**
+	 * obtenir la clé de connexion de l'utilisateur a partir de son id
+	 * @param idUser
+	 * @return la clé de connexion
+	 */
 	
 	public static String getKey(int idUser)
 	{
@@ -158,6 +197,11 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * verifie si l'utilisateur est connecté a partir de son id
+	 * @param idUser
+	 * @return boolean
+	 */
 	public static boolean hasSession(int idUser)
 	{
 		Connection c;
@@ -180,6 +224,11 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * verifie si la clé passé en parametre est deja utilisé
+	 * @param key
+	 * @return boolean
+	 */
 	public static boolean keyExists(String key)
 	{
 	
@@ -203,6 +252,12 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * vérifie la correspondance (login,pwd)
+	 * @param login
+	 * @param pwd
+	 * @return boolean
+	 */
 	public static boolean checkPwd(String login , String pwd)
 	{
 		Connection c;
@@ -226,6 +281,12 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * obtenir le login du user a partir de son id
+	 * @param key
+	 * @return le login
+	 */
+	
 	public static String getLogin(String key)
 	{
 		Connection c;
@@ -248,6 +309,11 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * obtenir le id du user a partir de son login 
+	 * @param login
+	 * @return l'id du user
+	 */
 	public static int getIdUser(String login)
 	{
 		Connection c;
@@ -269,6 +335,13 @@ public class UserTools
 			return -1;
 		}
 	}
+	
+	/**
+	 * ajouter une entrée dans la table Friend (ajouter ami) 
+	 * @param idUser 
+	 * @param idFriend
+	 * @return boolean
+	 */
 	public static boolean addFriend(String idUser, String idFriend)
 	{
 		try
@@ -289,17 +362,72 @@ public class UserTools
 			return false;
 		}
 	}
+	
+	/**
+	 * supprimer un ami dans la table Friend
+	 * @param idUser
+	 * @param idFriend
+	 * @return boolean
+	 */
 
 	public static boolean removeFriend(String idUser, String idFriend)
 	{
+		/*try
+		{
+			Connection c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "DELETE FROM friend(id_user, id_friend) WHERE idUser=\""+idUser+"\" AND idFiend =\""+idFriend+"\";";
+			System.out.println("Supprimer ami : " + query);
+			int res = st.executeUpdate(query); 
+			if (res == 0)
+				return false;
+			else
+				return true;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error RemoveFriend : " + e.getMessage());
+			return false;
+		}*/
+		
 		return true;
 	}
 	
-	public static String listFriend(String idUser)
+	/**
+	 * lister les amis d'un utilisateur
+	 * @param idUser
+	 * @return 
+	 */
+	public static ArrayList<String> listFriend(String idUser)
 	{
-		return "Lonely for now";
+		/*try
+		{
+			Connection c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM friend WHERE idUser=\""+idUser+"\";";
+			System.out.println("List Ami: " + query);
+			ResultSet cursor = st.executeQuery(query);
+			ArrayList<String> listFriend = new ArrayList<String>();
+			while(cursor.next())
+			{
+				listFriend.add(cursor.getString("idFriend"));
+			}
+			
+			return listFriend;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error addFriend : " + e.getMessage());
+			return null;
+		}*/
+		return null;
 	}
 	
+	/**
+	 * test si une connexion existe avec la clé "key"
+	 * @param key
+	 * @return boolean
+	 */
 	public static boolean isConnection(String key)
 	{
 		Connection c;
@@ -322,11 +450,51 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * supprimer une connexion
+	 * @param key
+	 * @return boolean
+	 */
+	
 	public static boolean removeConnection(String key)
 	{
+		/*try
+		{
+			Connection c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			
+			if(isConnection(key))
+			{
+	
+					String query = "DELETE FROM connection WHERE skey=\""+key+"\" ;";
+					System.out.println("Deconnexion : " + query);
+					int res = st.executeUpdate(query);
+					if (res == 0)
+						return false;
+					else
+						return true;
+				
+			}
+			else
+			{
+				return true;
+			}
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error insererConnecion : " + e.getMessage());
+			return false;
+		}*/
+
 		return true;
 	}
 	
+
+	/**
+	 * generer la clé de connexion a partir de  l'id du user
+	 * @param idUser
+	 * @return la clé de connexion
+	 */
 	private static String generate_key()
 	{
 		String key = UUID.randomUUID().toString().replaceAll("-", "");		//GÃ©nÃ©re une clÃ© de 32 octets.
