@@ -5,7 +5,7 @@ public class Test {
 	public static void main(String[] args) 
 	{
 		System.out.println(new ErrorJSON());
-		/*// Les infos de l'utilisateur
+		// Les infos de l'utilisateur
 		String login = "JS";
 		String pwd = "mot de passe de toto";
 		String prenom = "Jason";

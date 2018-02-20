@@ -6,13 +6,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
-
+/**
+ * Classe contenant les méthodes statiques permettant à un utilisateur d'intéragir avec la base de données MySQL.
+ *
+ */
 public class UserTools 
 {
 	/**
-	 *  teste si l'utilisateur existe dans la bd avec son login
-	 * @param login : le login de l'utilisateur
-	 * @return boolean 
+	 * Teste si l'utilisateur existe dans la bd avec son login.
+	 * @param login : le login de l'utilisateur.
+	 * @return True si l'utilisateur existe dans la base de données. False sinon.
 	 */
 	public static boolean userExists (String login)
 	{
@@ -35,9 +38,9 @@ public class UserTools
 	}
 	
 	/**
-	 * teste si l'utilisateur existe dans la bd avec son id
-	 * @param id
-	 * @return
+	 * Teste si l'utilisateur existe dans la bd avec son id.
+	 * @param id L'id de l'utilisateur dans la base de données.
+	 * @return True si l'utilisateur existe dans la base de données. False sinon.
 	 */
 	
 	public static boolean userExists (int id)
@@ -61,13 +64,13 @@ public class UserTools
 	}
 	
 	/**
-	 * Ajouter un uutilisateur dans la base de donn�es
-	 * @param login 
-	 * @param pwd
-	 * @param prenom
-	 * @param nom
-	 * @param email
-	 * @return boolean
+	 * Ajouter un utilisateur dans la base de données.
+	 * @param login Le login de l'utilisateur.
+	 * @param pwd Le mot de passe de l'utilisateur.
+	 * @param prenom Le prenom de l'utilisateur.
+	 * @param nom Le nom de l'utilisateur.
+	 * @param email L'e-mail de l'utilisateur.
+	 * @return boolean True si l'utilisateur à été ajouté dans la base de données. False sinon.
 	 */
 	
 	public static boolean insererUser(String login , String pwd , String prenom , String nom , String email)
@@ -95,10 +98,10 @@ public class UserTools
 	}
 	
 	/**
-	 * inserer une connexion s'il est pas connect� et mettre a jour les donn�es de la connxion s'il est deja connect� 
-	 * @param login
-	 * @param pwd
-	 * @return la cl� de la connection
+	 * Inserer une connexion si l'utilisateur n'est pas connecté. S'il est déjà connecté, on met à jour les données de la connexion. 
+	 * @param login Le login de l'utilisateur.
+	 * @param pwd Le mot de passe de l'utilisateur.
+	 * @return la clé de la connection. Null si la connexion n'a pû être insérée.
 	 */
 	public static String insererConnexion(String login , String pwd)
 	{
@@ -146,9 +149,9 @@ public class UserTools
 	}
 	
 	/**
-	 * mettre a jour les donn�es de connexion de l'utilisateur
-	 * @param idUser
-	 * @return boolean
+	 * Mettre a jour les données de connexion de l'utilisateur.
+	 * @param idUser L'id de l'utilisateur.
+	 * @return True si les données ont pû être mises à jour. False sinon.
 	 */
 	public static boolean updateDateSession(int idUser)
 	{
@@ -170,9 +173,9 @@ public class UserTools
 	}
 	
 	/**
-	 * obtenir la cl� de connexion de l'utilisateur a partir de son id
-	 * @param idUser
-	 * @return la cl� de connexion
+	 * Obtenir la clé de connexion de l'utilisateur a partir de son id.
+	 * @param idUser L'id de l'utilisateur.
+	 * @return La clé de connexion, ou null en cas de problème.
 	 */
 	
 	public static String getKey(int idUser)
@@ -198,9 +201,9 @@ public class UserTools
 	}
 	
 	/**
-	 * verifie si l'utilisateur est connect� a partir de son id
-	 * @param idUser
-	 * @return boolean
+	 * Vérifie si l'utilisateur est connecté a partir de son id.
+	 * @param idUser L'id de l'utilisateur.
+	 * @return True si l'utilisateur est connecté. False sinon.
 	 */
 	public static boolean hasSession(int idUser)
 	{
@@ -225,9 +228,9 @@ public class UserTools
 	}
 	
 	/**
-	 * verifie si la cl� pass� en parametre est deja utilis�
-	 * @param key
-	 * @return boolean
+	 * Verifie si la clé passée en paramètre est deja utilisée.
+	 * @param key La clé que l'on doit vérifier.
+	 * @return True si la clé existe déjà dans la base de données. False sinon.
 	 */
 	public static boolean keyExists(String key)
 	{
@@ -253,10 +256,10 @@ public class UserTools
 	}
 	
 	/**
-	 * v�rifie la correspondance (login,pwd)
-	 * @param login
-	 * @param pwd
-	 * @return boolean
+	 * Vérifie la correspondance (login,pwd).
+	 * @param login Le login à vérifier.
+	 * @param pwd Le mot de passe à vérifier.
+	 * @return True si le couple existe dans la base de données. False sinon.
 	 */
 	public static boolean checkPwd(String login , String pwd)
 	{
@@ -282,9 +285,9 @@ public class UserTools
 	}
 	
 	/**
-	 * obtenir le login du user a partir de son id
-	 * @param key
-	 * @return le login
+	 * Obtenir le login de l'utilisateur à partir de son id.
+	 * @param key La clé.
+	 * @return Le login de l'utilisateur. False en cas d'erreur avec la base de données.
 	 */
 	
 	public static String getLogin(String key)
@@ -297,10 +300,9 @@ public class UserTools
 			String query = "SELECT login FROM user WHERE key= \""+key+"\";";
 			ResultSet rs = st.executeQuery(query);
 			if(rs.next())
-			{
 				return rs.getString(1);
-			}
-			return null;
+			else
+				return null;
 		} 
 		catch (Exception e) 
 		{
@@ -310,9 +312,9 @@ public class UserTools
 	}
 	
 	/**
-	 * obtenir le id du user a partir de son login 
-	 * @param login
-	 * @return l'id du user
+	 * Obtenir l'id de l'utilisateur à partir de son login. 
+	 * @param login Le login de l'utilisateur.
+	 * @return l'id du user, ou -1 en cas de problème avec la base de données.
 	 */
 	public static int getIdUser(String login)
 	{
@@ -324,10 +326,9 @@ public class UserTools
 			String query = "SELECT id FROM user WHERE login= \""+login+"\";";
 			ResultSet rs = st.executeQuery(query);
 			if(rs.next())
-			{
 				return rs.getInt(1);
-			}
-			return -1;
+			else
+				return -1;
 		} 
 		catch (Exception e) 
 		{
@@ -337,10 +338,10 @@ public class UserTools
 	}
 	
 	/**
-	 * ajouter une entr�e dans la table Friend (ajouter ami) 
-	 * @param idUser 
-	 * @param idFriend
-	 * @return boolean
+	 * Ajouter une entrée dans la table Friend (ajouter ami).
+	 * @param idUser L'id de l'utilisateur qui souhaite ajouter un ami.
+	 * @param idFriend L'id de l'ami à ajouter.
+	 * @return True si l'ajout s'est effectué sans problème. False sinon.
 	 */
 	public static boolean addFriend(String idUser, String idFriend)
 	{
@@ -364,10 +365,10 @@ public class UserTools
 	}
 	
 	/**
-	 * supprimer un ami dans la table Friend
-	 * @param idUser
-	 * @param idFriend
-	 * @return boolean
+	 * Supprimer un ami dans la table Friend.
+	  * @param idUser L'id de l'utilisateur qui souhaite supprimer un ami.
+	 * @param idFriend L'id de l'ami à supprimer.
+	 * @return True si la suppression s'est effectuée sans problème. False sinon.
 	 */
 
 	public static boolean removeFriend(String idUser, String idFriend)
@@ -394,9 +395,9 @@ public class UserTools
 	}
 	
 	/**
-	 * lister les amis d'un utilisateur
-	 * @param idUser
-	 * @return 
+	 * Lister les amis d'un utilisateur.
+	 * @param idUser L'id de l'utilisateur
+	 * @return La liste des amis de l'utilisateur.
 	 */
 	public static ArrayList<String> listFriend(String idUser)
 	{
@@ -424,9 +425,9 @@ public class UserTools
 	}
 	
 	/**
-	 * test si une connexion existe avec la cl� "key"
-	 * @param key
-	 * @return boolean
+	 * Test si une connexion existe avec la clé "key"
+	 * @param key La clé à tester
+	 * @return boolean True si la clé existe. False sinon.
 	 */
 	public static boolean isConnection(String key)
 	{
@@ -438,10 +439,9 @@ public class UserTools
 			String query = "SELECT * FROM session WHERE skey= \""+key+"\";";
 			ResultSet rs = st.executeQuery(query);
 			if(rs.next())
-			{
 				return true;
-			}
-			return false;
+			else
+				return false;
 		} 
 		catch (Exception e) 
 		{
@@ -451,9 +451,9 @@ public class UserTools
 	}
 	
 	/**
-	 * supprimer une connexion
-	 * @param key
-	 * @return boolean
+	 * Supprimer une connexion.
+	 * @param key La clé à supprimer.
+	 * @return boolean True si la clé à été supprimée avec succès. False sinon.
 	 */
 	
 	public static boolean removeConnection(String key)
@@ -491,9 +491,8 @@ public class UserTools
 	
 
 	/**
-	 * generer la cl� de connexion a partir de  l'id du user
-	 * @param idUser
-	 * @return la cl� de connexion
+	 * Générer une clé de connexion de 32 caractères.
+	 * @return la clé de connexion.
 	 */
 	private static String generate_key()
 	{
