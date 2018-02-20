@@ -26,7 +26,7 @@ public class MessageServices
 			if(! MessageTools.addMessage(login , message))
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 			
-			return ServiceTools.serviceAccepted().put("message_added", message);
+			return ServiceTools.serviceAccepted().put("added_message", message);
 		}
 		catch(JSONException e)
 		{
@@ -48,7 +48,7 @@ public class MessageServices
 			if(! MessageTools.removeMessage(login , message))
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 			
-			return ServiceTools.serviceAccepted().put("message_removed", message);
+			return ServiceTools.serviceAccepted().put("removed_message", message);
 		}
 		catch(JSONException e)
 		{
