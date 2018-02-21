@@ -9,9 +9,19 @@ import utils.Data;
 import utils.ErrorJSON;
 import utils.ServiceTools;
 
+/**
+ * Classe contenant tous les services en lien avec la gestion d'ami.
+ *
+ */
 public class FriendServices 
 {
-	
+	/**
+	 * Ajouter un ami à la base de données MySQL.
+	 * @param idUser L'id de l'utilisateur qui souhaite ajouter un ami.
+	 * @param idFriend L'id de l'ami.
+	 * @param key La clé de connexion.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject addFriend(String idUser , String idFriend , String key)
 	{
 		if(idUser == null || idFriend == null )
@@ -37,6 +47,13 @@ public class FriendServices
 		return ServiceTools.serviceAccepted();
 	}
 	
+	/**
+	 * Supprimer un ami à la base de données MySQL.
+	 * @param idUser L'id de l'utilisateur qui souhaite supprimer un ami.
+	 * @param idFriend L'id de l'ami.
+	 * @param key La clé de connexion.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject removeFriend(String idUser , String idFriend , String key)
 	{
 		if(idUser == null || idFriend == null )
@@ -56,7 +73,13 @@ public class FriendServices
 		return ServiceTools.serviceAccepted();
 	}
 	
-	//////////////////////////////� verifier
+	//////////////////////////////À verifier
+	/**
+	 * Lister tous les amis d'un utilisateur.
+	 * @param idUser L'id de l'utilisateur.
+	 * @param key La clé de connexion.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject listFriend(String idUser, String key)
 	{
 		if(idUser == null || key == null)

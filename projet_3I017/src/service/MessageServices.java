@@ -13,6 +13,12 @@ import utils.ServiceTools;
 
 public class MessageServices 
 {
+	/**
+	 * Ajouter un message à la base de données MongoDB.
+	 * @param key La clé de connexion.
+	 * @param message Le message que l'utilisateur souhaite ajouter.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject addMessage(String key, String message)
 	{
 		if(key == null || message == null)
@@ -34,7 +40,12 @@ public class MessageServices
 		}
 	}
 	
-	
+	/**
+	 * Supprimer un message à la base de données MySQL.
+ 	 * @param key La clé de connexion.
+	 * @param message Le message à supprimer.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject removeMessage(String key, String message)
 	{
 		if(key == null || message == null)
@@ -56,6 +67,12 @@ public class MessageServices
 		}
 	}
 	
+	/**
+	 * Lister tous les messages d'un utilisateur.
+	 * @param key La clé de connexion.
+	 * @param login Le login de l'utilisateur.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject listMessage(String key , String login)
 	{
 		if(key == null || login == null)

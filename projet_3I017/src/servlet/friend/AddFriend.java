@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+/**
+ * Servlet d'ajout de message
+ *
+ */
 public class AddFriend extends HttpServlet
 {
-
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String idUser = request.getParameter("idUser");
@@ -27,6 +31,7 @@ public class AddFriend extends HttpServlet
 		out.println(json.toString());
 	}
 	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);

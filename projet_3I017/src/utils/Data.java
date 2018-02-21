@@ -1,5 +1,10 @@
 package utils;
 
+/**
+ * Classe des constantes utilisés dans l'application.
+ * @author 3772468
+ *
+ */
 public abstract class Data
 {
 	public static int CODE_MISSING_PARAMETERS = -1;

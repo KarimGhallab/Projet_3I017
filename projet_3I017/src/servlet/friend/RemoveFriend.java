@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+/**
+ * Servlet pour supprimer une amie.
+ *
+ */
 public class RemoveFriend extends HttpServlet
 {
-
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String idUser = request.getParameter("idUser");
@@ -26,6 +30,7 @@ public class RemoveFriend extends HttpServlet
 		out.println(json.toString());
 	}
 	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);

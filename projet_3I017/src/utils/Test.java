@@ -1,7 +1,11 @@
 package utils;
 
-public class Test {
-
+public class Test 
+{
+	/**
+	 * Classe contenant le main pour les tests en local.
+	 * @param args
+	 */
 	public static void main(String[] args) 
 	{
 		System.out.println(new ErrorJSON());

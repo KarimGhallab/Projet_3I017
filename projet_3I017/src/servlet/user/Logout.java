@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+/**
+ * Servlet de déconnexion.
+ *
+ */
 public class Logout extends HttpServlet 
 {
-	
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String key = request.getParameter("key");
@@ -24,6 +28,7 @@ public class Logout extends HttpServlet
 		out.println(json.toString());
 	}
 	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);

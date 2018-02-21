@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+/**
+ * Servlet de création d'utilisateur.
+ *
+ */
 public class CreateUser extends HttpServlet
 {
-
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String login = request.getParameter("login");
@@ -29,6 +33,7 @@ public class CreateUser extends HttpServlet
 		out.println(json.toString());
 	}
 	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);

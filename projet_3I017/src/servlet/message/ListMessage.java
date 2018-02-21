@@ -10,9 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+/**
+ * Servlet pour lister les messages de l'utilisateur.
+ *
+ */
 public class ListMessage extends HttpServlet
 {
-	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{

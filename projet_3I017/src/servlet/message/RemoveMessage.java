@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+/**
+ * Servlet de suppression de message.
+ *
+ */
 public class RemoveMessage extends HttpServlet
 {
-
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String key = request.getParameter("key");
@@ -26,6 +30,7 @@ public class RemoveMessage extends HttpServlet
 		out.println(json.toString());
 	}
 	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);
