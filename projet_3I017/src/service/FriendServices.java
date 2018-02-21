@@ -73,7 +73,6 @@ public class FriendServices
 		return ServiceTools.serviceAccepted();
 	}
 	
-	//////////////////////////////À verifier
 	/**
 	 * Lister tous les amis d'un utilisateur.
 	 * @param idUser L'id de l'utilisateur.

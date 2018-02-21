@@ -12,7 +12,10 @@ import base_de_donnees.UserTools;
 import utils.Data;
 import utils.ErrorJSON;
 import utils.ServiceTools;
-
+/**
+ * Classe contenant tous les services en lien avec la gestion de message.
+ *
+ */
 public class MessageServices 
 {
 	/**

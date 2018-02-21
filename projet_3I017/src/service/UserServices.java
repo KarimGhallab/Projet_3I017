@@ -7,8 +7,19 @@ import utils.Data;
 import utils.ErrorJSON;
 import utils.ServiceTools;
 
+/**
+ * Classe contenant tous les services en lien avec la gestion d'utilisateur.
+ *
+ */
 public class UserServices 
 {
+	/**
+	 * Permet à un utilisateur de se connecter.
+	 * @param login Le login de l'utilisateur.
+	 * @param pwd Le mot de passe de l'utilsiateur.
+	 * @param root Un booléen pour indiquer si l'utilisateur devra etre déconnecté à partir d'un certain délai.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject login(String login, String pwd, String root) 
 	{
 		if(login==null || pwd == null || root == null)
@@ -37,6 +48,11 @@ public class UserServices
 		}	
 	}
 	
+	/**
+	 * Déconnecte un utilisateur.
+	 * @param key Le clé de connexion de l'utilisateur.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject logout(String key)
 	{
 		if(key == null)
@@ -50,6 +66,15 @@ public class UserServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 	}
 	
+	/**
+	 * Ajoute un utilisateur à la base de données MySQL.
+	 * @param login Le login de l'utilisateur.
+	 * @param pwd Le mot de passe de l'utilisateur.
+	 * @param prenom Le prénom de l'utilisateur.
+	 * @param nom Le nom de l'utilisateur.
+	 * @param email L'e-mail de l'utilisateur.
+	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 */
 	public static JSONObject createUser (String login , String pwd , String prenom , String nom , String email)
 	{
 		if(login==null || pwd == null)
