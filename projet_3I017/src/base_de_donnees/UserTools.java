@@ -103,7 +103,7 @@ public class UserTools
 	 * @param pwd Le mot de passe de l'utilisateur.
 	 * @return la clé de la connection. Null si la connexion n'a pû être insérée.
 	 */
-	public static String insererConnexion(String login , String pwd)
+	public static String insererConnexion(String login , String pwd, int root)
 	{
 		try 
 		{
@@ -126,7 +126,7 @@ public class UserTools
 					{
 						//tkt bro ça marche
 					}
-					String query = "INSERT INTO session(id_user , skey , root) VALUES(\""+idUser+"\", \""+skey+"\", \""+0+"\");";
+					String query = "INSERT INTO session(id_user , skey , root) VALUES(\""+idUser+"\", \""+skey+"\", \""+root+"\");";
 					System.out.println("Insertion utilisateur : " + query);
 					int res = st.executeUpdate(query);
 					if (res == 0)

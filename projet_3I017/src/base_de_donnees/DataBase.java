@@ -1,5 +1,6 @@
 package base_de_donnees;
 
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,6 +8,10 @@ import java.sql.SQLException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.Mongo;
 
 /**
  * Représente une base de données.
@@ -78,4 +83,20 @@ public class DataBase
 			return dataBase.getConnection();
 		}
 	}
+	
+	public static DBCollection getMongoCollection(String collec)
+	{
+		try 
+		{
+			Mongo m = new Mongo(DBStatic.mongo_url);
+			DB db = m.getDB(DBStatic.mongo_db);
+			return db.getCollection(collec);
+			
+		} catch (UnknownHostException e)
+		{
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
+
 }

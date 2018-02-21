@@ -21,8 +21,9 @@ public class Login extends HttpServlet
 	{
 		String login = request.getParameter("login");
 		String pwd = request.getParameter("pwd");
+		String root = request.getParameter("root");
 		
-		JSONObject json = service.UserServices.login(login, pwd);
+		JSONObject json = service.UserServices.login(login, pwd, root);
 		
 		PrintWriter out = response.getWriter();
 		

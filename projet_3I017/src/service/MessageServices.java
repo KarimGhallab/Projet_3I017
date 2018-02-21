@@ -3,8 +3,10 @@ package service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import base_de_donnees.MessageTools;
 import base_de_donnees.UserTools;
 import utils.Data;
@@ -29,8 +31,7 @@ public class MessageServices
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
 			String login = UserTools.getLogin(key);
-			if(! MessageTools.addMessage(login , message))
-				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+			MessageTools.addMessage(login , message);
 			
 			return ServiceTools.serviceAccepted().put("added_message", message);
 		}
@@ -46,20 +47,19 @@ public class MessageServices
 	 * @param message Le message à supprimer.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
-	public static JSONObject removeMessage(String key, String message)
+	public static JSONObject removeMessage(String key, String id_message)
 	{
-		if(key == null || message == null)
+		if(key == null || id_message == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
 		{
 			if(!base_de_donnees.UserTools.isConnection(key))
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		
+			MessageTools.removeMessage(id_message);
+				//return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 			
-			String login = UserTools.getLogin(key);
-			if(! MessageTools.removeMessage(login , message))
-				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
-			
-			return ServiceTools.serviceAccepted().put("removed_message", message);
+			return ServiceTools.serviceAccepted().put("removed_message",id_message);
 		}
 		catch(JSONException e)
 		{
@@ -70,23 +70,25 @@ public class MessageServices
 	/**
 	 * Lister tous les messages d'un utilisateur.
 	 * @param key La clé de connexion.
-	 * @param login Le login de l'utilisateur.
+	 * @param userId Le login de l'utilisateur.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
-	public static JSONObject listMessage(String key , String login)
+	public static JSONObject listMessage(String key , String userId, String orderAsc, String limite)
 	{
-		if(key == null || login == null)
+		if(key == null || userId == null || orderAsc == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
 		{
 			if(!base_de_donnees.UserTools.isConnection(key))
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
-			ArrayList<String> messages = MessageTools.listMessage(login);
+			boolean order = Boolean.parseBoolean(orderAsc);
+			int limiteEntiere = Integer.parseInt(limite);
+			JSONArray messages = MessageTools.listMessage(userId, order, limiteEntiere);
 			if(messages == null)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 			
-			return ServiceTools.serviceAccepted().put("list_message", messages.toString());
+			return ServiceTools.serviceAccepted().put("list_message", messages);	// On ajoute la liste des messages
 		}
 		catch(JSONException e)
 		{

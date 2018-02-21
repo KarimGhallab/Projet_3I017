@@ -9,16 +9,19 @@ import utils.ServiceTools;
 
 public class UserServices 
 {
-	public static JSONObject login(String login, String pwd) 
+	public static JSONObject login(String login, String pwd, String root) 
 	{
-		if(login==null || pwd == null)
+		if(login==null || pwd == null || root == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
+		int myRoot = Integer.parseInt(root);
+		if ((myRoot != 0) && (myRoot != 1))
+			myRoot = 0;
 		
 		if(!base_de_donnees.UserTools.userExists(login))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_DOES_NOT_EXIST, Data.CODE_USER_DOES_NOT_EXIST);
 		if(!base_de_donnees.UserTools.checkPwd(login,pwd))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_INCORRECT_LOGIN_PASSWORD, Data.CODE_INCORRECT_LOGIN_PASSWORD);
-		String key = base_de_donnees.UserTools.insererConnexion(login, pwd);
+		String key = base_de_donnees.UserTools.insererConnexion(login, pwd, myRoot);
 		if (key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		else
