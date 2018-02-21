@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 /**
  * Classe contenant les méthodes statiques permettant à un utilisateur d'intéragir avec la base de données MySQL.
@@ -436,10 +438,26 @@ public class UserTools
 		{
 			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
-			String query = "SELECT * FROM session WHERE skey= \""+key+"\";";
+			String query = "SELECT sdate FROM session WHERE skey= \""+key+"\";";
 			ResultSet rs = st.executeQuery(query);
-			if(rs.next())
-				return true;
+			if(rs.next())		// Il faut vérifier depuis quand est posée la clé de connexion
+			{
+				Timestamp tempsSession = rs.getTimestamp(1);
+				Timestamp maintenant = new Timestamp(new GregorianCalendar().getTimeInMillis());
+				if((maintenant.getTime() - tempsSession.getTime()) >= utils.Data.DUREE_AVANT_DECO)
+				{
+					if (!isRoot(key))
+					{
+						System.out.println("On enlève la connexion");
+						removeConnection(key);
+						return false;
+					}
+					else
+						return true;
+				}
+				else
+					return true;
+			}
 			else
 				return false;
 		} 
@@ -458,35 +476,25 @@ public class UserTools
 	
 	public static boolean removeConnection(String key)
 	{
-		/*try
+		try
 		{
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			
-			if(isConnection(key))
-			{
-	
-					String query = "DELETE FROM connection WHERE skey=\""+key+"\" ;";
-					System.out.println("Deconnexion : " + query);
-					int res = st.executeUpdate(query);
-					if (res == 0)
-						return false;
-					else
-						return true;
-				
-			}
+			String query = "DELETE FROM session WHERE skey=\""+key+"\" ;";
+			System.out.println("Deconnexion : " + query);
+			int res = st.executeUpdate(query);
+			if (res == 0)
+				return false;
 			else
-			{
 				return true;
-			}
+		
 		}
 		catch (Exception e)
 		{
-			System.err.println("Error insererConnecion : " + e.getMessage());
+			System.err.println("Error removeConnecion : " + e.getMessage());
 			return false;
-		}*/
-
-		return true;
+		}
 	}
 	
 
@@ -499,5 +507,37 @@ public class UserTools
 		String key = UUID.randomUUID().toString().replaceAll("-", "");		//Génére une clé de 32 octets.
 		System.out.println(key.length());
 		return key;
+	}
+	
+	/**
+	 * Vérifie si une connexion est root.
+	 * @param key La clé de connexion
+	 * @return true si la connexion est root, false sinon.
+	 */
+	private static boolean isRoot(String key)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT root FROM session WHERE skey= \""+key+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())		// Il faut vérifier depuis quand est posé la clé de connexion
+			{
+				int root = rs.getInt(1);
+				if(root == 0)
+					return false;
+				else
+					return true;
+			}
+			else
+				return false;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error isRoot : " + e.getMessage());
+			return false;
+		}
 	}
 }

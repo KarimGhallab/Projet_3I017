@@ -30,4 +30,6 @@ public abstract class Data
 	
 	public static int CODE_ERROR_DB = -1;
 	public static String MESSAGE_ERROR_DB = "Error database.";
+	
+	public static long DUREE_AVANT_DECO = 0;//3600000;		//1 Heure
 }
