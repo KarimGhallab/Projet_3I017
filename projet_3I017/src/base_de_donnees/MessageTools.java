@@ -55,7 +55,9 @@ public class MessageTools
 	/**
 	 * Renvoyer la liste des messages d'un utilisateur
 	 * @param login Le login pour lequel il faut chercher la liste des messages.
-	 * @return La liste des message de l'utilisateur. Ou null en cas d'erreur.
+	 * @param orderAsc Indique si on effectue un trie des messages par date croissante.
+	 * @param limite Le nombre de messag à afficher. Si la limte est inférieur ou égal à 0, on affiche tous les messages.
+	 * @return La liste des messages de l'utilisateur. Ou null en cas d'erreur.
 	 */
 	public static JSONArray listMessage(String id_user, boolean orderAsc, int limite) 
 	{

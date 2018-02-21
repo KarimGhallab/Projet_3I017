@@ -84,6 +84,11 @@ public class DataBase
 		}
 	}
 	
+	/**
+	 * Récupérer une collection MongoDB.
+	 * @param collec Le nom de la collection souhaitée.
+	 * @return La collection.
+	 */
 	public static DBCollection getMongoCollection(String collec)
 	{
 		try 
@@ -98,5 +103,4 @@ public class DataBase
 			return null;
 		}
 	}
-
 }

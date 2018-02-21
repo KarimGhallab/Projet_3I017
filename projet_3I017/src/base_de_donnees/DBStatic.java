@@ -21,7 +21,9 @@ public class DBStatic
 	/** /** Le mot de passe pour la connexion vers la base de données MySQL. */
 	public static String mysql_password = "root";
 	
+	/** L'url de la base de données MongoDB  */
 	public static String mongo_url = "localhost";
 	
+	/** Le nom de la base de données MongoDB  */
 	public static String mongo_db = "ghallab_fodil";
 }
