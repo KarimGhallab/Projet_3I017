@@ -8,6 +8,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.UUID;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 /**
  * Classe contenant les méthodes statiques permettant à un utilisateur d'intéragir avec la base de données MySQL.
  *
@@ -401,29 +404,31 @@ public class UserTools
 	 * @param idUser L'id de l'utilisateur
 	 * @return La liste des amis de l'utilisateur.
 	 */
-	public static ArrayList<String> listFriend(String idUser)
+	public static JSONArray listFriend(String idUser)
 	{
-		/*try
+		try
 		{
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM friend WHERE idUser=\""+idUser+"\";";
 			System.out.println("List Ami: " + query);
 			ResultSet cursor = st.executeQuery(query);
-			ArrayList<String> listFriend = new ArrayList<String>();
+			JSONArray friendArray = new JSONArray();
 			while(cursor.next())
 			{
-				listFriend.add(cursor.getString("idFriend"));
+				
+				JSONObject json = new JSONObject();
+				json.put("user_id",cursor.getString("id_friend"));
+				friendArray.put(json);
 			}
 			
-			return listFriend;
+			return friendArray;
 		}
 		catch (Exception e)
 		{
-			System.err.println("Error addFriend : " + e.getMessage());
+			System.err.println("Error listFriend : " + e.getMessage());
 			return null;
-		}*/
-		return null;
+		}
 	}
 	
 	/**
@@ -538,6 +543,33 @@ public class UserTools
 		{
 			System.err.println("Error isRoot : " + e.getMessage());
 			return false;
+		}
+	}
+	
+	public static JSONArray searchUserByLogin(String login)
+	{
+		try
+		{
+			Connection c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM user WHERE login LIKE \"%"+login+"%\";";
+			System.out.println("UserSearch: " + query);
+			ResultSet cursor = st.executeQuery(query);
+			JSONArray userArray = new JSONArray();
+			while(cursor.next())
+			{
+				JSONObject json = new JSONObject();
+				json.put("user_id",cursor.getString("id"));
+				json.put("login",cursor.getString("login"));
+				userArray.put(json);
+			}
+			
+			return userArray;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error User_Search : " + e.getMessage());
+			return null;
 		}
 	}
 }

@@ -2,6 +2,7 @@ package service;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import base_de_donnees.UserTools;
@@ -85,13 +86,13 @@ public class FriendServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
-		ArrayList<String> liste=null;
-		if((liste=UserTools.listFriend(idUser)) == null)
+		JSONArray liste=UserTools.listFriend(idUser);
+		if(liste == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		
 		try
 		{
-			return ServiceTools.serviceAccepted().put("list", liste);
+			return ServiceTools.serviceAccepted().put("list friend", liste);
 		}
 		catch (JSONException e)
 		{

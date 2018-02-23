@@ -1,5 +1,6 @@
 package service;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import base_de_donnees.UserTools;
@@ -87,5 +88,26 @@ public class UserServices
 			return ServiceTools.serviceAccepted();
 		else
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+	}
+	
+	public static JSONObject searchUserByLogin(String login, String key)
+	{
+		if(login == null || key == null)
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
+		if(!base_de_donnees.UserTools.isConnection(key))
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		JSONArray liste=UserTools.searchUserByLogin(login);
+		if(liste == null)
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+		
+		try
+		{
+			return ServiceTools.serviceAccepted().put("list_search_user", liste);
+		}
+		catch (JSONException e)
+		{
+			System.err.println("Error search User By Login : " + e.getMessage());
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+		}
 	}
 }
