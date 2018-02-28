@@ -127,14 +127,17 @@ public class MessageTools
 	public static void addComment(String auteurId , String idMessage, String commentaire)
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
-		BasicDBObject query = new BasicDBObject();
-		GregorianCalendar c= new GregorianCalendar();
-		query.put("content", commentaire);
-		query.put("date", c.getTime());
-		query.put("idAuthor",auteurId);
+		BasicDBObject comments = new BasicDBObject();
+		GregorianCalendar c = new GregorianCalendar();
+		comments.put("content", commentaire);
+		comments.put("date", c.getTime());
+		comments.put("idAuthor",auteurId);
+		
+		BasicDBObject content = new BasicDBObject();
+		content.put("comments", comments);
 		
 		BasicDBObject push = new BasicDBObject();
-		push.put("$push", query);
+		push.put("$push", content);
 		
 		BasicDBObject cond = new BasicDBObject();
 		cond.put("_id", new ObjectId(idMessage));
