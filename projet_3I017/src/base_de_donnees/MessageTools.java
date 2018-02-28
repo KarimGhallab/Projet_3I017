@@ -1,6 +1,7 @@
 package base_de_donnees;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class MessageTools
 		query.put("user_id", userID);
 		query.put("content", message);
 		query.put("date", c.getTime());
+		query.put("comments", Collections.EMPTY_LIST);
 		msg.insert(query);
 	}
 
@@ -59,11 +61,14 @@ public class MessageTools
 	 * @param limite Le nombre de messag à afficher. Si la limte est inférieur ou égal à 0, on affiche tous les messages.
 	 * @return La liste des messages de l'utilisateur. Ou null en cas d'erreur.
 	 */
-	public static JSONArray listMessage(String id_user, boolean orderAsc, int limite) 
+	public static JSONArray listMessage(String id_user, boolean orderAsc, int limite, String[] id_friends) 
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
-		query.put("user_id", id_user);
+		if(id_friends == null)
+			query.put("user_id", id_user);
+		else
+			query.put("user_id", new BasicDBObject("$in", id_friends));
 		DBCursor messagesCursor = msg.find(query);
 		if (!orderAsc)
 			messagesCursor.sort(new BasicDBObject("date", -1));
@@ -81,6 +86,7 @@ public class MessageTools
 				json.put("content", document.get("content"));
 				json.put("date", document.get("date"));
 				json.put("id", document.get("_id"));
+				json.put("user_id", document.get("user_id"));
 				userMessages.put(json);
 			}
 			return userMessages;
@@ -90,5 +96,52 @@ public class MessageTools
 			System.err.println("listMessage : " + e.getMessage());
 			return null;
 		}
+	}
+	
+	public static JSONArray listMessage() 
+	{
+		DBCollection msg = DataBase.getMongoCollection("Message");
+		DBCursor messagesCursor = msg.find();
+		JSONArray userMessages = new JSONArray();
+		try
+		{
+			while(messagesCursor.hasNext())
+			{
+				JSONObject json = new JSONObject();
+				DBObject document = messagesCursor.next();
+				json.put("content", document.get("content"));
+				json.put("date", document.get("date"));
+				json.put("id", document.get("_id"));
+				json.put("user_id", document.get("user_id"));
+				userMessages.put(json);
+			}
+			return userMessages;
+		}
+		catch(Exception e)
+		{
+			System.err.println("listMessage : " + e.getMessage());
+			return null;
+		}
+	}
+	
+	public static void addComment(String auteurId , String idMessage, String commentaire)
+	{
+		DBCollection msg = DataBase.getMongoCollection("Message");
+		BasicDBObject query = new BasicDBObject();
+		GregorianCalendar c= new GregorianCalendar();
+		query.put("content", commentaire);
+		query.put("date", c.getTime());
+		query.put("idAuthor",auteurId);
+		
+		BasicDBObject push = new BasicDBObject();
+		push.put("$push", query);
+		
+		BasicDBObject cond = new BasicDBObject();
+		cond.put("_id", new ObjectId(idMessage));
+		
+		System.out.println("condition : " + cond);
+		System.out.println("push : " + push);
+		
+		msg.update(cond , push);
 	}
 }

@@ -33,8 +33,8 @@ public class MessageServices
 			if(!base_de_donnees.UserTools.isConnection(key))
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
-			String login = UserTools.getLogin(key);
-			MessageTools.addMessage(login , message);
+			String id = UserTools.getIdUserFromKey(key);
+			MessageTools.addMessage(id , message);
 			
 			return ServiceTools.serviceAccepted().put("added_message", message);
 		}
@@ -76,9 +76,9 @@ public class MessageServices
 	 * @param userId Le login de l'utilisateur.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
-	public static JSONObject listMessage(String key , String userId, String orderAsc, String limite)
+	public static JSONObject listMessage(String key , String orderAsc, String limite, String amis)
 	{
-		if(key == null || userId == null || orderAsc == null)
+		if(key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
 		{
@@ -86,8 +86,26 @@ public class MessageServices
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
 			boolean order = Boolean.parseBoolean(orderAsc);
-			int limiteEntiere = Integer.parseInt(limite);
-			JSONArray messages = MessageTools.listMessage(userId, order, limiteEntiere);
+			int limiteEntiere;
+			if (limite == null)
+				limiteEntiere = 0;
+			else
+				limiteEntiere = Integer.parseInt(limite);
+			
+			String[] friends;
+			if (amis == null)
+				friends = null;
+			else
+				friends = amis.split("-");
+			
+			JSONArray messages;
+			
+			String userId = base_de_donnees.UserTools.getIdUserFromKey(key); 
+			
+			if(userId == null || orderAsc == null)
+				messages = MessageTools.listMessage();
+			else
+				messages = MessageTools.listMessage(userId, order, limiteEntiere, friends);
 			if(messages == null)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 			

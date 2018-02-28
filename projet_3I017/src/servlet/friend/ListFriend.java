@@ -19,10 +19,9 @@ public class ListFriend extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		String idUser = request.getParameter("idUser");
 		String key = request.getParameter("key");
 		
-		JSONObject json = service.FriendServices.listFriend(idUser, key);
+		JSONObject json = service.FriendServices.listFriend(key);
 		PrintWriter out = response.getWriter();
 		
 		response.setContentType("text/plain");

@@ -23,24 +23,26 @@ public class FriendServices
 	 * @param key La clé de connexion.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
-	public static JSONObject addFriend(String idUser , String idFriend , String key)
+	public static JSONObject addFriend(String idFriend , String key)
 	{
-		if(idUser == null || idFriend == null )
+		if(key == null || idFriend == null )
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
-			
-		if(!UserTools.userExists (Integer.parseInt(idUser)))
+		
+		if(!base_de_donnees.UserTools.isConnection(key))
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		
+		String idUser = base_de_donnees.UserTools.getIdUserFromKey(key); 
+		
+		if(!UserTools.userExistsId (Integer.parseInt(idUser)))
 		{
 			System.out.println("idUser : " + idUser);
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_DOES_NOT_EXIST, Data.CODE_USER_DOES_NOT_EXIST);
 		}
-		if(!UserTools.userExists (Integer.parseInt(idFriend)))
+		if(!UserTools.userExistsId (Integer.parseInt(idFriend)))
 		{
 			System.out.println("idFriend : " + idFriend);
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_FRIEND_DOES_NOT_EXIST, Data.CODE_FRIEND_DOES_NOT_EXIST);
 		}
-		
-		if(!base_de_donnees.UserTools.isConnection(key))
-			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
 		if(!UserTools.addFriend(idUser, idFriend))		// Ajout de la Friendship
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
@@ -55,18 +57,18 @@ public class FriendServices
 	 * @param key La clé de connexion.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
-	public static JSONObject removeFriend(String idUser , String idFriend , String key)
+	public static JSONObject removeFriend(String idFriend , String key)
 	{
-		if(idUser == null || idFriend == null )
+		if(key == null || idFriend == null )
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
-			
-		if(!UserTools.userExists (idUser))
-			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_DOES_NOT_EXIST, Data.CODE_USER_DOES_NOT_EXIST);
-		if(!UserTools.userExists (idFriend))
-			return ErrorJSON.defaultJsonError(Data.MESSAGE_FRIEND_DOES_NOT_EXIST, Data.CODE_FRIEND_DOES_NOT_EXIST);
-		
+	
 		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		String idUser = base_de_donnees.UserTools.getIdUserFromKey(key); 
+		if(!UserTools.userExistsId (Integer.parseInt(idUser)))
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_DOES_NOT_EXIST, Data.CODE_USER_DOES_NOT_EXIST);
+		if(!UserTools.userExistsId (Integer.parseInt(idFriend)))
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_FRIEND_DOES_NOT_EXIST, Data.CODE_FRIEND_DOES_NOT_EXIST);	
 		
 		if(!UserTools.removeFriend(idUser, idFriend))		//Supression de la Friendship
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
@@ -80,12 +82,14 @@ public class FriendServices
 	 * @param key La clé de connexion.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
-	public static JSONObject listFriend(String idUser, String key)
+	public static JSONObject listFriend(String key)
 	{
-		if(idUser == null || key == null)
+		if(key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		
+		String idUser = base_de_donnees.UserTools.getIdUserFromKey(key); 
 		JSONArray liste=UserTools.listFriend(idUser);
 		if(liste == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);

@@ -19,12 +19,11 @@ public class AddFriend extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		String idUser = request.getParameter("idUser");
 		String idFriend = request.getParameter("idFriend");
 		String key = request.getParameter("key");
 		
 		
-		JSONObject json = service.FriendServices.addFriend(idUser , idFriend , key);
+		JSONObject json = service.FriendServices.addFriend(idFriend , key);
 		PrintWriter out = response.getWriter();
 		
 		response.setContentType("text/plain");

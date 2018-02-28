@@ -11,6 +11,8 @@ import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.mysql.jdbc.StringUtils;
 /**
  * Classe contenant les méthodes statiques permettant à un utilisateur d'intéragir avec la base de données MySQL.
  *
@@ -22,7 +24,7 @@ public class UserTools
 	 * @param login : le login de l'utilisateur.
 	 * @return True si l'utilisateur existe dans la base de données. False sinon.
 	 */
-	public static boolean userExists (String login)
+	public static boolean userExistsLogin (String login)
 	{
 		Connection c;
 		try 
@@ -48,7 +50,7 @@ public class UserTools
 	 * @return True si l'utilisateur existe dans la base de données. False sinon.
 	 */
 	
-	public static boolean userExists (int id)
+	public static boolean userExistsId (int id)
 	{
 		Connection c;
 		try 
@@ -295,14 +297,14 @@ public class UserTools
 	 * @return Le login de l'utilisateur. False en cas d'erreur avec la base de données.
 	 */
 	
-	public static String getLogin(String key)
+	public static String getIdUserFromKey(String key)
 	{
 		Connection c;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
-			String query = "SELECT login FROM user WHERE key= \""+key+"\";";
+			String query = "SELECT id_user FROM session WHERE skey= \""+key+"\";";
 			ResultSet rs = st.executeQuery(query);
 			if(rs.next())
 				return rs.getString(1);
@@ -352,15 +354,20 @@ public class UserTools
 	{
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
-			Statement st = c.createStatement();
-			String query = "INSERT INTO friend(id_user, id_friend) VALUES(\""+idUser+"\", \""+idFriend+"\");";
-			System.out.println("Ajout ami : " + query);
-			int res = st.executeUpdate(query); 
-			if (res == 0)
-				return false;
+			if(!areFriends(idUser, idFriend))
+			{
+				Connection c = DataBase.getMySQLConnection();
+				Statement st = c.createStatement();
+				String query = "INSERT INTO friend(id_user, id_friend) VALUES(\""+idUser+"\", \""+idFriend+"\");";
+				System.out.println("Ajout ami : " + query);
+				int res = st.executeUpdate(query); 
+				if (res == 0)
+					return false;
+				else
+					return true;
+			}
 			else
-				return true;
+				return false;
 		}
 		catch (Exception e)
 		{
@@ -378,11 +385,11 @@ public class UserTools
 
 	public static boolean removeFriend(String idUser, String idFriend)
 	{
-		/*try
+		try
 		{
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
-			String query = "DELETE FROM friend(id_user, id_friend) WHERE idUser=\""+idUser+"\" AND idFiend =\""+idFriend+"\";";
+			String query = "DELETE FROM friend WHERE id_user=\""+idUser+"\" AND id_friend =\""+idFriend+"\";";
 			System.out.println("Supprimer ami : " + query);
 			int res = st.executeUpdate(query); 
 			if (res == 0)
@@ -394,9 +401,8 @@ public class UserTools
 		{
 			System.err.println("Error RemoveFriend : " + e.getMessage());
 			return false;
-		}*/
+		}
 		
-		return true;
 	}
 	
 	/**
@@ -410,7 +416,7 @@ public class UserTools
 		{
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
-			String query = "SELECT * FROM friend WHERE idUser=\""+idUser+"\";";
+			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
 			System.out.println("List Ami: " + query);
 			ResultSet cursor = st.executeQuery(query);
 			JSONArray friendArray = new JSONArray();
@@ -570,6 +576,51 @@ public class UserTools
 		{
 			System.err.println("Error User_Search : " + e.getMessage());
 			return null;
+		}
+	}
+	
+	public static String listFriendString(String idUser)
+	{
+		try
+		{
+			Connection c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
+			System.out.println("List Ami: " + query);
+			ResultSet cursor = st.executeQuery(query);
+			String amis = "";
+			while(cursor.next())
+				amis += cursor.getString(3) + "-";
+			
+			return amis;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error listFriend string: " + e.getMessage());
+			return null;
+		}
+	}
+	
+	public static boolean areFriends(String idUser, String idFriend)
+	{
+		try
+		{
+			Connection c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\" AND id_friend=\""+idFriend+"\";";
+			ResultSet cursor = st.executeQuery(query);
+			JSONArray friendArray = new JSONArray();
+			if(cursor.next())
+			{
+				return true;
+			}
+			
+			return false;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error areFriend : " + e.getMessage());
+			return false;
 		}
 	}
 }

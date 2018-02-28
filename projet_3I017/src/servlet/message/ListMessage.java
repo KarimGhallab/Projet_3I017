@@ -20,11 +20,11 @@ public class ListMessage extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		String key = request.getParameter("key");
-		String userId = request.getParameter("user_id");
 		String orderAsc = request.getParameter("orderAsc");
 		String limite = request.getParameter("limite");
+		String amis = request.getParameter("amis");
 		
-		JSONObject json = service.MessageServices.listMessage(key, userId, orderAsc, limite);
+		JSONObject json = service.MessageServices.listMessage(key, orderAsc, limite, amis);
 		
 		PrintWriter out = response.getWriter();
 		

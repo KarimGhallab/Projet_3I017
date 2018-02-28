@@ -25,11 +25,12 @@ public class UserServices
 	{
 		if(login==null || pwd == null || root == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
+		
 		int myRoot = Integer.parseInt(root);
 		if ((myRoot != 0) && (myRoot != 1))
 			myRoot = 0;
 		
-		if(!base_de_donnees.UserTools.userExists(login))
+		if(!base_de_donnees.UserTools.userExistsLogin(login))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_DOES_NOT_EXIST, Data.CODE_USER_DOES_NOT_EXIST);
 		if(!base_de_donnees.UserTools.checkPwd(login,pwd))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_INCORRECT_LOGIN_PASSWORD, Data.CODE_INCORRECT_LOGIN_PASSWORD);
@@ -78,9 +79,13 @@ public class UserServices
 	 */
 	public static JSONObject createUser (String login , String pwd , String prenom , String nom , String email)
 	{
-		if(login==null || pwd == null)
+		if(login==null || pwd == null || prenom == null || nom == null || email == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
-		if(base_de_donnees.UserTools.userExists(login))
+		
+		if(login.length() < 5 || pwd.length() < 8)
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_LENGTH_PARAMETER, Data.CODE_LENGTH_PARAMETER);
+		
+		if(base_de_donnees.UserTools.userExistsLogin(login))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_ALREADY_EXISTS, Data.CODE_USER_ALREADY_EXISTS);
 		
 		boolean res = base_de_donnees.UserTools.insererUser(login , pwd , prenom , nom , email);
@@ -110,4 +115,10 @@ public class UserServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
 		}
 	}
+	
+	/*public static boolean validate(String emailStr) 
+	{
+        Matcher matcher = Data.VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return matcher.find();
+	}*/
 }
