@@ -45,9 +45,9 @@ public class MessageServices
 	}
 	
 	/**
-	 * Supprimer un message à la base de données MySQL.
+	 * Supprimer un message à la base de données MongoDB.
  	 * @param key La clé de connexion.
-	 * @param message Le message à supprimer.
+	 * @param id_message Le message à supprimer.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
 	public static JSONObject removeMessage(String key, String id_message)
@@ -71,10 +71,12 @@ public class MessageServices
 	}
 	
 	/**
-	 * Lister tous les messages d'un utilisateur.
+	 * Liste les messages d'un utilisateur et d'une liste de ses amis.
 	 * @param key La clé de connexion.
-	 * @param userId Le login de l'utilisateur.
-	 * @return Un objet JSON indiquant le résultat de l'opération.
+	 * @param orderAsc Lister dans un ordre ascendant ou non.
+	 * @param limite La limite du nombre de message à lister.
+	 * @param amis Les amis pour lequel on veut lister les messages.
+	 * @return La liste des messages.
 	 */
 	public static JSONObject listMessage(String key , String orderAsc, String limite, String amis)
 	{
@@ -103,7 +105,7 @@ public class MessageServices
 			String userId = base_de_donnees.UserTools.getIdUserFromKey(key); 
 			
 			if(userId == null || orderAsc == null)
-				messages = MessageTools.listMessage();
+				messages = MessageTools.listMessage(limiteEntiere);
 			else
 				messages = MessageTools.listMessage(userId, order, limiteEntiere, friends);
 			if(messages == null)

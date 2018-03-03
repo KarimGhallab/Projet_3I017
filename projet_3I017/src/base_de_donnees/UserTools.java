@@ -118,10 +118,10 @@ public class UserTools
 			Statement st = c.createStatement();
 			if(checkPwd(login, pwd))
 			{
-				int idUser = getIdUser(login);
+				int idUser = getIdUserFromLogin(login);
 				if(hasSession(idUser))		// Il a déja une session, il faut mettre à jour la date
 				{
-					if(UserTools.updateDateSession(idUser))
+					if(UserTools.updateDateSessionById(idUser))
 						return UserTools.getKey(idUser);
 					else
 						return null;
@@ -156,11 +156,11 @@ public class UserTools
 	}
 	
 	/**
-	 * Mettre a jour les données de connexion de l'utilisateur.
+	 * Mettre a jour les données de connexion de l'utilisateur à partir de sa clé.
 	 * @param idUser L'id de l'utilisateur.
 	 * @return True si les données ont pû être mises à jour. False sinon.
 	 */
-	public static boolean updateDateSession(int idUser)
+	public static boolean updateDateSessionById(int idUser)
 	{
 		Connection c;
 		try 
@@ -174,7 +174,31 @@ public class UserTools
 		} 
 		catch (Exception e) 
 		{
-			System.err.println("Error updateDateSession : " + e.getMessage());
+			System.err.println("Error updateDateSessionById : " + e.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Mettre a jour les données de connexion de l'utilisateur à partir de sa clé.
+	 * @param key La clé de session de l'utilisateur.
+	 * @return True si les données ont pû être mises à jour. False sinon.
+	 */
+	public static boolean updateDateSessionByKey(String key)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "UPDATE session SET sdate = NOW() WHERE skey = \""+key+"\";";
+			if(st.executeUpdate(query) == 0)
+				return false;
+			return true;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error updateDateSessionByKey : " + e.getMessage());
 			return false;
 		}
 	}
@@ -184,7 +208,6 @@ public class UserTools
 	 * @param idUser L'id de l'utilisateur.
 	 * @return La clé de connexion, ou null en cas de problème.
 	 */
-	
 	public static String getKey(int idUser)
 	{
 		Connection c;
@@ -292,11 +315,10 @@ public class UserTools
 	}
 	
 	/**
-	 * Obtenir le login de l'utilisateur à partir de son id.
+	 * Obtenir le login de l'utilisateur à partir de sa clé.
 	 * @param key La clé.
 	 * @return Le login de l'utilisateur. False en cas d'erreur avec la base de données.
 	 */
-	
 	public static String getIdUserFromKey(String key)
 	{
 		Connection c;
@@ -323,7 +345,7 @@ public class UserTools
 	 * @param login Le login de l'utilisateur.
 	 * @return l'id du user, ou -1 en cas de problème avec la base de données.
 	 */
-	public static int getIdUser(String login)
+	public static int getIdUserFromLogin(String login)
 	{
 		Connection c;
 		try 
@@ -378,7 +400,7 @@ public class UserTools
 	
 	/**
 	 * Supprimer un ami dans la table Friend.
-	  * @param idUser L'id de l'utilisateur qui souhaite supprimer un ami.
+	 * @param idUser L'id de l'utilisateur qui souhaite supprimer un ami.
 	 * @param idFriend L'id de l'ami à supprimer.
 	 * @return True si la suppression s'est effectuée sans problème. False sinon.
 	 */
@@ -438,7 +460,7 @@ public class UserTools
 	}
 	
 	/**
-	 * Test si une connexion existe avec la clé "key"
+	 * Test si une connexion existe avec la clé "key". Si necessaire, la date de la clé peut être mise à jour.
 	 * @param key La clé à tester
 	 * @return boolean True si la clé existe. False sinon.
 	 */
@@ -455,18 +477,21 @@ public class UserTools
 			{
 				Timestamp tempsSession = rs.getTimestamp(1);
 				Timestamp maintenant = new Timestamp(new GregorianCalendar().getTimeInMillis());
-				if((maintenant.getTime() - tempsSession.getTime()) >= utils.Data.DUREE_AVANT_DECO)
+				if((maintenant.getTime() - tempsSession.getTime()) >= utils.Data.DUREE_AVANT_DECO)		// Le temps est dépassé
 				{
-					if (!isRoot(key))
+					if (!isRoot(key))		// L'utilisateur n'est pas root, on le déconnecte
 					{
 						System.out.println("On enlève la connexion");
 						removeConnection(key);
 						return false;
 					}
 					else
-						return true;
+						return false;
 				}
-				else
+				else if(!isRoot(key))						// Le temps n'est pas dépassé, et l'utilisateur n'est pas root
+					return updateDateSessionByKey(key);		//On met donc à jour la date de sa session
+				
+				else										// Le temps n'est pas dépassé, et l'utilisateur est root
 					return true;
 			}
 			else
@@ -474,7 +499,7 @@ public class UserTools
 		} 
 		catch (Exception e) 
 		{
-			System.err.println("Error getIdUser : " + e.getMessage());
+			System.err.println("Error isConnexion : " + e.getMessage());
 			return false;
 		}
 	}
@@ -484,7 +509,6 @@ public class UserTools
 	 * @param key La clé à supprimer.
 	 * @return boolean True si la clé à été supprimée avec succès. False sinon.
 	 */
-	
 	public static boolean removeConnection(String key)
 	{
 		try
@@ -552,6 +576,11 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * Recherche la liste des utilisateur dont le login ressemble à celui donnée en paramètre.
+	 * @param login Le login recherché
+	 * @return Une liste des login ressemblant à celui passé en paramètre.
+	 */
 	public static JSONArray searchUserByLogin(String login)
 	{
 		try
@@ -579,6 +608,11 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * Liste tous les amis d'un utilisateur sous forme d'une chaine de caractère.
+	 * @param idUser L'id de l'utilisateur dans la base de données MySQL.
+	 * @return La liste des amis de l'utilisateur sous la forme suivante : id_ami1-id_ami2-id_ami3-...
+	 */
 	public static String listFriendString(String idUser)
 	{
 		try
@@ -601,6 +635,12 @@ public class UserTools
 		}
 	}
 	
+	/**
+	 * Vérifie si deux utilisateurs sont amis.
+	 * @param idUser Le premier utilisateur.
+	 * @param idFriend Le second utilisateur.
+	 * @return True s'ils sont amis, false sinon.
+	 */
 	public static boolean areFriends(String idUser, String idFriend)
 	{
 		try

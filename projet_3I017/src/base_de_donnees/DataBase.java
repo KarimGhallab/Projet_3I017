@@ -15,7 +15,6 @@ import com.mongodb.Mongo;
 
 /**
  * Représente une base de données.
- * @author 3772468
  *
  */
 public class DataBase

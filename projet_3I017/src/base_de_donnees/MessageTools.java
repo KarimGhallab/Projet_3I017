@@ -98,10 +98,17 @@ public class MessageTools
 		}
 	}
 	
-	public static JSONArray listMessage() 
+	/**
+	 * Liste l'ensemble des messages de l'application.
+	 * @param limite Le nombre de message à afficher.
+	 * @return La liste des messages.
+	 */
+	public static JSONArray listMessage(int limite) 
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		DBCursor messagesCursor = msg.find();
+		if (limite > 0)
+			messagesCursor.limit(limite);
 		JSONArray userMessages = new JSONArray();
 		try
 		{
@@ -122,29 +129,5 @@ public class MessageTools
 			System.err.println("listMessage : " + e.getMessage());
 			return null;
 		}
-	}
-	
-	public static void addComment(String auteurId , String idMessage, String commentaire)
-	{
-		DBCollection msg = DataBase.getMongoCollection("Message");
-		BasicDBObject comments = new BasicDBObject();
-		GregorianCalendar c = new GregorianCalendar();
-		comments.put("content", commentaire);
-		comments.put("date", c.getTime());
-		comments.put("idAuthor",auteurId);
-		
-		BasicDBObject content = new BasicDBObject();
-		content.put("comments", comments);
-		
-		BasicDBObject push = new BasicDBObject();
-		push.put("$push", content);
-		
-		BasicDBObject cond = new BasicDBObject();
-		cond.put("_id", new ObjectId(idMessage));
-		
-		System.out.println("condition : " + cond);
-		System.out.println("push : " + push);
-		
-		msg.update(cond , push);
 	}
 }

@@ -18,7 +18,6 @@ public class FriendServices
 {
 	/**
 	 * Ajouter un ami à la base de données MySQL.
-	 * @param idUser L'id de l'utilisateur qui souhaite ajouter un ami.
 	 * @param idFriend L'id de l'ami.
 	 * @param key La clé de connexion.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
@@ -52,7 +51,6 @@ public class FriendServices
 	
 	/**
 	 * Supprimer un ami à la base de données MySQL.
-	 * @param idUser L'id de l'utilisateur qui souhaite supprimer un ami.
 	 * @param idFriend L'id de l'ami.
 	 * @param key La clé de connexion.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
@@ -78,7 +76,6 @@ public class FriendServices
 	
 	/**
 	 * Lister tous les amis d'un utilisateur.
-	 * @param idUser L'id de l'utilisateur.
 	 * @param key La clé de connexion.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */

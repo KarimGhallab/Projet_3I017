@@ -95,13 +95,19 @@ public class UserServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 	}
 	
+	/**
+	 * 
+	 * @param login Le login de l'utilisateur
+	 * @param key
+	 * @return
+	 */
 	public static JSONObject searchUserByLogin(String login, String key)
 	{
 		if(login == null || key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
-		JSONArray liste=UserTools.searchUserByLogin(login);
+		JSONArray liste = UserTools.searchUserByLogin(login);
 		if(liste == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		

@@ -1,4 +1,6 @@
 package utils;
+import java.sql.Time;
+
 import org.bson.types.*;
 
 public class Test 
@@ -17,7 +19,7 @@ public class Test
 		String mail = "toto@chips.fr";
 		String loginFriend = "tata";
 		int root = 1;
-		int idUser = base_de_donnees.UserTools.getIdUser(loginFriend); 
+		int idUser = base_de_donnees.UserTools.getIdUserFromLogin(loginFriend); 
 		int id1;
 		int id2;
 		
@@ -90,19 +92,18 @@ public class Test
 		
 		
 		
-		/*System.out.println(service.UserServices.createUser("toto", "toto", "to", "to", "to@to.to.com").toString());
+		// Test des commentaires
+		//System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
 		
-		int idToto = base_de_donnees.UserTools.getIdUser("toto");
-		service.UserServices.login("toto", "toto", ""+0);
+		int idToto = base_de_donnees.UserTools.getIdUserFromLogin("totot");
+		String idMessageAjout = "5a8dc7e246ec5903bf73c062";
+		service.UserServices.login("totot", "totototo", ""+0);
 		String keyToto = base_de_donnees.UserTools.getKey(idToto);
 		
 		System.out.println("cle toto : " + keyToto);
-		System.out.println("isConnexion : " + base_de_donnees.UserTools.isConnection(keyToto) + "\n");
-		System.out.println("Liste des messages : \n" + service.MessageServices.listMessage(keyToto, ""+idToto, ""+0, ""+0, "3-2").toString() + "\n");
-		*/
-		
-		//base_de_donnees.MessageTools.removeMessage("5a96d670e4b01ee4120b9fc8");
-		base_de_donnees.MessageTools.addComment(""+3, "5a96d64de4b02ccacb187974", "commentaire2");
+		System.out.println(service.CommentServices.addComment(keyToto, idMessageAjout, "Je suis pas d'accord t'es nul"));
+		System.out.println(service.CommentServices.listComment(keyToto, idMessageAjout));
+		//System.out.println(service.CommentServices.removeComment(idMessageAjout));
 	}
 
 }

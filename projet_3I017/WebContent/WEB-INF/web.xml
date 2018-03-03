@@ -45,6 +45,20 @@
 		<servlet-class>servlet.message.ListMessage</servlet-class> 
 	</servlet>  
 	
+	<!-- Servlet Comment -->
+	 <servlet> 
+		<servlet-name>addComment</servlet-name> 
+		<servlet-class>servlet.comment.AddComment</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>removeComment</servlet-name> 
+		<servlet-class>servlet.comment.RemoveComment</servlet-class> 
+	</servlet> 
+	<servlet> 
+		<servlet-name>listComment</servlet-name> 
+		<servlet-class>servlet.comment.ListComment</servlet-class> 
+	</servlet>
+	
 	 <!-- Servlet-mapping User -->
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
@@ -85,5 +99,19 @@
 	<servlet-mapping>
 		<servlet-name>listMessage</servlet-name> 
 		<url-pattern>/message/listMessage</url-pattern> 
+	</servlet-mapping>
+	
+	<!-- Servlet-mapping Comment -->
+	<servlet-mapping> 
+		<servlet-name>addComment</servlet-name> 
+		<url-pattern>/comment/addComment</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>removeComment</servlet-name> 
+		<url-pattern>/comment/removeComment</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>listComment</servlet-name> 
+		<url-pattern>/comment/listComment</url-pattern> 
 	</servlet-mapping>
 </web-app>
