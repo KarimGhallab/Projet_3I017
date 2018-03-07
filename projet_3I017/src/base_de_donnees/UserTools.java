@@ -88,9 +88,7 @@ public class UserTools
 			Statement st = c.createStatement();
 			String query = "INSERT INTO user(login, pwd, nom, prenom, mail) VALUES(\""+login+"\", PASSWORD(\""+pwd+"\"), \""+nom+"\", \""+prenom+"\", \""+email+"\");";
 			System.out.println("Insertion utilisateur : " + query);
-			int res;
-			
-				res = st.executeUpdate(query);
+			int res = st.executeUpdate(query);
 			 
 			if (res == 0)
 				return false;

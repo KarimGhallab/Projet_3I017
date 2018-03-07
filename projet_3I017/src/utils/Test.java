@@ -93,15 +93,15 @@ public class Test
 		
 		
 		// Test des commentaires
-		//System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
+		System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
 		
 		int idToto = base_de_donnees.UserTools.getIdUserFromLogin("totot");
-		String idMessageAjout = "5a8dc7e246ec5903bf73c062";
+		String idMessageAjout = "5a96d64de4b02ccacb187974";
 		service.UserServices.login("totot", "totototo", ""+0);
 		String keyToto = base_de_donnees.UserTools.getKey(idToto);
 		
 		System.out.println("cle toto : " + keyToto);
-		System.out.println(service.CommentServices.addComment(keyToto, idMessageAjout, "Je suis pas d'accord t'es nul"));
+		System.out.println(service.CommentServices.addComment(keyToto, idMessageAjout, "Je suis pas d'accord t'es trop nul"));
 		System.out.println(service.CommentServices.listComment(keyToto, idMessageAjout));
 		//System.out.println(service.CommentServices.removeComment(idMessageAjout));
 	}

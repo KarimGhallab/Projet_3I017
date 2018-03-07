@@ -7,6 +7,7 @@ import org.json.JSONArray;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 
 /**
  * Classe contenant les méthodes statiques pour gérer les commentaires de messages avec notre base de données MongDB.
@@ -28,6 +29,9 @@ public class CommentTools
 		comments.put("content", commentaire);
 		comments.put("date", c.getTime());
 		comments.put("idAuthor",auteurId);
+		
+		//objectId = genererObjectId();
+		comments.put("id_comment", new ObjectId());
 		
 		BasicDBObject content = new BasicDBObject();
 		content.put("comments", comments);
@@ -62,6 +66,27 @@ public class CommentTools
 	 */
 	public static void removeComment(String idCommentaire)
 	{
-		System.err.println("Error removeComment : not yet implemented !");
+		DBCollection msg = DataBase.getMongoCollection("Message");
+		BasicDBObject query = new BasicDBObject();
+		query.put("id_comment", new ObjectId(idCommentaire));
+		System.out.println("Query : " +query);
+		msg.remove(query);
+	}
+	
+	public static ObjectId genererObjectId()
+	{
+		DBCollection msg = DataBase.getMongoCollection("Message");
+		int taille = 1;
+		ObjectId id = new ObjectId();
+		while(taille > 0)
+		{
+			BasicDBObject query = new BasicDBObject();
+			query.put("id_comment", new BasicDBObject("$exists", true).put("$ne", id));
+			System.out.println(query);
+			DBCursor cursor = msg.find(query);
+			System.out.println("Taille curseur : " + cursor.size());
+			taille = cursor.size();
+		}
+		return id;
 	}
 }
