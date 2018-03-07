@@ -4,10 +4,12 @@ import java.util.GregorianCalendar;
 
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 /**
  * Classe contenant les méthodes statiques pour gérer les commentaires de messages avec notre base de données MongDB.
@@ -55,9 +57,27 @@ public class CommentTools
 	 */
 	public static JSONArray listComment(String idMessage)
 	{
-		System.err.println("Error listComment : not yet implemented !");
-		
-		return null;
+		DBCollection msg = DataBase.getMongoCollection("Message");
+		BasicDBObject query = new BasicDBObject();
+		query.put("_id", new ObjectId(idMessage));
+		DBCursor cursor = msg.find(query);
+		JSONArray comments = new JSONArray();
+		try
+		{
+			while(cursor.hasNext())
+			{
+				JSONObject json = new JSONObject();
+				DBObject comment = cursor.next();
+				json.put("comment", comment.get("comment"));
+				comments.put(json);
+			}
+			return comments;
+		}
+		catch(Exception e)
+		{
+			System.err.println("listMessage : " + e.getMessage());
+			return null;
+		}
 	}
 	
 	/**
@@ -73,19 +93,24 @@ public class CommentTools
 		msg.remove(query);
 	}
 	
+	/**
+	 * Génére un nouvel ObjectId de commentaire pas encore attribué. 
+	 * @return L'ObjectId généré.
+	 */
 	public static ObjectId genererObjectId()
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
-		int taille = 1;
-		ObjectId id = new ObjectId();
-		while(taille > 0)
+		ObjectId id;
+		while(true)
 		{
+			id = new ObjectId();
 			BasicDBObject query = new BasicDBObject();
 			query.put("id_comment", new BasicDBObject("$exists", true).put("$ne", id));
 			System.out.println(query);
 			DBCursor cursor = msg.find(query);
 			System.out.println("Taille curseur : " + cursor.size());
-			taille = cursor.size();
+			if (cursor.size() != 0)
+				break;
 		}
 		return id;
 	}
