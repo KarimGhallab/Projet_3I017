@@ -30,8 +30,8 @@ public class CommentTools
 		comments.put("date", c.getTime());
 		comments.put("idAuthor",auteurId);
 		
-		//objectId = genererObjectId();
-		comments.put("id_comment", new ObjectId());
+		ObjectId objectId = genererObjectId();
+		comments.put("id_comment", objectId);
 		
 		BasicDBObject content = new BasicDBObject();
 		content.put("comments", comments);
