@@ -82,6 +82,7 @@ public class CommentServices
 		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
+		base_de_donnees.CommentTools.removeComment(idCommentaire);
 		return ServiceTools.serviceAccepted();
 	}
 }
