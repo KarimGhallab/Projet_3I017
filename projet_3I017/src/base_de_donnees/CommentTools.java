@@ -28,12 +28,12 @@ public class CommentTools
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject comments = new BasicDBObject();
 		GregorianCalendar c = new GregorianCalendar();
-		comments.put("content", commentaire);
-		comments.put("date", c.getTime());
-		comments.put("idAuthor",auteurId);
 		
 		ObjectId objectId = genererObjectId();
 		comments.put("id_comment", objectId);
+		comments.put("content", commentaire);
+		comments.put("date", c.getTime());
+		comments.put("idAuthor",auteurId);
 		
 		BasicDBObject content = new BasicDBObject();
 		content.put("comments", comments);
@@ -62,15 +62,13 @@ public class CommentTools
 		query.put("_id", new ObjectId(idMessage));
 		DBCursor cursor = msg.find(query);
 		JSONArray comments = new JSONArray();
+		
 		try
 		{
-			while(cursor.hasNext())
-			{
-				JSONObject json = new JSONObject();
-				DBObject comment = cursor.next();
-				json.put("comment", comment.get("comment"));
-				comments.put(json);
-			}
+			JSONObject json = new JSONObject();
+			DBObject comment = cursor.next();
+			json.put("comment", comment.get("comments"));
+			comments.put(json);
 			return comments;
 		}
 		catch(Exception e)
@@ -86,11 +84,15 @@ public class CommentTools
 	 */
 	public static void removeComment(String idCommentaire)
 	{
+		System.out.println("#################");
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
-		query.put("id_comment", new ObjectId(idCommentaire));
-		System.out.println("Query : " +query);
-		msg.remove(query);
+		BasicDBObject condition = new BasicDBObject("id_comment", new ObjectId(idCommentaire));
+		query.put("comments", condition);
+		BasicDBObject finalQuery = new BasicDBObject();
+		finalQuery.put("$pull", query);
+		System.out.println("Query : " +finalQuery);
+		msg.update(new BasicDBObject(), finalQuery, false, false);
 	}
 	
 	/**

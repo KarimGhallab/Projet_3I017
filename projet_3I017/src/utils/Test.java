@@ -96,14 +96,16 @@ public class Test
 		System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
 		
 		int idToto = base_de_donnees.UserTools.getIdUserFromLogin("totot");
-		String idMessageAjout = "5a96d64de4b02ccacb187974";
 		service.UserServices.login("totot", "totototo", ""+0);
 		String keyToto = base_de_donnees.UserTools.getKey(idToto);
 		
+		//service.MessageServices.addMessage(keyToto, "Vive Jason");
+		String idMessage = "5aa181b246ec75cfec8b7f47";
+		
 		System.out.println("cle toto : " + keyToto);
-		System.out.println(service.CommentServices.addComment(keyToto, idMessageAjout, "Je suis pas d'accord t'es trop nul"));
-		System.out.println(service.CommentServices.listComment(keyToto, idMessageAjout));
-		//System.out.println(service.CommentServices.removeComment(idMessageAjout));
+		//System.out.println(service.CommentServices.addComment(keyToto, idMessage, "8000 fois d'accord avec toi, vive Jason !"));
+		//System.out.println("Liste des commentaires : " + service.CommentServices.listComment(keyToto, idMessage));
+		//System.out.println(service.CommentServices.removeComment(keyToto, "5aa185d346ec3aa8bc39d8be"));
 	}
 
 }
