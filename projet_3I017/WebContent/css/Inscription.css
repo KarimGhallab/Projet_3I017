@@ -3,7 +3,7 @@ body
     background-image: url("../image/background_blue.jpg");
     background-size: cover;
 }
-#main_connexion
+#main_inscription
 {
     position: absolute;
     top: 50%;
@@ -38,7 +38,7 @@ body
     }
 }
 
-#main_connexion span
+#main_inscription span
 {
     float: left;
     width: 100px;
@@ -57,7 +57,7 @@ body
     text-align: right;
 }
 
-#main_connexion input[type=text], input[type=password]
+#main_inscription input[type=text], input[type=password], input[type=email]
 {
     padding: 8px 20px;
     border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
@@ -65,15 +65,22 @@ body
     outline: none;
 }
 
-#main_connexion input[type=text]:focus, input[type=password]:focus
+#main_inscription input[type=text]:focus, input[type=password]:focus, input[type=email]:focus
 {
     border: 2px solid #007acc;
     transition: 0.5s;
     border-radius: 5px;
 }
 
-#main_connexion input[type=submit]
+#main_inscription input[type=submit]:hover
 {
+    background: #66b3ff;
+    color: #fff;
+}
+
+#submit_button
+{
+    float: right;
     border: none;
     padding: 8px 15px 8px 15px;
     background: #0099ff;
@@ -81,23 +88,27 @@ body
     border-radius: 5px;
     transition: 0.5s;
 }
-#main_connexion input[type=submit]:hover
+
+#submit_button:hover
 {
     background: #66b3ff;
     color: #fff;
 }
 
-#links
-{
-    margin-top: 2em;
-}
-#link1
+#cancel_button
 {
     float: left;
+    border: none;
+    padding: 8px 15px 8px 15px;
+    background: #0099ff;
+    color: #fff;
+    border-radius: 5px;
+    transition: 0.5s;
 }
 
-#link2
+#cancel_button:hover
 {
-    float: right;
-    text-align: right;
+    float: left;
+    background: #66b3ff;
+    color: #fff;
 }

@@ -8,7 +8,7 @@
     <!--<script src="main.js"></script>-->
 </head>
 <body>
-    <div id="main_Inscription">
+    <div id="main_inscription">
         <form method="POST" action="javascript:(function (){return;})()">
             <h1>Inscription</h1>
             <div class="ids" ><span>Nom</span><input type="text" name="nom"/></div>
@@ -16,8 +16,10 @@
             <div class="ids" ><span>Mail</span><input type="email" name="email"/></div>
             <div class="ids" ><span>Mot de passe</span><input type="password" name="pwd"/></div>
             <div class="ids" ><span>Confirmer mot de passe</span><input type="password" name="pwd2"/></div>
-            <div class="button"><input type="submit" value="Enregistrer"/></div>
-            <div class="button"><a href="Connexion.html"><input type="button" value="Annuler"/></a></div>
+            <div class="buttons">
+                <input type="submit" value="Enregistrer" id="submit_button"/>
+                <a href="Connexion.html"><input type="button" value="Déjà un compte ?" id="cancel_button"/></a>
+            </div>
         </form>
     </div>
 </body>
