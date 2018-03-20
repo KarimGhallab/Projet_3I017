@@ -1,0 +1,62 @@
+body{
+	background-color: #e6ecf0;
+}
+#header{
+	border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+input[type=button]{
+	border-radius:12px 0 12px 0;
+	background: #f5f5f5;
+	border:none;
+	color:#555;
+	font:bold 12px Verdana;
+	padding:6px 0 6px 0;
+	box-shadow:1px 1px 3px #999;
+	background-color: #5270ff;
+	color: white;
+}
+
+
+#logo{
+  display: inline-block;
+  border: 2px dotted orange;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  
+}
+
+#logo_img{
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+}
+#deconnexion{
+	float: right;
+	padding-top: 20px;
+}
+#search{
+	float: right;
+	padding-top: 20px;
+
+	margin-right: 30px;
+}
+
+.msg{
+	width:50%;
+    margin:auto;  
+    background-color: #fff;
+}
+
+#stat{
+	float: left;
+}
+
+#new_msg{
+	align-content: center;
+	width: 500px;
+	height: 30px
+}
