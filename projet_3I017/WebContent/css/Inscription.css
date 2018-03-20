@@ -158,3 +158,12 @@ footer
     margin-left: 50px;
     margin-bottom: 12px;
 }
+
+
+input:invalid {
+  border: 1px solid red;
+}
+
+input:valid {
+  border: 1px solid green;
+}

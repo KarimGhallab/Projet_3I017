@@ -54,6 +54,16 @@ body
     margin-top: 8px;
 }
 
+#input_id
+{
+    flex: 1;
+}
+#mail
+{
+     display:flex;
+    flex-direction:row
+}
+
 .ids
 {
     margin-bottom: 2em;
@@ -64,7 +74,7 @@ body
     text-align: right;
 }
 
-#main_connexion input[type=text], input[type=password]
+#main_connexion input[type=text], input[type=password] , input[type=email]
 {
     padding: 8px 20px;
     border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
@@ -72,11 +82,21 @@ body
     outline: none;
 }
 
-#main_connexion input[type=text]:focus, input[type=password]:focus
+#main_connexion input[type=text]:focus, input[type=password]:focus , input[type=email]:focus
 {
     border: 2px solid #007acc;
     transition: 0.5s;
     border-radius: 5px;
+}
+
+#main_connexion input[type=text]:valid, input[type=password]:valid , input[type=email]:valid
+{                                                                                               /*remplace les bordures en vert quand le champs est valid*/
+    border: 2px solid green;
+}
+
+#main_connexion input[type=text]:invalid, input[type=password]:invalid , input[type=email]:invalid
+{                                                                                                /*remplace les bordures en rouge quand le champs est invalid*/
+    border: 2px solid red;
 }
 
 #main_connexion input[type=submit]
