@@ -1,3 +1,9 @@
+html, body
+{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 body
 {
     background-image: url("../image/background_blue.jpg");
@@ -14,7 +20,7 @@ body
     border-bottom: 2px solid #ddd;
     margin-bottom: 20px;
     font-size: 15px;
-    padding-bottom: 3px;
+    padding-bottom: 10px;
     font-family: Arial;
     animation: fadein 2s;
 }
@@ -33,7 +39,8 @@ body
     {
         top: 70%;
     }
-    100% {
+    100%
+    {
         top: 50%;
     }
 }
@@ -105,7 +112,7 @@ body
 footer
 {
     position: absolute;
-    bottom: 30px;
+    bottom: 15px;
     left: 50%;
     transform: translate(-50%, 0%);
 }

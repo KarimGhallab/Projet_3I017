@@ -1,8 +1,12 @@
+html, body
+{
+    padding: 0;
+    margin: 0;
+}
 body
 {
     background-image: url("../image/background_blue.jpg");
     background-size: cover;
-    height: 100%;
 }
 #main_inscription
 {
@@ -12,7 +16,7 @@ body
     font-weight: bold;
     font-style: italic;
     border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
     font-size: 15px;
     font-family: Arial;
     animation: fadein 2s;
@@ -31,10 +35,11 @@ body
     }
     0%          /* Gére le mouvement */
     {
-        top:80%;
+        margin-top:10%;
     }
-    100% {
-        top: 50%;
+    100%
+    {
+        margin-top:50px;
     }
 }
 
@@ -59,7 +64,13 @@ body
 
 #prenom
 {
-    display: block;
+    display: inline-block;
+}
+
+#mail
+{
+    display:flex;
+    flex-direction:row
 }
 
 #mdp2
@@ -129,8 +140,8 @@ body
 
 footer
 {
-    position: absolute;
-    bottom: 30px;
+    position: fixed;
+    bottom: 15px;
     left: 50%;
     transform: translate(-50%, 0%);
 }
