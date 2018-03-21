@@ -1,4 +1,4 @@
-html, body
+html
 {
     height: 100%;
     margin: 0;
@@ -53,6 +53,38 @@ body
     text-align: left;
     margin-right: 0.3em;
     margin-top: 8px;
+}
+
+/* L'header */
+#header{
+    border-radius: 3px;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100%;
+	position: relative;
+	margin-bottom: 10px;
+}
+
+#title{
+	position: absolute;
+	left:70px;
+	transform: translate(0,-50%);
+	top: 50%;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	font-size: 3em;
+}
+
+#logo{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+}
+
+#logo_img{
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
 }
 
 #input_id
@@ -133,7 +165,7 @@ body
 footer
 {
     position: absolute;
-    bottom: 15px;
+    bottom: 0px;
     left: 50%;
     transform: translate(-50%, 0%);
 }

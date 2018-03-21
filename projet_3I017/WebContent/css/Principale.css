@@ -9,15 +9,6 @@ body
 	background-size: cover;
 	background-attachment: fixed;
 }
-#header
-{
-	
-    border-radius: 3px;
-	background-color: rgba(255, 255, 255, 0.6);
-	width: 100%;
-	position: relative;
-	margin-bottom: 10px;
-}
 
 .sticky
 {
@@ -55,6 +46,15 @@ input[type=button]
 	color: white;
 }
 
+/* Le header */
+#header{
+    border-radius: 3px;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100%;
+	position: relative;
+	margin-bottom: 10px;
+}
+
 #title{
 	position: absolute;
 	left:70px;
@@ -63,8 +63,8 @@ input[type=button]
 	font-family: Georgia, 'Times New Roman', Times, serif;
 	font-size: 3em;
 }
-#logo
-{
+
+#logo{
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -103,9 +103,10 @@ input[type=button]
 #messages
 {
 	position: absolute;
-	top :27%;
+	top :22%;
 	width: 98%;
 	z-index: -1;		/* A voir quel effet on veut */
+	margin-bottom: 50px;
 }
 
 .msg
@@ -138,7 +139,7 @@ input[type=button]
 footer
 {
     position: fixed;
-    bottom: 15px;
+    bottom: 0px;
     left: 50%;
 	transform: translate(-50%, 0%);
 }

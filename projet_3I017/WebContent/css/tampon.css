@@ -1,4 +1,4 @@
-html
+html, body
 {
     padding: 0;
     margin: 0;
@@ -12,6 +12,7 @@ body
 #main_inscription
 {
     margin:auto;
+    margin-top: 50px;
     width: 50%;
     font-weight: bold;
     font-style: italic;
@@ -21,7 +22,6 @@ body
     font-family: Arial;
     animation: fadein 2s;
     position: relative;
-    top:0px;
 }
 
 @keyframes fadein
@@ -36,11 +36,11 @@ body
     }
     0%          /* Gére le mouvement */
     {
-        top:50px;
+        margin-top:100px;
     }
     100%
     {
-        top:0px;
+        margin-top:50px;
     }
 }
 
@@ -50,37 +50,6 @@ body
     width: 100px;
     margin-right: 0.3em;
     margin-top: 8px;
-}
-
-/* L'header */
-#header{
-    border-radius: 3px;
-	background-color: rgba(255, 255, 255, 0.6);
-	width: 100%;
-	position: relative;
-}
-
-#title{
-	position: absolute;
-	left:70px;
-	transform: translate(0,-50%);
-	top: 50%;
-	font-family: Georgia, 'Times New Roman', Times, serif;
-	font-size: 3em;
-}
-
-#logo{
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  position: relative;
-}
-
-#logo_img{
-  width: inherit;
-  height: inherit;
-  border-radius: inherit;
 }
 
 .ids
@@ -156,7 +125,7 @@ body
 footer
 {
     position: fixed;
-    bottom: 0px;
+    bottom: 15px;
     left: 50%;
     transform: translate(-50%, 0%);
 }
