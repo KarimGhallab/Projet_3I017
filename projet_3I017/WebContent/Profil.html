@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>Profil</title>
+	<meta charset="utf-8" />
+    <title>Twister</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="css/Profil.css" />
     <!--<script src="main.js"></script>-->
 </head>
 <body>
-    <header>
-        <div id="logo"><img src="" alt="logo"></div>
-        <div id="search"><label for="input_search">Recheche</label><input id="input_search" type="text" name="search"/><input type="button" onclick="javascript:(function (){return;})()"></div>
+	<header>
+    	<div id="header">
+        
+        <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"></div>
         <div id="deconnexion"><input type="button" value="Deconnexion" onclick=""></div>
+        <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search"/>
+        	<input type="button" value="Search" onclick="javascript:(function (){return;})()">
+        </div>
+    	</div>
     </header>
-    <div id="stat"> je suis une stat</div>
-    <div id="profil">
-        <div id="infos"><img src="" alt="logo"> <span>Nom</span><span>prenom</span></div>
-        <div id="messages"></div>
-    </div>
-    <footer></footer>
 </body>
 </html>

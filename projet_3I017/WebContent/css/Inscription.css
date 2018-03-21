@@ -67,6 +67,10 @@ body
     display: inline-block;
 }
 
+#indication
+{
+	font-size: 15px;
+}
 #mail
 {
     display:flex;
