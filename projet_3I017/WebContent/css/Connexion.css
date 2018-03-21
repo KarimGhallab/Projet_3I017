@@ -8,6 +8,7 @@ body
 {
     background-image: url("../image/background_blue.jpg");
     background-size: cover;
+    background-attachment: fixed;
 }
 #main_connexion
 {
@@ -84,7 +85,6 @@ body
 
 #main_connexion input[type=text]:focus, input[type=password]:focus , input[type=email]:focus
 {
-    border: 2px solid #007acc;
     transition: 0.5s;
     border-radius: 5px;
 }
@@ -129,6 +129,7 @@ body
     text-align: right;
 }
 
+/* Le footer */
 footer
 {
     position: absolute;

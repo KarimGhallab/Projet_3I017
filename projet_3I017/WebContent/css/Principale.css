@@ -1,17 +1,49 @@
-body{
+html
+{
+	height: 100%;
+	margin: 0;
+}
+body
+{
 	background-image: url("../image/background_blue.jpg");
 	background-size: cover;
 	background-attachment: fixed;
 }
-#header{
-	border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
+#header
+{
+	
     border-radius: 3px;
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100%;
 	position: relative;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 }
 
-input[type=button]{
+.sticky
+{
+	position: fixed;
+	top: 10px;
+	left: 50%;
+	transform: translate(-50%, 0);
+  }
+
+input[type=text], input[type=password], input[type=email]
+{
+    padding: 8px 20px;
+    border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
+    border-radius: 5px;
+    /*transition: 0.5s;*/
+    outline: none;
+}
+
+input[type=text]:focus
+{
+    border: 2px solid #007acc;
+    border-radius: 5px;
+}
+
+input[type=button]
+{
 	border-radius:12px 0 12px 0;
 	background: #f5f5f5;
 	border:none;
@@ -31,7 +63,8 @@ input[type=button]{
 	font-family: Georgia, 'Times New Roman', Times, serif;
 	font-size: 3em;
 }
-#logo{
+#logo
+{
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -44,6 +77,7 @@ input[type=button]{
   height: inherit;
   border-radius: inherit;
 }
+
 #deconnexion{
 	float: right;
 	transform: translate(-50%, -50%);
@@ -51,26 +85,74 @@ input[type=button]{
 	right: 0%;
 	top:50%;
 }
-#search{
+
+#input_search
+{
+	width: 60%;
+}
+
+#search
+{
 	float: right;
 	transform: translate(-50%, -50%);
 	position: absolute;
-	left: 50%;
+	left:50%;
 	top:50%;
 }
 
-.msg{
+#messages
+{
+	position: absolute;
+	top :27%;
+	width: 98%;
+	z-index: -1;		/* A voir quel effet on veut */
+}
+
+.msg
+{
 	width:50%;
     margin:auto;  
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 #stat{
-	float: left;
+	position: fixed;
+	left:8px;
+	display: flex;
+	flex-flow: column;
+	width: 20%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.6);
 }
 
 #new_msg{
-	align-content: center;
-	width: 500px;
+	width: 40%;
 	height: 30px
+}
+
+#nouveau_msg
+{
+	text-align: center;
+}
+
+/* Le footer */
+footer
+{
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+	transform: translate(-50%, 0%);
+}
+
+#logo_github:hover
+{
+    fill:#fff;
+}
+
+.lien_github
+{
+    float: right;
+    cursor: pointer;
+    margin-left: 50px;
+    margin-bottom: 12px;
 }
