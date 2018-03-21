@@ -5,17 +5,134 @@
     <title>Twister</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="css/Principale.css" />
-    <!--<script src="main.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="main.js"></script> -->
 </head>
-<body>
+<script type="text/javascript">
+    //Objet Message
+    function Message(id , auteur , texte , comments , date){
+        this.id = id;
+        this.auteur=auteur;
+        this.date=date;
+        this.texte=texte;
+        if(comments == undefined){
+            comments=[];}
+        this.comments=comments;
+    }
+    Message.prototype.getHTML = function(){
+        s="<div id=\"message_"+this.id+"\" class=\"msg\">\n"+
+            "<div>\n<div>"+this.auteur.getHTML()+"</div>\n<div>"+this.date+"</div>\n</div>\n"+
+            "<div>"+this.texte+"</div>"+
+            "<div>";
+        for(var i =0 ; i<this.comments.length ; i++){
+            s+="<div>"+this.comments[i].getHTML()+"</div>"
+        }
+        s+="</div></div>";
+        return s;
+    }
+
+    //objet commentaire
+    function Commentaire(id , auteur , texte , date){
+        this.id = id;
+        this.auteur=auteur;
+        this.date=date;
+        this.texte=texte;
+    }
+    Commentaire.prototype.getHTML = function(){
+        s="<div id=\"commentaire_"+this.id+"\">"+
+            "<div><div>"+this.auteur.getHTML()+"</div><div>"+this.date+"</div></div>"+
+            "<div>"+this.texte+"</div>"+
+            "</div>";
+        return s;
+    }
+
+    //objet Auteur
+    function Auteur(id , login){
+        this.id = id;
+        this.login=login;
+    }
+    Auteur.prototype.getHTML = function(){
+        s="<div id=\"auteur_"+this.id+"\">"+
+            "<div>"+this.login+"</div>"+
+            "</div>";
+        return s;
+    }
+
+    //fonction du parser
+    revival=function(key , value){
+        if(!value.comments == undefined){
+            return new Message(value.id , valu.auteur, value.texte , value.date , value.comments);
+        }
+        else if(value.texte != undefined){
+            return new Commentaire(value.id , value.auteur ,value.texte, value.date);
+        }
+        if(key=="auteur"){
+            return new Auteur(value.id , value.login);
+        }
+        if(key=="date"){
+            return new date(value.date);
+        }
+    }
+
+    function setVirtualdb(){
+        localdb= []
+        follows = []
+        /*var u1 = {"id":1 , "login":"toto"}
+        var u2 = {"id":2 , "login":"titi"}
+        var u3 = {"id":3 , "login":"jordan"}*/
+
+        var u1 = new Auteur(1, "toto");
+        var u2 = new Auteur(2, "tata");
+        var u3 = new Auteur(3, "jordan");
+
+        follows[1] = new Set()
+        follows[1].add(2)
+        follows[2] = new Set()
+        follows[2].add(3)
+        follows[3] = new Set()
+        follows[3].add(1)
+
+        com1 = new Commentaire(1, u2, "Comment ca va", new Date());
+        com2 =  new Commentaire(2, u3, "Ca va bien", new Date());
+
+        msg = new Message( 1 , u1 , "yo !" , [com1 , com2] , new Date());
+
+        localdb[0] = msg;
+    }
+
+    function init()
+    {
+        noConnection = true;
+        env = new Object();
+        env.key = "abcd";
+        env.idUser = 1;
+        setVirtualdb();
+        $("#messages").append(localdb[0].getHTML());
+    }
+
+    function makeMainPanel(fromId , fromLogin , query){
+        env.message = []
+        if(fromId == undefined){
+            fromId = -1
+        }
+        env.fromLogin = fromLogin;
+        s=""
+        /*if(env.fromId < 0)
+        {
+            s+=localdb[0].
+        }*/
+    }
+
+</script>
+
+<body onload="javascript: init()">
     <header>
     	<div id="header">
-        
-        <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"></div>
-        <div id="deconnexion"><input type="button" value="Deconnexion" onclick=""></div>
-        <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search"/>
-        	<input type="button" value="Search" onclick="javascript:(function (){return;})()">
-        </div>
+            <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"><span id="title">Twister</span></div>
+            <div id="deconnexion"><input type="button" value="Deconnexion" onclick=""></div>
+            <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search"/>
+                <input type="button" value="Search" onclick="javascript:(function (){return;})()">
+            </div>
     	</div>
     </header>
     <div id="stat"> je suis une stat</div>

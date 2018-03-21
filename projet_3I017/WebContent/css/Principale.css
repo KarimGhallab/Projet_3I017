@@ -1,10 +1,14 @@
 body{
-	background-color: #e6ecf0;
+	background-image: url("../image/background_blue.jpg");
+	background-size: cover;
+	background-attachment: fixed;
 }
 #header{
 	border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
     border-radius: 3px;
-    background-color: #fff;
+	background-color: #fff;
+	position: relative;
+	margin-bottom: 30px;
 }
 
 input[type=button]{
@@ -19,14 +23,20 @@ input[type=button]{
 	color: white;
 }
 
-
+#title{
+	position: absolute;
+	left:70px;
+	transform: translate(0,-50%);
+	top: 50%;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	font-size: 3em;
+}
 #logo{
   display: inline-block;
-  border: 2px dotted orange;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  
+  position: relative;
 }
 
 #logo_img{
@@ -36,13 +46,17 @@ input[type=button]{
 }
 #deconnexion{
 	float: right;
-	padding-top: 20px;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	right: 0%;
+	top:50%;
 }
 #search{
 	float: right;
-	padding-top: 20px;
-
-	margin-right: 30px;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	left: 50%;
+	top:50%;
 }
 
 .msg{
