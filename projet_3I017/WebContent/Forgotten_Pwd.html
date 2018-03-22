@@ -9,15 +9,43 @@
 </head>
 <body>
    <div id="main_connexion">
+   <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
         <h1>Récuperation de mot de pass</h1>
-        <div class="ids" id="mail" ><span>Entrez votre e-mail</span><input type="email" name="email" id="input_id"  /></div>
-        <div class="ids" id="mail" ><span>confirmez votre e-mail</span><input type="email" name="email"  id="input_id"/></div>
+        <label id="error_vide"></label>
+        <label id="error_different"></label>
+        <div class="ids" id="mail" ><span>Entrez votre e-mail</span><input type="email" name="email" id="mail" value=""  /></div>
+        <div class="ids" id="mail" ><span>confirmez votre e-mail</span><input type="email" name="email"  id="mail2" value=""/></div>
         <div class="button"><input type="submit" value="Connexion"/></div>
         <div id="links">
             <div id="link1"><a href="Connexion.html">Déja inscrit ?</a></div>
             <div id="link2"><a href="Inscription.html">S'inscrire !</a></div>
         </div>
     </div>
+    
+     <!-- script pour verifier l'egalité entre les deux mot de passes -->
+     <!-- ne marche pas pour le moment 
+     <script type="text/javascript">
+   	 	document.querySelector('#mon_form').addEventListener('submit', function(e) {
+   	 		
+   	 		if(document.getElementById('mail').value==='' || document.getElementById('mail').value==='' )
+   	 			//alert('Attention, tout les champs doivent etre remplis !');
+   	 			{
+   	 				document.getElementById("error_vide").innerHTML="attention, tout les champs doivent etre remplis !!"; 
+   	 			}
+		    else if (document.getElementById('email').value !== document.getElementById('mail2').value) {
+		    	alert(document.getElementById("mail").value )
+		        document.getElementById("error_different").innerHTML="attention, les champs ne sont pas corrects !!"; 
+		        return false;
+		    }
+		    else {
+		    	document.getElementById("error_vide").innerHTML="";
+		    	document.getElementById("error_different").innerHTML="";
+		    }
+		}, false);
+	</script>
+	-->
+	</form>
+			
     <footer>
             Fodil Zaki - Ghallab Karim
             <div class="lien_github" onclick=" window.open('https://github.com/PaulMorgon/Projet_3I017/', '_blank');">

@@ -12,16 +12,29 @@
             <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"><span id="title">Twister</span></div>
     </div>
     <div id="main_inscription">
-        <form method="POST" action="javascript:(function (){return;})()">
+        <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
             <h1>Inscription</h1>
             <div class="ids" id="indication"><p>* le mot de passe doit contenir au moins 8 caractères.<br/></p></div>
+			<label id="mdp_error"></label>
             <div class="ids" id="nom" ><span>Nom</span><input type="text" name="nom"/></div>
             <div class="ids" id="prenom"><span>Prenom</span><input type="text" name="prenom"/></div>
             <div class="ids" id="login"><span>login</span><input type="text" name="login"/></div>
             <div class="ids" id="mail"><span>Mail</span><input type="email" name="email" id="input_mail" placeholder="toto@toto.toto"/></div>
-            <div class="ids" id="mdp"><span>Mot de passe</span><input type="password" name="pwd" size="32" minlength="8"/></div>
-            <div class="ids" id="mdp2"><span>Confirmer mot de passe</span><input type="password" name="pwd2" size="32" minlength="8" /></div>
-            <input type="submit" value="Enregistrer" id="submit_button"/>
+            <div class="ids" id="mdp"><span>Mot de passe</span><input type="password" id="pwd" name="pwd" size="32" minlength="8"/></div>
+            <div class="ids" id="mdp2"><span>Confirmer mot de passe</span><input type="password" id="pwd2" name="pwd2" size="32" minlength="8"/></div>
+            
+            <!-- script pour verifier l'egalité entre les deux mot de passes -->
+            <script type="text/javascript">
+				document.querySelector('#mon_form').addEventListener('submit', function(e) {
+			    	if (document.getElementById('pwd').value !== document.getElementById('pwd2').value) {
+				        alert('Attention, le mot de passe de confirmation est différent du mot de passe !');
+				        e.preventDefault();
+				        return false;
+			    	}
+				}, false);
+			</script>
+            
+            <input type="submit" value="Enregistrer" id="submit_button" onclick="javascript:checkMdp()"/>
             <input type="button" value="Déjà un compte ?" id="cancel_button" onclick="location.href = 'Connexion.html';"/>
         </form>
     </div>

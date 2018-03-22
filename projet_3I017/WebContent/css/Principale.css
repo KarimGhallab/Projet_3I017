@@ -8,6 +8,7 @@ body
 	background-image: url("../image/background_blue.jpg");
 	background-size: cover;
 	background-attachment: fixed;
+	height:80%;
 }
 
 .sticky
@@ -30,7 +31,8 @@ input[type=text], input[type=password], input[type=email]
 input[type=text]:focus
 {
     border: 2px solid #007acc;
-    border-radius: 5px;
+    border-radius: 4px;
+    box-shadow:1px 1px 3px #999;
 }
 
 input[type=button]
@@ -44,12 +46,17 @@ input[type=button]
 	box-shadow:1px 1px 3px #999;
 	background-color: #5270ff;
 	color: white;
+	
+}
+
+input[type=button],[value=connexion]{
+	margin-right: 5px;
 }
 
 /* Le header */
 #header{
     border-radius: 3px;
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: rgba(255, 255, 255, 0.7);
 	width: 100%;
 	position: relative;
 	margin-bottom: 10px;
@@ -60,7 +67,7 @@ input[type=button]
 	left:70px;
 	transform: translate(0,-50%);
 	top: 50%;
-	font-family: Georgia, 'Times New Roman', Times, serif;
+	font-family: Georgia;
 	font-size: 3em;
 }
 
@@ -78,9 +85,9 @@ input[type=button]
   border-radius: inherit;
 }
 
-#deconnexion{
+#connexion{
 	float: right;
-	transform: translate(-50%, -50%);
+	transform: translate(-20%, -50%);
 	position: absolute;
 	right: 0%;
 	top:50%;
@@ -98,6 +105,7 @@ input[type=button]
 	position: absolute;
 	left:50%;
 	top:50%;
+	width:35em;
 }
 
 #messages
@@ -113,21 +121,22 @@ input[type=button]
 {
 	width:50%;
     margin:auto;  
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 #stat{
 	position: fixed;
 	left:8px;
-	width: 20%;
+	width: 15%;
 	height: 100%;
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: rgba(255, 255, 255, 0.7);
 }
 
 #new_msg{
 	width: 40%;
 	height: 30px;
 	transition: initial;
+	margin-right: 5px;
 }
 
 #nouveau_msg
