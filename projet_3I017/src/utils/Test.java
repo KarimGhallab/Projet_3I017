@@ -100,9 +100,9 @@ public class Test
 		String keyToto = base_de_donnees.UserTools.getKey(idToto);
 		
 		//service.MessageServices.addMessage(keyToto, "Vive Jason");
-		String idMessage = "5aa181b246ec75cfec8b7f47";
+		//String idMessage = "5aa181b246ec75cfec8b7f47";
 		
-		System.out.println("cle toto : " + keyToto);
+		//System.out.println("cle toto : " + keyToto);
 		//System.out.println(service.CommentServices.addComment(keyToto, idMessage, "8000 fois d'accord avec toi, vive Jason !"));
 		//System.out.println("Liste des commentaires : " + service.CommentServices.listComment(keyToto, idMessage));
 		//System.out.println(service.CommentServices.removeComment(keyToto, "5aa185d346ec3aa8bc39d8be"));

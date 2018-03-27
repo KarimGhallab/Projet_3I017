@@ -661,4 +661,30 @@ public class UserTools
 			return false;
 		}
 	}
+	
+	/**
+	 * Récupérer le login de l'utilisateur à partir de son id.
+	 * @param id L'id de l'utilisateur dans la base de données MySQL.
+	 * @return Le login de l'utilisateur, NULL en cas d'erreur.
+	 */
+	public static String getLoginFromId(int id)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT login FROM user WHERE id = "+id+";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getString(1);
+			else
+				return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getLoginFromId : " + e.getMessage());
+			return null;
+		}
+	}
 }
