@@ -84,7 +84,7 @@ public class MessageTools
 				JSONObject json = new JSONObject();
 				BasicDBObject auteur = new BasicDBObject();
 				DBObject document = messagesCursor.next();
-				auteur.put("login", UserTools.getLoginFromId(Integer.parseInt(id_user)));
+				auteur.put("login", UserTools.getLoginFromId(id_user));
 				auteur.put("user_id", document.get("user_id"));
 				json.put("content", document.get("c_ontent"));
 				json.put("auteur", auteur);

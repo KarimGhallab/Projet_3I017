@@ -68,7 +68,7 @@ public class CommentTools
 			BasicDBObject auteur = new BasicDBObject();
 			DBObject comment = cursor.next();
 			String id_user = (String) comment.get("user_id");
-			auteur.put("login", UserTools.getLoginFromId(Integer.parseInt(id_user)));
+			auteur.put("login", UserTools.getLoginFromId(id_user));
 			auteur.put("user_id", id_user);
 			json.put("comment", comment.get("comments"));
 			comments.put(json);

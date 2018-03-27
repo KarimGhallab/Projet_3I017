@@ -7,7 +7,16 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 import java.util.UUID;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -667,7 +676,7 @@ public class UserTools
 	 * @param id L'id de l'utilisateur dans la base de données MySQL.
 	 * @return Le login de l'utilisateur, NULL en cas d'erreur.
 	 */
-	public static String getLoginFromId(int id)
+	public static String getLoginFromId(String id)
 	{
 		Connection c;
 		try 
@@ -686,5 +695,184 @@ public class UserTools
 			System.err.println("Error getLoginFromId : " + e.getMessage());
 			return null;
 		}
+	}
+	
+	/**
+	 * Récupère l' e-mail d'un utilisateur.
+	 * @param id L'id de l'utilisateur dans la base de données MySQL.
+	 * @return L'e-mail de l'utilisateur.
+	 */
+	public static String getMailFromId(String id)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT mail FROM user WHERE id = "+id+";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getString(1);
+			else
+				return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getMailFromId : " + e.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * Récupère le mot de passe d'un utilisateur
+	 * @param id L'id de l'utilisateur dans la base de données MySQL.
+	 * @return Le nouveau mot de passe.
+	 */
+	public static String getPassword(String id)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT pwd FROM user WHERE id = \""+id+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getString(1);
+			return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getPassword : " + e.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * Met à jour le mot de passe d'un utilisateur.
+	 * @param id L'id de l'utilisateur dans la base de données MySQL.
+	 * @param newPwd Le nouveau mot de passe.
+	 * @return Un booléen indiquant la bonne execution ou non de l'envoi de mail.
+	 */
+	public static boolean setNewPwd(String id, String newPwd)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "UPDATE user SET pwd = PASSWORD(\""+newPwd+"\") WHERE id = \""+id+"\";";
+			if(st.executeUpdate(query) == 0)
+				return false;
+			return true;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error setNewPwd : " + e.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Rétablie l'ancien mot de passe d'un utilisateur.
+	 * @param id L'id de l'utilisateur dans la base de données MySQL.
+	 * @param formerPwd L'ancien mot de passe à rétablir.
+	 * @return Un booléen indiquant la bonne execution ou non de l'envoi de mail. 
+	 */
+	public static boolean setFormerPwd(String id, String formerPwd)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "UPDATE user SET pwd = \""+formerPwd+"\" WHERE id = \""+id+"\";";
+			if(st.executeUpdate(query) == 0)
+				return false;
+			return true;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error setFormerPwd : " + e.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Envoie par mail un nouveau mot de passe.
+	 * @param key La clé de connexion.
+	 * @return Un booléen indiquant la bonne execution ou non de l'envoi de mail.
+	 */
+	public static boolean sendRecoveryPassword(String key)
+	{
+		String id = getIdUserFromKey(key);
+		String formerPwd = getPassword(id);
+		if (formerPwd == null)		// On a pas pu récupérer le mot de passe
+			return false;
+		else
+		{
+			String mail = getMailFromId(id);
+			
+			// Envoi du mail
+			final String username = "toto.to@gmail.com";
+			final String password = "password";
+			final String newPwd = generateNewPwd();
+			if(!setNewPwd(id, newPwd))		// erreur lors de la mise en place du nouveau mot de passe
+			{
+				setFormerPwd(id, formerPwd);		// On rétablie le précedent mot de passe
+				return false;
+			}
+			else
+			{
+				Properties props = new Properties();
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.starttls.enable", "true");
+				props.put("mail.smtp.host", "smtp.gmail.com");
+				props.put("mail.smtp.port", "587");
+
+				Session session = Session.getInstance(props, new javax.mail.Authenticator()
+				{
+					protected PasswordAuthentication getPasswordAuthentication()
+					{
+						return new PasswordAuthentication(username, password);
+					}
+				  });
+
+				try
+				{
+					Message message = new MimeMessage(session);
+					message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(username));
+					message.setSubject("Password recovery");
+					message.setText("Your new password is : \"" + newPwd +"\".");
+					
+					Transport.send(message);
+					
+					return true;
+					
+				}
+				catch (MessagingException e)
+				{
+					System.err.println("sendRecoveryPassword : " + e.getMessage());
+					
+					setFormerPwd(id, formerPwd);
+					return false;
+				}
+
+			}
+		}
+	}
+	
+	/**
+	 * Génére un nouveau mot de passe de 10 caractères.
+	 * @return Le nouveau mot de passe généré.
+	 */
+	private static String generateNewPwd()
+	{
+		String pwd = UUID.randomUUID().toString().replaceAll("-", "");		//Génére une clé de 32 octets.
+		System.out.println("ancien pwd : " + pwd);
+		pwd = pwd.substring(0, 9);
+		System.out.println("nouveau pwd : " + pwd);
+		
+		return pwd;
 	}
 }

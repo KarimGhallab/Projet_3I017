@@ -122,9 +122,17 @@ public class UserServices
 		}
 	}
 	
-	/*public static boolean validate(String emailStr) 
+	public static JSONObject sendRecoveryPassword(String key)
 	{
-        Matcher matcher = Data.VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
-        return matcher.find();
-	}*/
+		if (key == null)
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
+		if(!base_de_donnees.UserTools.isConnection(key))
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		boolean res = UserTools.sendRecoveryPassword(key);
+		if(res)
+			return ServiceTools.serviceAccepted();
+		else
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+		
+	}
 }

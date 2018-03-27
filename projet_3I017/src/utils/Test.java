@@ -93,7 +93,8 @@ public class Test
 		
 		
 		// Test des commentaires
-		System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
+		//System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
+		System.out.println(service.UserServices.login("totot", "4b3304b4d", "0"));
 		
 		int idToto = base_de_donnees.UserTools.getIdUserFromLogin("totot");
 		service.UserServices.login("totot", "totototo", ""+0);
@@ -106,6 +107,8 @@ public class Test
 		//System.out.println(service.CommentServices.addComment(keyToto, idMessage, "8000 fois d'accord avec toi, vive Jason !"));
 		//System.out.println("Liste des commentaires : " + service.CommentServices.listComment(keyToto, idMessage));
 		//System.out.println(service.CommentServices.removeComment(keyToto, "5aa185d346ec3aa8bc39d8be"));
+		
+		//System.out.println("Envoi de mail : " + service.UserServices.sendRecoveryPassword(keyToto));
 	}
 
 }
