@@ -11,7 +11,7 @@
     <div id="stat"><span>je suis une stat</span></div>
     <div id="principale">
         <div id="nouveau_msg">
-        	<input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"><input type="button" onclick="" value="Publier"/>
+        	<input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
         </div>
         <div id="messages">
             <div class="msg">
@@ -28,4 +28,22 @@
             </svg>
         </div>
     </footer>
+    <!-- Script pour que la zone de création de message colle au haut de l'écran -->
+    <script type="text/javascript">
+        window.onscroll = function() {myFunction()};
+
+        var header = document.getElementById("new_msg");
+        var sticky = header.offsetTop;
+
+        function myFunction()
+        {
+            if (window.pageYOffset >= sticky - 10){      // 10 est la valeur du margin-bottom du header
+                header.classList.add("sticky");
+            }
+            else {
+                header.classList.remove("sticky");
+            }
+        }
+    </script>
+
 </body>

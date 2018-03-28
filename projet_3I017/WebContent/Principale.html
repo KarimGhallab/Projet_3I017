@@ -23,11 +23,13 @@
         this.comments=comments;
     }
     Message.prototype.getHTML = function(){
-        s="<div id=\"message_"+this.id+"\" class=\"msg\">\n"+
+        s="<div id=\"message_"+this.id+"\" class=\"msg\">"+
             "<img/>"+
-            "<div>\n<div>"+this.auteur.getHTML()+"</div>\n<div>"+this.date+"</div>\n</div>\n"+
+            "<div>"+
+                "<div>"+this.auteur.getHTML()+"</div>"+
+                "<div>"+this.date+"</div>"+
+            "</div>"+
             "<div>"+this.texte+"</div>"+
-            
         "</div>";
         return s;
     }
@@ -103,11 +105,10 @@
 
     function init()
     {
-        fetch('./tampon.html')
+        /*fetch('./tampon.html')
         .then(response => response.text())
-        .then(text => console.log(text))
+        .then(text => console.log(text))*/
 
-        console.log("bonjour");
         noConnection = true;
         env = new Object();
         env.key = "abcd";
@@ -115,7 +116,9 @@
         setVirtualdb();
 
         makeMainPanel(0,0,0);
-        $("#messages").append(localdb[0].getHTML());
+        var c = localdb[0].getHTML();
+        console.log(c);
+        $("#messages").append(c);
         replieMessage(1);
     }
 
@@ -139,9 +142,19 @@
         env.fromLogin = fromLogin;
         s="";
         $("link").attr("href", "css/Principale.css")
-        $("body").load( "./tampon.html", function(){
+        $.ajax({
+            url: 'tampon.html',
+            dataType: 'html',
+            async: false,
+            success: function(data)
+            {
+                $("body").html(data);
+                //$("#messages").append(localdb[0].getHTML());
+            }
+            });
+        /*$("body").load( "./tampon.html", function(){
         console.log(localdb[0].getHTML());
-        });
+        });*/
         
     }
 
@@ -168,21 +181,4 @@
     }
 
 </script>
-    <!-- Script pour que la zone de création de message colle au haut de l'écran -->
-    <script type="text/javascript">
-        window.onscroll = function() {myFunction()};
-
-        var header = document.getElementById("new_msg");
-        var sticky = header.offsetTop;
-
-        function myFunction()
-        {
-            if (window.pageYOffset >= sticky - 10){      // 10 est la valeur du margin-bottom du header
-                header.classList.add("sticky");
-            }
-            else {
-                header.classList.remove("sticky");
-            }
-        }
-    </script>
 </html>
