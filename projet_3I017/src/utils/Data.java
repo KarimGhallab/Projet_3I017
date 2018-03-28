@@ -24,6 +24,9 @@ public abstract class Data
 	public static int CODE_INCORRECT_LOGIN_PASSWORD = 1004;
 	public static String MESSAGE_INCORRECT_LOGIN_PASSWORD = "Incorrect login/password.";
 	
+	public static int CODE_MAIL_MATCHING_ERROR = 1005;
+	public static String MESSAGE_MAIL_MATCHING_ERROR = "The two mail addresses do not match together.";
+	
 	public static int CODE_ERROR_JSON = 101;
 	public static String MESSAGE_ERROR_JSON = "Error JSON.";
 	
