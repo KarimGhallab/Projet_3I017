@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Inscription</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/Inscription.css" />
-    <!--<script src="main.js"></script>-->
-</head>
+
 <body>
     <div id="header">
             <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"><span id="title">Twister</span></div>
@@ -35,7 +27,7 @@
 			</script>
             
             <input type="submit" value="Enregistrer" id="submit_button" onclick="javascript:checkMdp()"/>
-            <input type="button" value="Déjà un compte ?" id="cancel_button" onclick="location.href = 'Connexion.html';"/>
+            <input type="button" value="Déjà un compte ?" id="cancel_button" onclick="javascript:(function (){makeConnexionPanel()})()"/>
         </form>
     </div>
     <footer>
@@ -48,4 +40,3 @@
             </div>
         </footer>
 </body>
-</html>
