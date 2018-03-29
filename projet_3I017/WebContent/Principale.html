@@ -12,7 +12,7 @@
     <div id="container_main">
         <header>
             <div id="header">
-                <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
+                <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
                 <div id="connexion"><input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/><input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
                 <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
                     <input type="button" value="Search" onclick="javascript:(function (){return;})()"/>
@@ -25,7 +25,6 @@
                 <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
             </div>
             <div id="messages">
-                <div class="msg"></div>
             </div>
         </div>
         <!-- Script pour que la zone de création de message colle au haut de l'écran -->
@@ -50,7 +49,7 @@
 
     <div id="container_connexion">
         <div id="header">
-            <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
+            <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
         </div>
         <div id="main_connexion">
             <h1>Se connecter</h1>
@@ -66,7 +65,7 @@
 
     <div id="container_inscription">
         <div id="header">
-                <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
+                <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
         </div>
         <div id="main_inscription">
             <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
@@ -98,6 +97,9 @@
     </div> <!-- Conteneur d'inscription -->
     
     <div id="container_forgotten_pwd">
+        <div id="header">
+            <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
+        </div>
         <div id="main_connexion">
             <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
                 <h1>Récuperation de mot de passe</h1>
@@ -266,6 +268,7 @@
 
     function hideAll()
     {
+        $("#messages").html("");        // On enlève les messages ajoutés au main
         for(var i=0; i<env.containers.length; i++)
         {
             env.containers[i].hide();
@@ -296,6 +299,7 @@
 
     function makeMainPanel(fromId , fromLogin , query){
         hideAll()
+        console.log("bonjour");
         $("link").attr("href", "css/Principale.css")
         $("#container_main").show();
         

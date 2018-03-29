@@ -81,6 +81,7 @@ body
   width: inherit;
   height: inherit;
   border-radius: inherit;
+  cursor: pointer;
 }
 
 .ids
