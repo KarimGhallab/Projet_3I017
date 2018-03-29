@@ -7,8 +7,9 @@
         <link rel="stylesheet" type="text/css" media="screen" href="css/Principale.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
+
 <body onload="init()">
-    <div id="container_principal">
+    <div id="container_main">
         <header>
             <div id="header">
                 <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
@@ -27,14 +28,6 @@
                 <div class="msg"></div>
             </div>
         </div>
-        <footer>
-            Fodil Zaki - Ghallab Karim
-            <div class="lien_github" onclick=" window.open('https://github.com/PaulMorgon/Projet_3I017/', '_blank');">
-                <svg height="24" viewBox="0 0 16 16" version="1.1" width="24" aria-hidden="true" id="logo_github">
-                    <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                </svg>
-            </div>
-        </footer>
         <!-- Script pour que la zone de création de message colle au haut de l'écran -->
         <script type="text/javascript">
     
@@ -53,7 +46,107 @@
                 }
             }
         </script>
-    </div>
+    </div> <!-- Conteneur du main -->
+
+    <div id="container_connexion">
+        <div id="header">
+            <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
+        </div>
+        <div id="main_connexion">
+            <h1>Se connecter</h1>
+            <div class="ids" ><span>Login</span><input type="text" name="login"/></div>
+            <div class="ids" ><span>Mot de passe</span><input type="password" name="pwd" minlength="8" /></div>
+            <div class="button"><input type="submit" value="Connexion"/></div>
+            <div id="links">
+                <div class="button" style="float:left;"><input type="submit" value="Mot de passe oublié ?" onclick="javascript:(function (){makeForgottenPwdPanel()})()"/></div>
+                <div class="button" style="float:right;"><input type="submit" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
+            </div>
+        </div>
+    </div> <!-- Conteneur de connexion -->
+
+    <div id="container_inscription">
+        <div id="header">
+                <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
+        </div>
+        <div id="main_inscription">
+            <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
+                <h1>Inscription</h1>
+                <div class="ids" id="indication"><p>* le mot de passe doit contenir au moins 8 caractères.<br/></p></div>
+                <label id="mdp_error"></label>
+                <div class="ids" id="nom" ><span>Nom</span><input type="text" name="nom"/></div>
+                <div class="ids" id="prenom"><span>Prenom</span><input type="text" name="prenom"/></div>
+                <div class="ids" id="login"><span>login</span><input type="text" name="login"/></div>
+                <div class="ids" id="mail"><span>Mail</span><input type="email" name="email" id="input_mail" placeholder="toto@toto.toto"/></div>
+                <div class="ids" id="mdp"><span>Mot de passe</span><input type="password" id="pwd" name="pwd" size="32" minlength="8"/></div>
+                <div class="ids" id="mdp2"><span>Confirmer mot de passe</span><input type="password" id="pwd2" name="pwd2" size="32" minlength="8"/></div>
+                
+                <!-- script pour verifier l'egalité entre les deux mot de passes -->
+                <script type="text/javascript">
+                    document.querySelector('#mon_form').addEventListener('submit', function(e) {
+                        if (document.getElementById('pwd').value !== document.getElementById('pwd2').value) {
+                            alert('Attention, le mot de passe de confirmation est différent du mot de passe !');
+                            e.preventDefault();
+                            return false;
+                        }
+                    }, false);
+                </script>
+                
+                <input type="submit" value="Enregistrer" id="submit_button" onclick="javascript:checkMdp()"/>
+                <input type="button" value="Déjà un compte ?" id="cancel_button" onclick="javascript:(function (){makeConnexionPanel()})()"/>
+            </form>
+        </div>
+    </div> <!-- Conteneur d'inscription -->
+    
+    <div id="container_forgotten_pwd">
+        <div id="main_connexion">
+            <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
+                <h1>Récuperation de mot de passe</h1>
+                <label id="error_vide"></label>
+                <label id="error_different"></label>
+                <div class="ids" id="mail" ><span>Entrez votre e-mail</span><input type="email" name="email" id="mail" value=""  /></div>
+                <div class="ids" id="mail" ><span>confirmez votre e-mail</span><input type="email" name="email"  id="mail2" value=""/></div>
+                <div class="button"><input type="submit" value="Connexion"/></div>
+                <div id="links">
+                    <div class="button" style="float:left"><input type="submit" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/></div>
+                    <div class="button" style="float:right"><input type="submit" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
+                </div>
+            </form>
+        </div>
+        <!-- script pour verifier l'egalité entre les deux mot de passes -->
+        <!-- ne marche pas pour le moment 
+        <script type="text/javascript">
+                document.querySelector('#mon_form').addEventListener('submit', function(e) {
+                    
+                if(document.getElementById('mail').value==='' || document.getElementById('mail').value==='' )
+                        //alert('Attention, tout les champs doivent etre remplis !');
+                        {
+                            document.getElementById("error_vide").innerHTML="attention, tout les champs doivent etre remplis !!"; 
+                        }
+                else if (document.getElementById('email').value !== document.getElementById('mail2').value) {
+                    alert(document.getElementById("mail").value )
+                    document.getElementById("error_different").innerHTML="attention, les champs ne sont pas corrects !!"; 
+                    return false;
+                }
+                else {
+                    document.getElementById("error_vide").innerHTML="";
+                    document.getElementById("error_different").innerHTML="";
+                }
+            }, false);
+        </script>
+        -->
+    </div> <!-- Conteneur de mot de passe oublié -->
+
+    <div id="container_profil">
+
+    </div> <!-- Conteneur du profil -->
+    <footer>
+            Fodil Zaki - Ghallab Karim
+            <div class="lien_github" onclick=" window.open('https://github.com/PaulMorgon/Projet_3I017/', '_blank');">
+                <svg height="24" viewBox="0 0 16 16" version="1.1" width="24" aria-hidden="true" id="logo_github">
+                    <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+            </div>
+        </footer>
 </body>
 
 <script type="text/javascript">
@@ -164,9 +257,8 @@
         env = new Object();
         env.key = "abcd";
         env.idUser = 1;
-        env.containers = [$("#container_principal")];
+        env.containers = [$("#container_main"), $("#container_connexion"), $("#container_inscription"), $("#container_forgotten_pwd"), $("#container_profil")];
         env.messages = {};
-        hideAll();
         setVirtualdb();
 
         makeMainPanel(0,0,0);
@@ -184,53 +276,30 @@
     /* Fonction de création de panel */
     /* ############################# */
     function makeForgottenPwdPanel(){
+        hideAll()
         $("link").attr("href", "css/Connexion.css")
-        $.ajax({
-            url: 'Forgotten_Pwd.html',
-            dataType: 'html',
-            async: false,
-            success: function(data)
-            {
-                $("body").html(data);
-            }
-            });
+        $("#container_forgotten_pwd").show();
     }
     
     function makeInscriptionPanel()
     {
-        /*$("link").attr("href", "css/Inscription.css")
-        $.ajax({
-            url: 'Inscription.html',
-            dataType: 'html',
-            async: false,
-            success: function(data)
-            {
-                $("body").html(data);
-            }
-            });*/
+        hideAll()
+        $("link").attr("href", "css/Inscription.css")
+        $("#container_inscription").show();
     }
 
     function makeConnexionPanel(){
+        hideAll();
         $("link").attr("href", "css/Connexion.css")
-        $.ajax({
-            url: 'Connexion.html',
-            dataType: 'html',
-            async: false,
-            success: function(data)
-            {
-                $("body").html(data);
-            }
-            });
+        $("#container_connexion").show();
     }
 
     function makeMainPanel(fromId , fromLogin , query){
-        if(fromId == undefined){
-            fromId = -1
-        }
-        env.fromLogin = fromLogin;
-
+        hideAll()
         $("link").attr("href", "css/Principale.css")
-        $("#container_principal").show();
+        $("#container_main").show();
+        
+        // Affiche les messages
         for (index in env.messages)
         {
             $("#messages").append(env.messages[index].getHTML());
