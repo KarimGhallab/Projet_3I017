@@ -8,10 +8,15 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
 <body onload="init()">
-
+    
 </body>
 
 <script type="text/javascript">
+    
+    /* ############################ */
+    /* Classes JavaScript du projet */
+    /* ############################ */
+
     //Objet Message
     function Message(id , auteur , texte , comments , date){
         this.id = id;
@@ -23,13 +28,15 @@
         this.comments=comments;
     }
     Message.prototype.getHTML = function(){
-        s="<div id=\"message_"+this.id+"\" class=\"msg\">"+
-            "<img/>"+
+        s="<div id=\"message_"+this.id+"\" class=\"msg\" >"+
+            "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='javascript:(function (){console.log(\"Jason\")})()'/>"+
             "<div>"+
                 "<div>"+this.auteur.getHTML()+"</div>"+
                 "<div>"+this.date+"</div>"+
             "</div>"+
             "<div>"+this.texte+"</div>"+
+            "<div class = \"comments\">"+
+            "</div>"
         "</div>";
         return s;
     }
@@ -105,10 +112,6 @@
 
     function init()
     {
-        /*fetch('./tampon.html')
-        .then(response => response.text())
-        .then(text => console.log(text))*/
-
         noConnection = true;
         env = new Object();
         env.key = "abcd";
@@ -117,30 +120,60 @@
 
         makeMainPanel(0,0,0);
         var c = localdb[0].getHTML();
-        console.log(c);
+        
         $("#messages").append(c);
-        replieMessage(1);
+        $("#messages").append(c);
     }
 
+    /* ############################# */
+    /* Fonction de création de panel */
+    /* ############################# */
     function makeForgottenPwdPanel(){
         $("link").attr("href", "css/Connexion.css")
-        $("body").load( "./Forgotten_Pwd.html")
+        $.ajax({
+            url: 'Forgotten_Pwd.html',
+            dataType: 'html',
+            async: false,
+            success: function(data)
+            {
+                $("body").html(data);
+            }
+            });
     }
+    
     function makeInscriptionPanel(){
         $("link").attr("href", "css/Inscription.css")
-        $("body").load( "./Inscription.html")
+        $.ajax({
+            url: 'Inscription.html',
+            dataType: 'html',
+            async: false,
+            success: function(data)
+            {
+                $("body").html(data);
+            }
+            });
     }
+
     function makeConnexionPanel(){
         $("link").attr("href", "css/Connexion.css")
-        $("body").load( "./Connexion.html")
+        $.ajax({
+            url: 'Connexion.html',
+            dataType: 'html',
+            async: false,
+            success: function(data)
+            {
+                $("body").html(data);
+            }
+            });
     }
+
     function makeMainPanel(fromId , fromLogin , query){
         env.message = []
         if(fromId == undefined){
             fromId = -1
         }
         env.fromLogin = fromLogin;
-        s="";
+
         $("link").attr("href", "css/Principale.css")
         $.ajax({
             url: 'tampon.html',
@@ -149,17 +182,16 @@
             success: function(data)
             {
                 $("body").html(data);
-                //$("#messages").append(localdb[0].getHTML());
             }
             });
-        /*$("body").load( "./tampon.html", function(){
-        console.log(localdb[0].getHTML());
-        });*/
-        
     }
 
+    /* ################################## */
+    /* Gestion affichage des commentaires */
+    /* ################################## */
     function developpeMessage(id)
     {
+        console.log("On developpe le message");
         var m = env.msg[id];
         var el = $("#message_"+id);
         for(var i=0; i<m.comments.length; i++)
@@ -170,14 +202,15 @@
 
         el = $("#message_"+id+" .new_comment");
         el.append("<p> ECRIT LE CODE POUR ECKRIR 1 COMM</p>>");
-        $("#message_"+id+" img" ).replaceWith("<img src=\"image/logo.png\" onclick=\"javascript:repliMessage("+id+")\"")
+        $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/minus_logo.png\" onclick=\"javascript:repliMessage("+id+")\"")
     }
 
     function replieMessage(id)
     {
-        var el = $("#message_"+id);
+        console.log("On remplie le message");
+        var el = $("#message_"+id+" .comments");
         el.html("");
-        $("#message_"+id+" img" ).replaceWith("<img src=\"image/logo2.png\" onclick=\"javascript:developpeMessage("+id+")\"")
+        $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage("+id+")\"")
     }
 
 </script>

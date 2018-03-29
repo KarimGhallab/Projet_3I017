@@ -8,17 +8,13 @@
             </div>
     	</div>
     </header>
-    <div id="stat"><span>je suis une stat</span></div>
+    <div id="stat"><span>je suis une stat</span> </div>
     <div id="principale">
         <div id="nouveau_msg">
         	<input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
         </div>
         <div id="messages">
-            <div class="msg">
-                <span>je suis un msg</span>
-            </div>
         </div>
-
     </div>
     <footer>
         Fodil Zaki - Ghallab Karim
@@ -30,9 +26,10 @@
     </footer>
     <!-- Script pour que la zone de création de message colle au haut de l'écran -->
     <script type="text/javascript">
+
         window.onscroll = function() {myFunction()};
 
-        var header = document.getElementById("new_msg");
+        var header = document.getElementById("nouveau_msg");
         var sticky = header.offsetTop;
 
         function myFunction()
