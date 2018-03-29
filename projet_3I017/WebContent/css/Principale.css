@@ -114,7 +114,6 @@ input[type=button],[value=connexion]{
 	position: absolute;
 	top :22%;
 	width: 98%;
-	z-index: -1;		/* A voir quel effet on veut */
 	margin-bottom: 50px;
 }
 
