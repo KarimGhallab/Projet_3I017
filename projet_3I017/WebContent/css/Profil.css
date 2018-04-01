@@ -1,0 +1,202 @@
+html
+{
+	height: 100%;
+	margin: 0;
+}
+body
+{
+	background-image: url("../image/background_blue.jpg");
+	background-size: cover;
+	background-attachment: fixed;
+	height:80%;
+}
+
+.sticky
+{
+	position: fixed;
+	top: 10px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: 100%;
+	z-index: 9999;
+  }
+
+input[type=text], input[type=password], input[type=email]
+{
+    padding: 8px 20px;
+    border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
+    border-radius: 5px;
+    transition: 0.5s;
+    outline: none;
+}
+
+input[type=text]:focus
+{
+    border: 2px solid #007acc;
+    border-radius: 4px;
+    box-shadow:1px 1px 3px #999;
+}
+
+input[type=button]
+{
+	border-radius:12px 0 12px 0;
+	background: #f5f5f5;
+	border:none;
+	color:#555;
+	font:bold 12px Verdana;
+	padding:6px 0 6px 0;
+	box-shadow:1px 1px 3px #999;
+	background-color: #5270ff;
+	color: white;
+	
+}
+
+input[type=button],[value=connexion]{
+	margin-right: 5px;
+}
+
+
+#principale {
+	
+}
+#infos_user{	
+	width:65%;
+    margin:auto;  
+    background-color: rgba(255, 255, 255, 0.7);
+    position: relative;
+}
+
+#profil{
+    height: 150px;
+    border-radius: 50%;
+    position: relative;
+  }
+  
+  #profil_img{
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    cursor: pointer;
+  }
+  #nom{
+    position: absolute;
+	left:4em;
+	transform: translate(0,-50%);
+	top: 50%;
+	font-family: Georgia;
+	font-size: 3em;
+  }
+
+/* Le header */
+#header{
+    border-radius: 3px;
+	background-color: rgba(255, 255, 255, 0.7);
+	width: 100%;
+	position: relative;
+	margin-bottom: 10px;
+}
+
+#title{
+	position: absolute;
+	left:70px;
+	transform: translate(0,-50%);
+	top: 50%;
+	font-family: Georgia;
+	font-size: 3em;
+}
+
+#logo{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+}
+
+#logo_img{
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+#connexion{
+	float: right;
+	transform: translate(-20%, -50%);
+	position: absolute;
+	right: 0%;
+	top:50%;
+}
+
+#input_search
+{
+	width: 60%;
+}
+
+#search
+{
+	float: right;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	left:50%;
+	top:50%;
+	width:35em;
+}
+
+#messages
+{
+	position: absolute;
+	top :22%;
+	width: 98%;
+	margin-bottom: 50px;
+}
+
+.msg
+{
+	width:50%;
+    margin:auto;  
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+#stat{
+	position: fixed;
+	left:8px;
+	width: 15%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.7);
+}
+
+#new_msg{
+	width: 40%;
+	height: 30px;
+	transition: initial;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+#nouveau_msg
+{
+	text-align: center;
+}
+
+/* Le footer */
+footer
+{
+    position: fixed;
+    bottom: 0px;
+    left: 50%;
+	transform: translate(-50%, 0%);
+}
+
+#logo_github:hover
+{
+    fill:#fff;
+}
+
+.lien_github
+{
+    float: right;
+    cursor: pointer;
+    margin-left: 50px;
+    margin-bottom: 12px;
+}
