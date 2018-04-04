@@ -15,29 +15,52 @@
         <header>
             <div id="header">
                 <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
-                <div id="connexion"><input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/><input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
-                <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
-                    <input type="button" value="Search" onclick="javascript:(function (){return;})()"/>
+                <div id="connexion">
+                	
+               	</div>
+                <div id="search">
+                	<label class="hidden" for="input_search_main"></label>
+                	<input id="input_search_main" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
+               		<input type="button" value="Search" onclick="doSearch()"/>
                 </div>
             </div>
         </header>
         	<div id="stat">Je suis une stat</div>
         <div id="principale">
             <div id="nouveau_msg">
-                <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
+                <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="mainAddMessage()" value="Publier"/>
             </div>
             <div id="messages">
             </div>
         </div>
         <!-- Script pour que la zone de création de message colle au haut de l'écran -->
         <script type="text/javascript">
-    
-            window.onscroll = function() {myFunction()};
+    		$("#new_msg").keydown(enterHandler);
+    		
+    		function enterHandler(event)
+	        {
+	             if(event.keyCode == 13){		// Touche "entrée"
+	            	 mainAddMessage();
+	             }	
+			}
+        
+        	function mainAddMessage()
+    		{
+    			var input = $("#new_msg").val();
+    			addMessage(input)
+    		}
+    		
+    		function addMessage(message)
+    		{
+    			console.log("Je souhaite ajouter le message : " + message);
+    		}
+    		
+            window.onscroll = scrollWithInput;
     
             var header = document.getElementById("nouveau_msg");
             var sticky = header.offsetTop;
     
-            function myFunction()
+            function scrollWithInput()
             {
                 if (window.pageYOffset >= sticky - 10){      // 10 est la valeur du margin-bottom du header// 10 est la valeur du margin-bottom du header
                     header.classList.add("sticky");
@@ -55,6 +78,7 @@
         </div>
         <div id="main_connexion">
             <h1>Se connecter</h1>
+            <div id=error_connexion style="color:DarkRed;"></div>
             <div class="ids" ><span>Login</span><input type="text" id="login_co" name="login"/></div>
             <div class="ids" ><span>Mot de passe</span><input type="password" id="pwd_co" name="pwd" minlength="8" /></div>
             <div class="button"><input type="submit" value="Connexion" onclick="mainConnexion()"/></div>
@@ -65,10 +89,27 @@
         </div>
 
         <script type="text/javascript">
+	        
+        	$("#login_co").keydown(enterHandler);
+        	$("#pwd_co").keydown(enterHandler);
+        	
+        	function mainConnexion()
+	        {
+	            var login = document.getElementById("login_co").value;
+	            var pwd = document.getElementById("pwd_co").value;
+	            connecte(login , pwd);
+	        }
+        
+	        function enterHandler(event)
+	        {
+	             if(event.keyCode == 13){		// Touche "entrée"
+	            	 mainConnexion()
+	             }	
+			}
+
+        
             function connecte (login, pwd)
             {
-                console.log("login : " + login);
-                console.log("pwd : " + pwd);
                 if(!noConnection)
                     $.ajax({
                         type: "POST",
@@ -88,14 +129,12 @@
             }
 
             function reponseConnexion(rep){
-                console.log("responseConnexion");
-                console.log("reponse : " + rep);
                 var repD = JSON.parse(rep);
-                if(repD.code == "ko"){
-                    $("#error_connexion").html("erreur connexion");
+                console.log("reponse : " + rep);
+                if(repD.status == "ko"){
+                    $("#error_connexion").html("Connexion error : " + repD.message);
                 }
                 else{
-                    console.log("status : " + repD.status);
                     env.key = repD.key;
                     env.fromId = repD.id;
                     env.login = repD.login;
@@ -110,13 +149,6 @@
                     
                     makeMainPanel();
                 }
-            }
-
-
-            function mainConnexion(){
-                var login = document.getElementById("login_co").value;
-                var pwd = document.getElementById("pwd_co").value;
-                connecte(login , pwd);
             }
         </script>
     </div>
@@ -166,9 +198,7 @@
                 }
             }
         </script>
-    </div>
-    
-    <!-- Conteneur d'inscription -->
+    </div> <!-- Conteneur d'inscription -->
   
     <!-- Conteneur de mot de passe oublié -->
     <div id="container_forgotten_pwd">
@@ -191,15 +221,16 @@
         </div>
             <!-- script pour verifier l'egalité entre les mails -->
             <script type="text/javascript">
-                function verif_egalite_mail(){
-                    if( document.getElementById("mail_forgotten").value===  ""||  document.getElementById("mail2_forgotten").value==="")
-                            {
-                                $("#error_vide").html("attention, tout les champs doivent etre remplis !!"); 
-                                return false;
-                            }
-                    else if (document.getElementById("mail_forgotten").value != document.getElementById("mail2_forgotten").value ){
-                                $("#error_vide").html("attention, les champs ne sont pas corrects !!"); 
-                                return false;
+            	function verif_egalite_mail(){
+            	    if( document.getElementById("mail_forgotten").value===  ""||  document.getElementById("mail2_forgotten").value==="")
+					{
+						$("#error_vide").html("attention, tout les champs doivent etre remplis !!"); 
+						return false;
+					}
+                    else if (document.getElementById("mail_forgotten").value != document.getElementById("mail2_forgotten").value )
+                    {
+						$("#error_vide").html("attention, les champs ne sont pas corrects !!"); 
+						return false;
                     }
                     else {
                         document.getElementById("error_vide").innerHTML="";
@@ -228,8 +259,12 @@
     /* ############################ */
     /* Classes JavaScript du projet */
     /* ############################ */
-
-    //Objet Message
+	
+    ///////////////////////////////
+    //// Les classes du projet ////
+    ///////////////////////////////
+    
+    // Classe Message
     function Message(id , auteur , texte , comments , date){
         this.id = id;
         this.auteur=auteur;
@@ -253,7 +288,7 @@
         return s;
     }
 
-    //objet commentaire
+    // Classe Commentaire
     function Commentaire(id , auteur , texte , date){
         this.id = id;
         this.auteur=auteur;
@@ -268,7 +303,7 @@
         return s;
     }
 
-    //objet Auteur
+    // Classe Auteur
     function Auteur(id , login){
         this.id = id;
         this.login=login;
@@ -295,7 +330,37 @@
             return new date(value.date);
         }
     }
-
+    
+    
+	////////////////////////////////
+    ////// Fonctions pour init /////
+    ////////////////////////////////
+    function init()
+    {
+        noConnection = false;
+        ContainerEnum = {MAIN: 0, INSCRIPTION: 1, CONNEXION: 2, FORGOTTEN_PWD: 3, PROFIL: 4};
+        
+        env = new Object();
+        env.key = "abcd";
+        env.idUser = 1;
+        env.fromId = -1;
+        env.follows = {};
+        env.containers = {};
+        env.messages = {};
+        env.all_users = [];
+        env.currentContainer = ContainerEnum.MAIN;
+        
+        initializeContainers();
+        initializeAllLogins();
+        setVirtualdb();
+        setUpSearchBar();
+        ////////////////////////////////////
+        /* Charger liste des utilisateurs */
+        ////////////////////////////////////
+        hideAll();
+        makeMainPanel();
+    }
+	
     function setVirtualdb()
     {
         localdb= []
@@ -319,35 +384,12 @@
         com2 =  new Commentaire(2, u3, "Ca va bien", new Date());
 
         msg = new Message( 1 , u1 , "yo !" , [com1 , com2] , new Date());
-        console.log("création message : " + msg);
 
         env.messages[msg.id] = msg;
-        console.log(env.messages);
     }
 
-    function init()
+    function initializeAllLogins()
     {
-        noConnection = false;
-        env = new Object();
-        env.key = "abcd";
-        env.idUser = 1;
-        env.fromId = -1;
-        env.follows = {};
-        env.containers = [$("#container_main"), $("#container_connexion"), $("#container_inscription"), $("#container_forgotten_pwd"), $("#container_profil")];
-        env.messages = {};
-        env.all_users = [];
-        getAllLogins();
-        setVirtualdb();
-        setUpSearchBar();
-        ////////////////////////////////////
-        /* Charger liste des utilisateurs */
-        ////////////////////////////////////
-        makeMainPanel(0,0,0);
-    }
-
-    function getAllLogins()
-    {
-        console.log("getAllLogins");
         $.ajax({
                 type: "POST",
                 url: "user/getAllLogins",
@@ -362,51 +404,99 @@
                 } 
             })
     }
-
+    
+    function initializeContainers()
+    {
+    	env.containers[ContainerEnum.MAIN] = $("#container_main");
+    	env.containers[ContainerEnum.CONNEXION] = $("#container_connexion");
+    	env.containers[ContainerEnum.INSCRIPTION] = $("#container_inscription");
+    	env.containers[ContainerEnum.FORGOTTEN_PWD] = $("#container_forgotten_pwd");
+    	env.containers[ContainerEnum.PROFIL] =  $("#container_profil");
+    }
+	
     function reponseGetLogins(rep)
     {
-        console.log("responseGetLogins");
         var repD = JSON.parse(rep);
-        console.log("logins : " + repD.logins);
         env.all_users = repD.logins;
     }
 
+    function hideCurrent()
+    {
+    	if(env.currentContainer == ContainerEnum.MAIN)
+   		{
+			console.log("J'était sur le main");
+			$("#messages").html("");        // On enlève les messages ajoutés au main
+			$("#nouveau_msg").show();
+   		}
+    	else if (env.currentContainer == ContainerEnum.CONNEXION)
+   		{
+    		console.log("J'était sur la page de connexion");
+    		$("#error_connexion").html("");
+    		$("#login_co").val("");
+    		$("#pwd_co").val("");
+    		
+   		}
+    	console.log("Ancienne page : " + env.currentContainer);
+        env.containers[env.currentContainer].hide();
+    }
+    
     function hideAll()
     {
-        $("#messages").html("");        // On enlève les messages ajoutés au main
-        for(var i=0; i<env.containers.length; i++)
-        {
-            env.containers[i].hide();
-        }
+    	for(var key in env.containers) {
+   		  env.containers[key].hide();
+    	}
     }
 
-    /* ############################# */
-    /* Fonction de création de panel */
-    /* ############################# */
+	////////////////////////////////////
+    // Fonctions de création de panel //
+    ////////////////////////////////////
     function makeForgottenPwdPanel(){
-        hideAll()
+        hideCurrent()
         $("#changableLink").attr("href", "css/Connexion.css")
         $("#container_forgotten_pwd").show();
+        env.currentContainer = ContainerEnum.FORGOTTEN_PWD;
     }
     
     function makeInscriptionPanel()
     {
-        hideAll()
+        hideCurrent()
         $("#changableLink").attr("href", "css/Inscription.css")
         $("#container_inscription").show();
+        env.currentContainer = ContainerEnum.INSCRIPTION;
     }
 
     function makeConnexionPanel(){
-        hideAll();
+        hideCurrent();
         $("#changableLink").attr("href", "css/Connexion.css")
         $("#container_connexion").show();
+        env.currentContainer = ContainerEnum.CONNEXION;
     }
 
-    function makeMainPanel(fromId , fromLogin , query){
-        hideAll()
-        console.log("bonjour");
+    function makeMainPanel()
+    {
+        hideCurrent()
         $("#changableLink").attr("href", "css/Principale.css")
         $("#container_main").show();
+        env.currentContainer = ContainerEnum.MAIN;
+        var ajout = "";
+        if (env.fromId == -1)
+       	{
+        	console.log("Je ne suis pas connecté");
+        	
+        	ajout += '<input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/>';
+           	ajout += '<input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/>';
+           	
+           	$("#nouveau_msg").hide();
+       	}
+        else
+       	{
+        	console.log("Je suis connecté, mon login est : " + env.login);
+        	
+        	ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel()})()"/>';
+           	ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
+       	}
+        
+        $("#connexion").html(ajout);
         
         // Affiche les messages
         for (index in env.messages)
@@ -414,15 +504,23 @@
             $("#messages").append(env.messages[index].getHTML()); $("#messages").append(env.messages[index].getHTML());
         }
     }
+    
+    function makeProfilPanel()
+    {
+    	console.log("Je désire afficher le profil");
+    }
+    
+    function mainDeconnexion()
+    {
+    	console.log("Je désire me déconnecter");
+    }
 
-    /* ################################## */
-    /* Gestion affichage des commentaires */
-    /* ################################## */
+	////////////////////////////////////////
+    // Gestion affichage des commentaires //
+    ////////////////////////////////////////
     function developpeMessage(id)
     {
-        console.log("On developpe le message");
         var m = env.messages[id];
-        console.log("le message : " + m);
         var el = $("#message_"+id+" .comments");
         for(index in m.comments)
         {
@@ -437,18 +535,35 @@
 
     function replieMessage(id)
     {
-        console.log("On replie les commentaires");
         var el = $("#message_"+id+" .comments");
         el.html("");
         $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage("+id+")\"/>")
     }
-
+    
+	//////////////////////////////////////
+    // Gestion de la barre de recherche //
+    //////////////////////////////////////
     function setUpSearchBar()
     {
-        console.log("setUpSearchBar");
-        $("#input_search").autocomplete({
+        $("#input_search_main").autocomplete({
             source: env.all_users
         });
     }
+    
+    function doSearch()
+    {
+    	console.log("Search");
+    	var input = $("#input_search_main").val();
+    	console.log("Input : " + input);
+    }
+
+	$("#input_search_main").keydown(enterHandler);
+
+    function enterHandler(event)
+    {
+         if(event.keyCode == 13){		// Touche "entrée"
+        	 doSearch();
+         }	
+	}
 </script>
 </html>
