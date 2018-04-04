@@ -16,12 +16,12 @@
             <div id="header">
                 <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
                 <div id="connexion"><input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/><input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
-                <div id="search"><label class="hidden" for="selector"></label><input id="selector" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
+                <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
                     <input type="button" value="Search" onclick="javascript:(function (){return;})()"/>
                 </div>
             </div>
         </header>
-        
+        	<div id="stat">Je suis une stat</div>
         <div id="principale">
             <div id="nouveau_msg">
                 <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
@@ -385,27 +385,27 @@
     /* ############################# */
     function makeForgottenPwdPanel(){
         hideAll()
-        $("changableLink").attr("href", "css/Connexion.css")
+        $("#changableLink").attr("href", "css/Connexion.css")
         $("#container_forgotten_pwd").show();
     }
     
     function makeInscriptionPanel()
     {
         hideAll()
-        $("changableLink").attr("href", "css/Inscription.css")
+        $("#changableLink").attr("href", "css/Inscription.css")
         $("#container_inscription").show();
     }
 
     function makeConnexionPanel(){
         hideAll();
-        $("changableLink").attr("href", "css/Connexion.css")
+        $("#changableLink").attr("href", "css/Connexion.css")
         $("#container_connexion").show();
     }
 
     function makeMainPanel(fromId , fromLogin , query){
         hideAll()
         console.log("bonjour");
-        $("changableLink").attr("href", "css/Principale.css")
+        $("#changableLink").attr("href", "css/Principale.css")
         $("#container_main").show();
         
         // Affiche les messages
@@ -446,14 +446,9 @@
     function setUpSearchBar()
     {
         console.log("setUpSearchBar");
-        $("#selector").autocomplete({
+        $("#input_search").autocomplete({
             source: env.all_users
         });
-
-        $('#selector').change(function ()
-        {
-            alert($('#selector').val());
-        })
     }
 </script>
 </html>
