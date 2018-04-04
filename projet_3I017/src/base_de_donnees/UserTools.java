@@ -875,4 +875,27 @@ public class UserTools
 		
 		return pwd;
 	}
+
+	public static ArrayList<String> getAllLogins()
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT login FROM user";
+			ResultSet rs = st.executeQuery(query);
+			
+			ArrayList<String> logins = new ArrayList<String>();
+			while(rs.next())
+				logins.add(rs.getString(1));
+			
+			return logins;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getAllLogins : " + e.getMessage());
+			return null;
+		}
+	}
 }

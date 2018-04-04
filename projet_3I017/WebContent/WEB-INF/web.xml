@@ -20,6 +20,10 @@
 		<servlet-name>forgottenPassword</servlet-name> 
 		<servlet-class>servlet.user.ForgottenPassword</servlet-class> 
 	</servlet>
+	<servlet> 
+		<servlet-name>getAllLogins</servlet-name> 
+		<servlet-class>servlet.user.GetAllLogins</servlet-class> 
+	</servlet>
 	
 	<!-- Servlet Friend -->  
 	<servlet> 
@@ -79,6 +83,11 @@
 	<servlet-mapping> 
 		<servlet-name>forgottenPassword</servlet-name> 
 		<url-pattern>/user/forgottenPassword</url-pattern> 
+	</servlet-mapping>
+	
+	<servlet-mapping> 
+		<servlet-name>getAllLogins</servlet-name> 
+		<url-pattern>/user/getAllLogins</url-pattern> 
 	</servlet-mapping>
 	
 	<!-- Servlet-mapping Friend -->

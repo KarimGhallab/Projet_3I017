@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="css/Principale.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     </head>
 
 <body onload="init()">
@@ -14,7 +15,7 @@
             <div id="header">
                 <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
                 <div id="connexion"><input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/><input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
-                <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
+                <div id="search"><label class="hidden" for="selector"></label><input id="selector" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
                     <input type="button" value="Search" onclick="javascript:(function (){return;})()"/>
                 </div>
             </div>
@@ -105,7 +106,8 @@
                     {
                         follows[repD.id][i] = repD.follows[i]; 
                     }*/
-   
+                    
+                    makeMainPanel();
                 }
             }
 
@@ -332,11 +334,40 @@
         env.follows = {};
         env.containers = [$("#container_main"), $("#container_connexion"), $("#container_inscription"), $("#container_forgotten_pwd"), $("#container_profil")];
         env.messages = {};
+        env.all_users = [];
+        getAllLogins();
         setVirtualdb();
+        setUpSearchBar();
         ////////////////////////////////////
         /* Charger liste des utilisateurs */
         ////////////////////////////////////
         makeMainPanel(0,0,0);
+    }
+
+    function getAllLogins()
+    {
+        console.log("getAllLogins");
+        $.ajax({
+                type: "POST",
+                url: "user/getAllLogins",
+                dataType:"text",
+                async: false,
+                success: function(rep)
+                {
+                    reponseGetLogins(rep);
+                },
+                error: function(XHR , textStatus , errorThrown){
+                    alert(textStatus);
+                } 
+            })
+    }
+
+    function reponseGetLogins(rep)
+    {
+        console.log("responseGetLogins");
+        var repD = JSON.parse(rep);
+        console.log("logins : " + repD.logins);
+        env.all_users = repD.logins;
     }
 
     function hideAll()
@@ -411,5 +442,17 @@
         $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage("+id+")\"/>")
     }
 
+    function setUpSearchBar()
+    {
+        console.log("setUpSearchBar");
+        $("#selector").autocomplete({
+            source: env.all_users
+        });
+
+        $('#selector').change(function ()
+        {
+            alert($('#selector').val());
+        })
+    }
 </script>
 </html>

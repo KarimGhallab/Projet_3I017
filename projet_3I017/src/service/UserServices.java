@@ -1,8 +1,11 @@
 package service;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import base_de_donnees.UserTools;
 import utils.Data;
 import utils.ErrorJSON;
@@ -35,6 +38,7 @@ public class UserServices
 		if(!base_de_donnees.UserTools.checkPwd(login,pwd))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_INCORRECT_LOGIN_PASSWORD, Data.CODE_INCORRECT_LOGIN_PASSWORD);
 		String key = base_de_donnees.UserTools.insererConnexion(login, pwd, myRoot);
+		// Faire l'ajout de la liste d'amis
 		if (key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		else
@@ -137,5 +141,24 @@ public class UserServices
 		else
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		
+	}
+
+	public static JSONObject getAllLogins()
+	{
+		
+		ArrayList<String> res = UserTools.getAllLogins();
+		if(res != null)
+		{
+			try
+			{
+				return ServiceTools.serviceAccepted().put("logins", res);
+			}
+			catch (JSONException e)
+			{
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+			}
+		}
+		else
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 	}
 }
