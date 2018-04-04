@@ -41,7 +41,8 @@ public class UserServices
 		{
 			try
 			{
-				return ServiceTools.serviceAccepted().put("key", key);
+				JSONObject j =  ServiceTools.serviceAccepted().put("key", key);
+				return j.put("login" , login);
 			}
 			catch (JSONException e) 
 			{

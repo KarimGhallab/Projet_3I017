@@ -65,15 +65,16 @@
         <script type="text/javascript">
             function connecte (login, pwd)
             {
-                console.log("connecte");
+                console.log("login : " + login);
+                console.log("pwd : " + pwd);
                 if(!noConnection)
                     $.ajax({
                         type: "POST",
-                        url: "login",
-                        data: "login="+login+"&pwd="+pwd,
+                        url: "user/login",
+                        data: "login="+login+"&pwd="+pwd+"&root=1",
                         dataType:"text",
                         success: function(rep){
-                            reponseConnxion(rep);
+                            reponseConnexion(rep);
                         },
                         error: function(XHR , textStatus , errorThrown){
                             alert(textStatus);
@@ -86,16 +87,17 @@
 
             function reponseConnexion(rep){
                 console.log("responseConnexion");
+                console.log("reponse : " + rep);
                 var repD = JSON.parse(rep);
                 if(repD.code == "ko"){
                     $("#error_connexion").html("erreur connexion");
                 }
                 else{
-                    console.log("Bonjour");
+                    console.log("status : " + repD.status);
                     env.key = repD.key;
-                    en.fromId = repD.id;
+                    env.fromId = repD.id;
                     env.login = repD.login;
-                    env.follows = new Set(2);
+                    env.follows = new Set();
                     follows[repD.id]= new Set();
 
                     /* Les amis de l'utilisateur */
@@ -109,8 +111,8 @@
 
 
             function mainConnexion(){
-                var login = $("#login_co").value;
-                var pwd = $("#pwd_co").value;
+                var login = document.getElementById("login_co").value;
+                var pwd = document.getElementById("pwd_co").value;
                 connecte(login , pwd);
             }
         </script>
@@ -322,10 +324,12 @@
 
     function init()
     {
-        noConnection = true;
+        noConnection = false;
         env = new Object();
         env.key = "abcd";
         env.idUser = 1;
+        env.fromId = -1;
+        env.follows = {};
         env.containers = [$("#container_main"), $("#container_connexion"), $("#container_inscription"), $("#container_forgotten_pwd"), $("#container_profil")];
         env.messages = {};
         setVirtualdb();
