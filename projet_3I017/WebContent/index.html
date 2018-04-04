@@ -4,7 +4,8 @@
         <meta charset="utf-8" />
         <title>Twister</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/Principale.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link id="changableLink" rel="stylesheet" type="text/css" media="screen" href="css/Principale.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     </head>
@@ -20,7 +21,7 @@
                 </div>
             </div>
         </header>
-        <div id="stat"><span>je suis une stat</span> </div>
+        
         <div id="principale">
             <div id="nouveau_msg">
                 <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
@@ -126,7 +127,7 @@
                 <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
         </div>
         <div id="main_inscription">
-            <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
+            <form id="mon_form_inscription" method="POST" action="javascript:(function (){return;})()">
                 <h1>Inscription</h1>
                 <div class="ids" id="indication">
                     <p>* le mot de passe doit contenir au moins 8 caractères.<br/></p>
@@ -384,27 +385,27 @@
     /* ############################# */
     function makeForgottenPwdPanel(){
         hideAll()
-        $("link").attr("href", "css/Connexion.css")
+        $("changableLink").attr("href", "css/Connexion.css")
         $("#container_forgotten_pwd").show();
     }
     
     function makeInscriptionPanel()
     {
         hideAll()
-        $("link").attr("href", "css/Inscription.css")
+        $("changableLink").attr("href", "css/Inscription.css")
         $("#container_inscription").show();
     }
 
     function makeConnexionPanel(){
         hideAll();
-        $("link").attr("href", "css/Connexion.css")
+        $("changableLink").attr("href", "css/Connexion.css")
         $("#container_connexion").show();
     }
 
     function makeMainPanel(fromId , fromLogin , query){
         hideAll()
         console.log("bonjour");
-        $("link").attr("href", "css/Principale.css")
+        $("changableLink").attr("href", "css/Principale.css")
         $("#container_main").show();
         
         // Affiche les messages
