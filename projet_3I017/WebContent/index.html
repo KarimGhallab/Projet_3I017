@@ -95,6 +95,7 @@
                     $("#error_connexion").html("erreur connexion");
                 }
                 else{
+          			alert(repD.status);
                     console.log("status : " + repD.status);
                     env.key = repD.key;
                     env.fromId = repD.id;
