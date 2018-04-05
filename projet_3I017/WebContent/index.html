@@ -81,6 +81,7 @@
             <div id=error_connexion style="color:DarkRed;"></div>
             <div class="ids" ><span>Login</span><input type="text" id="login_co" name="login"/></div>
             <div class="ids" ><span>Mot de passe</span><input type="password" id="pwd_co" name="pwd" minlength="8" /></div>
+            <div class="button" style="float:left;"><span>Maintenir ma connexion</span> <input id="checkbox" type="checkbox" /> </div>
             <div class="button"><input type="submit" value="Connexion" onclick="mainConnexion()"/></div>
             <div id="links">
                 <div class="button" style="float:left;"><input type="submit" value="Mot de passe oublié ?" onclick="javascript:(function (){makeForgottenPwdPanel()})()"/></div>
@@ -97,7 +98,15 @@
 	        {
 	            var login = document.getElementById("login_co").value;
 	            var pwd = document.getElementById("pwd_co").value;
-	            connecte(login , pwd);
+               
+                if(document.getElementById("checkbox").checked){
+                    console.log("checked");
+                    connecte(login , pwd , 1);
+                }
+	            else  {
+                    console.log("nope");
+                    connecte(login , pwd , 0);
+                }
 	        }
         
 	        function enterHandler(event)
@@ -108,13 +117,13 @@
 			}
 
         
-            function connecte (login, pwd)
+            function connecte (login, pwd , save)
             {
                 if(!noConnection)
                     $.ajax({
                         type: "POST",
                         url: "user/login",
-                        data: "login="+login+"&pwd="+pwd+"&root=1",
+                        data: "login="+login+"&pwd="+pwd+"&root="+save,
                         dataType:"text",
                         success: function(rep){
                             reponseConnexion(rep);

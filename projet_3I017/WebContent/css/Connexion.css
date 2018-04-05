@@ -87,7 +87,9 @@ body
   border-radius: inherit;
   cursor: pointer;
 }
-
+ #checkbox{
+     display: inline-block;
+ }
 #input_id
 {
     flex: 1;
