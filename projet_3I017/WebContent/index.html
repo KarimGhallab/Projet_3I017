@@ -80,11 +80,15 @@
             <h1>Se connecter</h1>
             <div id=error_connexion style="color:DarkRed;"></div>
             <div class="ids" ><span>Login</span><input type="text" id="login_co" name="login"/></div>
-            <div class="ids" ><span>Mot de passe</span><input type="password" id="pwd_co" name="pwd" minlength="8" /></div>
-            <div class="button" style="float:left;"><span>Maintenir ma connexion</span> <input id="checkbox" type="checkbox" /> </div>
+            <div class="ids" ><span>Mot de passe</span><input type="password" id="pwd_co" name="pwd" minlength="8" /></div>            
+            
+
+            
+            
+            <div class="ids" style="float:left;position:relative"><span>Maintenir ma connexion</span> <input id="checkbox" type="checkbox" style="position:absolute; top:50%; transform:translate(0, -50%);"/> </div>
             <div class="button"><input type="submit" value="Connexion" onclick="mainConnexion()"/></div>
             <div id="links">
-                <div class="button" style="float:left;"><input type="submit" value="Mot de passe oublié ?" onclick="javascript:(function (){makeForgottenPwdPanel()})()"/></div>
+                <div class="button" style="position: absolute;left: 0;"><input type="submit" value="Mot de passe oublié ?" onclick="javascript:(function (){makeForgottenPwdPanel()})()"/></div>
                 <div class="button" style="float:right;"><input type="submit" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
             </div>
         </div>
@@ -139,22 +143,15 @@
 
             function reponseConnexion(rep){
                 var repD = JSON.parse(rep);
-                console.log("reponse : " + rep);
                 if(repD.status == "ko"){
                     $("#error_connexion").html("Connexion error : " + repD.message);
                 }
                 else{
+                	console.log(JSON.stringify(repD));
                     env.key = repD.key;
                     env.fromId = repD.id;
                     env.login = repD.login;
-                    env.follows = new Set();
-                    follows[repD.id]= new Set();
-
-                    /* Les amis de l'utilisateur */
-                    /*for(var i=0; i<repD.follows.length; i++)
-                    {
-                        follows[repD.id][i] = repD.follows[i]; 
-                    }*/
+                    env.follows[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
                     
                     makeMainPanel();
                 }
@@ -192,13 +189,13 @@
         <script type="text/javascript">
             function verif_egalite_pwd(){
                 if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
-                        {
-                            $("#mdp_error").html("attention, tout les champs doivent etre remplis !!"); 
-                            return false;
-                        }
+				{
+				    $("#mdp_error").html("attention, tout les champs doivent etre remplis !!"); 
+				    return false;
+				}
                 else if (document.getElementById("pwd").value != document.getElementById("pwd2").value ){
-                            $("#mdp_error").html("attention, les champs ne sont pas corrects !!"); 
-                            return false;
+					$("#mdp_error").html("attention, les champs ne sont pas corrects !!"); 
+					return false;
                 }
                 else {
                     document.getElementById("mdp_error").innerHTML="";
@@ -285,7 +282,7 @@
     }
     Message.prototype.getHTML = function(){
         s="<div id=\"message_"+this.id+"\" class=\"msg\" >"+
-            "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='javascript:(function (){developpeMessage("+this.id+")})()'/>"+
+            "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
             "<div>"+
                 "<div>"+this.auteur.getHTML()+"</div>"+
                 "<div>"+this.date+"</div>"+
@@ -325,19 +322,20 @@
     }
 
     //fonction du parser
-    revival=function(key , value){
-        if(!value.comments == undefined){
-            return new Message(value.id , value.auteur, value.texte , value.date , value.comments);
+    function revival(key, value) {
+        if(value.comments != undefined) {
+            return new Message(value.id , value.author, value.content , value.comments , value.date);
         }
-        else if(value.texte != undefined){
-            return new Commentaire(value.id , value.auteur ,value.texte, value.date);
+        else if(value.content != undefined){
+            return new Commentaire(value.id_comment , value.author ,value.content, value.date);
         }
-        if(key=="auteur"){
-            return new Auteur(value.id , value.login);
+        if(key == "author") {
+            return new Auteur(value.idAuthor , value.login);
         }
-        if(key=="date"){
-            return new date(value.date);
+        if(key=="date") {
+            return value;
         }
+        return value;
     }
     
     
@@ -389,12 +387,12 @@
         follows[3] = new Set()
         follows[3].add(1)
 
-        com1 = new Commentaire(1, u2, "Comment ca va", new Date());
+        /*com1 = new Commentaire(1, u2, "Comment ca va", new Date());
         com2 =  new Commentaire(2, u3, "Ca va bien", new Date());
 
         msg = new Message( 1 , u1 , "yo !" , [com1 , com2] , new Date());
 
-        env.messages[msg.id] = msg;
+        env.messages[msg.id] = msg;*/
     }
 
     function initializeAllLogins()
@@ -433,13 +431,11 @@
     {
     	if(env.currentContainer == ContainerEnum.MAIN)
    		{
-			console.log("J'était sur le main");
 			$("#messages").html("");        // On enlève les messages ajoutés au main
 			$("#nouveau_msg").show();
    		}
     	else if (env.currentContainer == ContainerEnum.CONNEXION)
    		{
-    		console.log("J'était sur la page de connexion");
     		$("#error_connexion").html("");
     		$("#login_co").val("");
     		$("#pwd_co").val("");
@@ -506,12 +502,57 @@
        	}
         
         $("#connexion").html(ajout);
-        
-        // Affiche les messages
-        for (index in env.messages)
-        {
-            $("#messages").append(env.messages[index].getHTML()); $("#messages").append(env.messages[index].getHTML());
-        }
+        setUpMessages();
+    }
+    
+    function setUpMessages(){
+    	var query = "";
+    	if(env.fromId == -1) {
+   			query = "key="+env.key;
+   		}
+    	else {
+    		query = "key="+env.key+"&amis="+getFriendList(env.fromId);
+   		}
+    	console.log(query);
+    	$.ajax({
+            type: "POST",
+            url: "message/listMessage",
+            data: query,
+            dataType:"text",
+            success: function(rep){
+                reponseSetUpMessages(rep);
+            },
+            error: function(XHR , textStatus , errorThrown){
+                alert(textStatus);
+            } 
+        })
+    }
+    
+    function reponseSetUpMessages(rep){
+    	var repD = JSON.parse(rep, revival);
+    	console.log(rep);
+    	env.messages = {};		// On remet à zéro la liste des messages
+    	var messages = repD.list_message;
+    	for(var index in messages) {
+			env.messages[messages[index].id] = messages[index];
+   		}
+    	
+    	displayMessages();
+    }
+    
+    function displayMessages(){
+    	for(index in env.messages){
+    		$("#messages").append(env.messages[index].getHTML());
+    	}
+    }
+    
+    function getFriendList(id){
+    	res = ""
+    	for(var index in env.follows[id]){
+    		res += env.follows[id][index]+"-";
+    	}
+    	console.log("res : " + res);
+    	return res;
     }
     
     function makeProfilPanel()
@@ -531,7 +572,7 @@
     {
         var m = env.messages[id];
         var el = $("#message_"+id+" .comments");
-        for(index in m.comments)
+        for(var index in m.comments)
         {
             var c = m.comments[index];
             el.append(c.getHTML());
@@ -539,14 +580,14 @@
 
         el = $("#message_"+id+" .new_comment");
         el.append("<p> ECRIT LE CODE POUR ECKRIR 1 COMM</p>>");
-        $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage("+id+")\"/>")
+        $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage('"+id+"')\"/>")
     }
 
     function replieMessage(id)
     {
         var el = $("#message_"+id+" .comments");
         el.html("");
-        $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage("+id+")\"/>")
+        $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
     }
     
 	//////////////////////////////////////

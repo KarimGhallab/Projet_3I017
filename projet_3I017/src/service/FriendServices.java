@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,13 +88,13 @@ public class FriendServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
 		String idUser = base_de_donnees.UserTools.getIdUserFromKey(key); 
-		JSONArray liste=UserTools.listFriend(idUser);
+		List<Integer> liste = UserTools.listFriend(idUser);
 		if(liste == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		
 		try
 		{
-			return ServiceTools.serviceAccepted().put("list friend", liste);
+			return ServiceTools.serviceAccepted().put("list_friend", liste);
 		}
 		catch (JSONException e)
 		{

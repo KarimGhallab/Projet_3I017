@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -439,7 +440,7 @@ public class UserTools
 	 * @param idUser L'id de l'utilisateur
 	 * @return La liste des amis de l'utilisateur.
 	 */
-	public static JSONArray listFriend(String idUser)
+	public static List<Integer> listFriend(String idUser)
 	{
 		try
 		{
@@ -448,13 +449,13 @@ public class UserTools
 			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
 			System.out.println("List Ami: " + query);
 			ResultSet cursor = st.executeQuery(query);
-			JSONArray friendArray = new JSONArray();
+			List<Integer> friendArray = new ArrayList<Integer>();
 			while(cursor.next())
 			{
 				
 				JSONObject json = new JSONObject();
 				json.put("user_id",cursor.getString("id_friend"));
-				friendArray.put(json);
+				friendArray.add(cursor.getInt("id_friend"));
 			}
 			
 			return friendArray;
@@ -488,15 +489,14 @@ public class UserTools
 				{
 					if (!isRoot(key))		// L'utilisateur n'est pas root, on le déconnecte
 					{
-						System.out.println("On enlève la connexion");
 						removeConnection(key);
 						return false;
 					}
 					else
-						return false;
+						return true;
 				}
 				else if(!isRoot(key))						// Le temps n'est pas dépassé, et l'utilisateur n'est pas root
-					return updateDateSessionByKey(key);		//On met donc à jour la date de sa session
+					return updateDateSessionByKey(key);		// On met donc à jour la date de sa session
 				
 				else										// Le temps n'est pas dépassé, et l'utilisateur est root
 					return true;

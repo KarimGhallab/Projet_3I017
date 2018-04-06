@@ -46,6 +46,7 @@ public class UserServices
 			try
 			{
 				JSONObject j =  ServiceTools.serviceAccepted().put("key", key);
+				j.put("friends", UserTools.listFriend(UserTools.getIdUserFromKey(key)));
 				return j.put("login" , login);
 			}
 			catch (JSONException e) 

@@ -1,6 +1,7 @@
 package base_de_donnees;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Map;
@@ -55,20 +56,25 @@ public class MessageTools
 	}
 	
 	/**
-	 * Renvoyer la liste des messages d'un utilisateur
+	 * Renvoyer la liste des messages d'un utilisateur et de ses amis
 	 * @param login Le login pour lequel il faut chercher la liste des messages.
 	 * @param orderAsc Indique si on effectue un trie des messages par date croissante.
 	 * @param limite Le nombre de messag à afficher. Si la limte est inférieur ou égal à 0, on affiche tous les messages.
-	 * @return La liste des messages de l'utilisateur. Ou null en cas d'erreur.
+	 * @return La liste des messages de l'utilisateur et de ses amis. Ou uniquement la liste des messages de l'utilisateur si id_friends est null. Ou null en cas d'erreur.
 	 */
 	public static JSONArray listMessage(String id_user, boolean orderAsc, int limite, String[] id_friends) 
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
-		if(id_friends == null)
+		if(id_friends == null)		// On renvoit la liste des messages de l'utilisateur
 			query.put("user_id", id_user);
 		else
-			query.put("user_id", new BasicDBObject("$in", id_friends));
+		{
+			ArrayList<String> friends = new ArrayList<String>();
+			friends.add(id_user);
+			friends.addAll(Arrays.asList(id_friends));
+			query.put("user_id", new BasicDBObject("$in", friends));
+		}
 		DBCursor messagesCursor = msg.find(query);
 		if (!orderAsc)
 			messagesCursor.sort(new BasicDBObject("date", -1));
@@ -84,12 +90,13 @@ public class MessageTools
 				JSONObject json = new JSONObject();
 				BasicDBObject auteur = new BasicDBObject();
 				DBObject document = messagesCursor.next();
-				auteur.put("login", UserTools.getLoginFromId(id_user));
-				auteur.put("user_id", document.get("user_id"));
-				json.put("content", document.get("c_ontent"));
-				json.put("auteur", auteur);
+				auteur.put("login", UserTools.getLoginFromId(document.get("user_id").toString()));
+				auteur.put("idAuthor", document.get("user_id"));
+				json.put("content", document.get("content"));
+				json.put("author", auteur);
 				json.put("date", document.get("date"));
 				json.put("id", document.get("_id"));
+				json.put("comments", CommentTools.listComment(document.get("_id").toString()));
 				userMessages.put(json);
 			}
 			return userMessages;
@@ -97,6 +104,7 @@ public class MessageTools
 		catch(Exception e)
 		{
 			System.err.println("listMessage : " + e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -106,23 +114,36 @@ public class MessageTools
 	 * @param limite Le nombre de message à afficher.
 	 * @return La liste des messages.
 	 */
-	public static JSONArray listMessage(int limite) 
+	public static JSONArray listMessage(int limite, boolean orderAsc) 
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		DBCursor messagesCursor = msg.find();
+		
+		if (!orderAsc)
+			messagesCursor.sort(new BasicDBObject("date", -1));
+		else
+			messagesCursor.sort(new BasicDBObject("date", 1));
 		if (limite > 0)
 			messagesCursor.limit(limite);
 		JSONArray userMessages = new JSONArray();
 		try
 		{
+			String id;
+			String login;
 			while(messagesCursor.hasNext())
 			{
 				JSONObject json = new JSONObject();
+				JSONObject auteur = new JSONObject();
 				DBObject document = messagesCursor.next();
+				id = document.get("user_id").toString();
+				auteur.put("idAuthor", id);
+				auteur.put("login", UserTools.getLoginFromId(id));
+				
 				json.put("content", document.get("content"));
 				json.put("date", document.get("date"));
+				json.put("author", auteur);
 				json.put("id", document.get("_id"));
-				json.put("user_id", document.get("user_id"));
+				json.put("comments", CommentTools.listComment( document.get("_id").toString()));
 				userMessages.put(json);
 			}
 			return userMessages;
@@ -130,6 +151,7 @@ public class MessageTools
 		catch(Exception e)
 		{
 			System.err.println("listMessage : " + e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 	}

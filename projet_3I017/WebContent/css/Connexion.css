@@ -87,17 +87,17 @@ body
   border-radius: inherit;
   cursor: pointer;
 }
- #checkbox{
-     display: inline-block;
- }
+.check {
+	margin-right: 2em;
+}
 #input_id
 {
     flex: 1;
 }
 #mail
 {
-     display:flex;
-    flex-direction:row
+  display:flex;
+  flex-direction:row
 }
 
 .ids

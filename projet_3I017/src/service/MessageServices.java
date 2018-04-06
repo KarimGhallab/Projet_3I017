@@ -83,11 +83,13 @@ public class MessageServices
 		if(key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
-		{
-			if(!base_de_donnees.UserTools.isConnection(key))
-				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		{	
+			boolean order;
+			if (orderAsc == null)
+				order = false;
+			else
+				order = Boolean.parseBoolean(orderAsc);
 			
-			boolean order = Boolean.parseBoolean(orderAsc);
 			int limiteEntiere;
 			if (limite == null)
 				limiteEntiere = 0;
@@ -100,12 +102,13 @@ public class MessageServices
 			else
 				friends = amis.split("-");
 			
+			
 			JSONArray messages;
 			
 			String userId = base_de_donnees.UserTools.getIdUserFromKey(key); 
 			
-			if(userId == null || orderAsc == null)
-				messages = MessageTools.listMessage(limiteEntiere);
+			if(userId == null)
+				messages = MessageTools.listMessage(limiteEntiere, order);
 			else
 				messages = MessageTools.listMessage(userId, order, limiteEntiere, friends);
 			if(messages == null)

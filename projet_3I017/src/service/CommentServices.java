@@ -3,6 +3,9 @@ package service;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.mongodb.BasicDBList;
+
 import base_de_donnees.CommentTools;
 import base_de_donnees.MessageTools;
 import base_de_donnees.UserTools;
@@ -58,7 +61,7 @@ public class CommentServices
 			if(!base_de_donnees.UserTools.isConnection(key))
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
-			JSONArray listeCommentaire = CommentTools.listComment(idMessage);
+			BasicDBList listeCommentaire = CommentTools.listComment(idMessage);
 			
 			return ServiceTools.serviceAccepted().put("comments", listeCommentaire);
 		}
