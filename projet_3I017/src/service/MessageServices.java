@@ -34,9 +34,10 @@ public class MessageServices
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
 			String id = UserTools.getIdUserFromKey(key);
-			MessageTools.addMessage(id , message);
+			System.out.println("service : " + message);
+			String idMessage = MessageTools.addMessage(id , message);
 			
-			return ServiceTools.serviceAccepted().put("added_message", message);
+			return ServiceTools.serviceAccepted().put("added_message", message).put("id", idMessage);
 		}
 		catch(JSONException e)
 		{

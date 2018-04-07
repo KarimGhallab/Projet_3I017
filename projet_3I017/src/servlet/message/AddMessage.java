@@ -22,6 +22,8 @@ public class AddMessage extends HttpServlet
 		String key = request.getParameter("key");
 		String message = request.getParameter("message");
 		
+		System.out.println("servlet : " + message);
+		
 		JSONObject json = service.MessageServices.addMessage(key, message);
 		
 		PrintWriter out = response.getWriter();

@@ -47,12 +47,41 @@
         	function mainAddMessage()
     		{
     			var input = $("#new_msg").val();
-    			addMessage(input)
+    			if (input != ""){
+    				addMessage(input);	
+    			}
+    			else
+    				alert("Vous ne pouvez pas publier un message vide")
     		}
     		
     		function addMessage(message)
     		{
+    			//var editedMessage = escapeHTMLEncode(message);
+    			var editedMessage = encodeURIComponent(message);
     			console.log("Je souhaite ajouter le message : " + message);
+    			console.log("Après modification : " + editedMessage);
+    			
+    			console.log("query : " + "key="+env.key+"&message="+editedMessage)
+    			
+    			$.ajax({
+                    type: "POST",
+                    url: "message/addMessage",
+                    data: "key="+env.key+"&message="+editedMessage,
+                    dataType:"text",
+                    success: function(rep){
+                    	responseAddMessage(rep);
+                    },
+                    error: function(XHR , textStatus , errorThrown){
+                        alert(textStatus);
+                    } 
+                })
+    			
+    		}
+    		
+    		function responseAddMessage(rep)
+    		{
+    			repD = JSON.parse(rep);
+    			console.log(rep);
     		}
     		
             window.onscroll = scrollWithInput;
@@ -172,7 +201,7 @@
                     <label id="mdp_error"></label>
                 </div>
                 
-                <div class="ids" id="nom" ><span>Nom</span><input type="text" name="nom"/></div>
+                <div class="ids" id="nom" ><span>Nom</span><input id="first_input_inscription" type="text" name="nom"/></div>
                 <div class="ids" id="prenom"><span>Prenom</span><input type="text" name="prenom"/></div>
                 <div class="ids" id="login"><span>login</span><input type="text" name="login"/></div>
                 <div class="ids" id="mail"><span>Mail</span><input type="email" name="email" id="input_mail" placeholder="toto@toto.toto"/></div>
@@ -247,7 +276,7 @@
         
     </div> <!-- Conteneur de mot de passe oublié -->
 
-    <div id="container_profil">
+    <div id="container_profil"></div>
 
     </div> <!-- Conteneur du profil -->
     <footer>
@@ -287,7 +316,7 @@
                 "<div>"+this.auteur.getHTML()+"</div>"+
                 "<div>"+this.date+"</div>"+
             "</div>"+
-            "<div>"+this.texte+"</div>"+
+            "<div>"+escapeHTMLEncode(this.texte)+"</div>"+
             "<div class = \"comments\">"+
             "</div>"
         "</div>";
@@ -459,6 +488,7 @@
         hideCurrent()
         $("#changableLink").attr("href", "css/Connexion.css")
         $("#container_forgotten_pwd").show();
+        $("#mail_forgotten").focus();
         env.currentContainer = ContainerEnum.FORGOTTEN_PWD;
     }
     
@@ -467,6 +497,7 @@
         hideCurrent()
         $("#changableLink").attr("href", "css/Inscription.css")
         $("#container_inscription").show();
+        $("#first_input_inscription").focus();
         env.currentContainer = ContainerEnum.INSCRIPTION;
     }
 
@@ -474,6 +505,7 @@
         hideCurrent();
         $("#changableLink").attr("href", "css/Connexion.css")
         $("#container_connexion").show();
+        $("#login_co").focus();
         env.currentContainer = ContainerEnum.CONNEXION;
     }
 
@@ -492,6 +524,7 @@
            	ajout += '<input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/>';
            	
            	$("#nouveau_msg").hide();
+           	$("#input_search_main").focus();
        	}
         else
        	{
@@ -499,6 +532,8 @@
         	
         	ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel()})()"/>';
            	ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
+           	
+           	$("#new_msg").focus();
        	}
         
         $("#connexion").html(ajout);
@@ -614,6 +649,13 @@
          if(event.keyCode == 13){		// Touche "entrée"
         	 doSearch();
          }	
+	}
+    
+    function escapeHTMLEncode(str) {
+		var div = document.createElement("div");
+		var text = document.createTextNode(str);
+		div.appendChild(text);
+		return div.innerHTML;
 	}
 </script>
 </html>

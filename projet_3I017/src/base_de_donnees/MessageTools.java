@@ -26,9 +26,9 @@ public class MessageTools
 	 * Ajouter un message à la base de données.
 	 * @param login Le login utilisateur qui souhaite ajouter un message.
 	 * @param message Le message à ajouter.
-	 * @return True si le message à été ajouté avec succès. False sinon.
+	 * @return L'id du message ajouté. Null en cas d'erreur.
 	 */
-	public static void addMessage(String userID , String message)
+	public static String addMessage(String userID , String message)
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
@@ -37,7 +37,12 @@ public class MessageTools
 		query.put("content", message);
 		query.put("date", c.getTime());
 		query.put("comments", Collections.EMPTY_LIST);
-		msg.insert(query);
+		msg.insert(query);		// Le message est ajouté
+		
+		DBCursor messagesCursor = msg.find(query);
+		DBObject document = messagesCursor.next();
+		
+		return document.get("_id").toString();
 	}
 
 	/**
