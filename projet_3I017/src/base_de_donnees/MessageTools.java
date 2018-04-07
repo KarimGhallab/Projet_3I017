@@ -26,23 +26,28 @@ public class MessageTools
 	 * Ajouter un message à la base de données.
 	 * @param login Le login utilisateur qui souhaite ajouter un message.
 	 * @param message Le message à ajouter.
-	 * @return L'id du message ajouté. Null en cas d'erreur.
+	 * @return Le message tel qu'il est stocké dans la base de données.
 	 */
-	public static String addMessage(String userID , String message)
+	public static BasicDBObject addMessage(String userID , String message)
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
 		GregorianCalendar c= new GregorianCalendar();
+		BasicDBObject auteur = new BasicDBObject();
+		auteur.put("idAuthor", userID);
+		auteur.put("login", UserTools.getLoginFromId(userID));
+		query.put("author", auteur);
 		query.put("user_id", userID);
 		query.put("content", message);
 		query.put("date", c.getTime());
 		query.put("comments", Collections.EMPTY_LIST);
 		msg.insert(query);		// Le message est ajouté
 		
-		DBCursor messagesCursor = msg.find(query);
-		DBObject document = messagesCursor.next();
-		
-		return document.get("_id").toString();
+		// On doit récuperer l'id du message dans la base de données
+		DBCursor cursor = msg.find(query);
+		DBObject document = cursor.next();
+		query.put("id", document.get("_id"));
+		return query;
 	}
 
 	/**
@@ -56,7 +61,6 @@ public class MessageTools
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", new ObjectId(id_message));
-		System.out.println("Query : " +query);
 		msg.remove(query);
 	}
 	
@@ -73,11 +77,12 @@ public class MessageTools
 		BasicDBObject query = new BasicDBObject();
 		if(id_friends == null)		// On renvoit la liste des messages de l'utilisateur
 			query.put("user_id", id_user);
-		else
+		else						
 		{
 			ArrayList<String> friends = new ArrayList<String>();
 			friends.add(id_user);
 			friends.addAll(Arrays.asList(id_friends));
+			
 			query.put("user_id", new BasicDBObject("$in", friends));
 		}
 		DBCursor messagesCursor = msg.find(query);
@@ -93,15 +98,13 @@ public class MessageTools
 			while(messagesCursor.hasNext())
 			{
 				JSONObject json = new JSONObject();
-				BasicDBObject auteur = new BasicDBObject();
 				DBObject document = messagesCursor.next();
-				auteur.put("login", UserTools.getLoginFromId(document.get("user_id").toString()));
-				auteur.put("idAuthor", document.get("user_id"));
 				json.put("content", document.get("content"));
-				json.put("author", auteur);
+				json.put("author", document.get("author"));
 				json.put("date", document.get("date"));
 				json.put("id", document.get("_id"));
 				json.put("comments", CommentTools.listComment(document.get("_id").toString()));
+				
 				userMessages.put(json);
 			}
 			return userMessages;
@@ -133,20 +136,14 @@ public class MessageTools
 		JSONArray userMessages = new JSONArray();
 		try
 		{
-			String id;
-			String login;
 			while(messagesCursor.hasNext())
 			{
 				JSONObject json = new JSONObject();
-				JSONObject auteur = new JSONObject();
 				DBObject document = messagesCursor.next();
-				id = document.get("user_id").toString();
-				auteur.put("idAuthor", id);
-				auteur.put("login", UserTools.getLoginFromId(id));
 				
 				json.put("content", document.get("content"));
 				json.put("date", document.get("date"));
-				json.put("author", auteur);
+				json.put("author", document.get("author"));
 				json.put("id", document.get("_id"));
 				json.put("comments", CommentTools.listComment( document.get("_id").toString()));
 				userMessages.put(json);

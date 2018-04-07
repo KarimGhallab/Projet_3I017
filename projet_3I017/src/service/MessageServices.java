@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.mongodb.BasicDBObject;
+
 import base_de_donnees.MessageTools;
 import base_de_donnees.UserTools;
 import utils.Data;
@@ -34,10 +36,9 @@ public class MessageServices
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
 			String id = UserTools.getIdUserFromKey(key);
-			System.out.println("service : " + message);
-			String idMessage = MessageTools.addMessage(id , message);
+			BasicDBObject storedMessage = MessageTools.addMessage(id , message);
 			
-			return ServiceTools.serviceAccepted().put("added_message", message).put("id", idMessage);
+			return ServiceTools.serviceAccepted().put("added_message", storedMessage);
 		}
 		catch(JSONException e)
 		{
@@ -112,6 +113,7 @@ public class MessageServices
 				messages = MessageTools.listMessage(limiteEntiere, order);
 			else
 				messages = MessageTools.listMessage(userId, order, limiteEntiere, friends);
+				
 			if(messages == null)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 			

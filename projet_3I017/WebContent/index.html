@@ -58,10 +58,6 @@
     		{
     			//var editedMessage = escapeHTMLEncode(message);
     			var editedMessage = encodeURIComponent(message);
-    			console.log("Je souhaite ajouter le message : " + message);
-    			console.log("Après modification : " + editedMessage);
-    			
-    			console.log("query : " + "key="+env.key+"&message="+editedMessage)
     			
     			$.ajax({
                     type: "POST",
@@ -69,7 +65,7 @@
                     data: "key="+env.key+"&message="+editedMessage,
                     dataType:"text",
                     success: function(rep){
-                    	responseAddMessage(rep);
+                    	reponseAddMessage(rep);
                     },
                     error: function(XHR , textStatus , errorThrown){
                         alert(textStatus);
@@ -78,10 +74,13 @@
     			
     		}
     		
-    		function responseAddMessage(rep)
+    		function reponseAddMessage(rep)
     		{
-    			repD = JSON.parse(rep);
-    			console.log(rep);
+    			repD = JSON.parse(rep, revival);
+    			var message = repD.added_message;
+    			env.messages[repD.id] = message;
+    			
+    			$("#messages").prepend(message.getHTML());
     		}
     		
             window.onscroll = scrollWithInput;
@@ -176,7 +175,6 @@
                     $("#error_connexion").html("Connexion error : " + repD.message);
                 }
                 else{
-                	console.log(JSON.stringify(repD));
                     env.key = repD.key;
                     env.fromId = repD.id;
                     env.login = repD.login;
@@ -548,7 +546,6 @@
     	else {
     		query = "key="+env.key+"&amis="+getFriendList(env.fromId);
    		}
-    	console.log(query);
     	$.ajax({
             type: "POST",
             url: "message/listMessage",
@@ -565,8 +562,8 @@
     
     function reponseSetUpMessages(rep){
     	var repD = JSON.parse(rep, revival);
-    	console.log(rep);
     	env.messages = {};		// On remet à zéro la liste des messages
+    	console.log(repD);
     	var messages = repD.list_message;
     	for(var index in messages) {
 			env.messages[messages[index].id] = messages[index];
@@ -586,7 +583,6 @@
     	for(var index in env.follows[id]){
     		res += env.follows[id][index]+"-";
     	}
-    	console.log("res : " + res);
     	return res;
     }
     

@@ -48,9 +48,6 @@ public class CommentTools
 		BasicDBObject cond = new BasicDBObject();
 		cond.put("_id", new ObjectId(idMessage));
 		
-		System.out.println("condition : " + cond);
-		System.out.println("push : " + push);
-		
 		msg.update(cond , push);
 	}
 	
@@ -83,14 +80,12 @@ public class CommentTools
 	 */
 	public static void removeComment(String idCommentaire)
 	{
-		System.out.println("#################");
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
 		BasicDBObject condition = new BasicDBObject("id_comment", new ObjectId(idCommentaire));
 		query.put("comments", condition);
 		BasicDBObject finalQuery = new BasicDBObject();
 		finalQuery.put("$pull", query);
-		System.out.println("Query : " +finalQuery);
 		msg.update(new BasicDBObject(), finalQuery, false, false);
 	}
 	
@@ -107,9 +102,7 @@ public class CommentTools
 			id = new ObjectId();
 			BasicDBObject query = new BasicDBObject();
 			query.put("id_comment", new BasicDBObject("$exists", true).put("$ne", id));
-			System.out.println(query);
 			DBCursor cursor = msg.find(query);
-			System.out.println("Taille curseur : " + cursor.size());
 			if (cursor.size() != 0)
 				break;
 		}

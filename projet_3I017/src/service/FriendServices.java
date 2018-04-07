@@ -34,15 +34,10 @@ public class FriendServices
 		String idUser = base_de_donnees.UserTools.getIdUserFromKey(key); 
 		
 		if(!UserTools.userExistsId (Integer.parseInt(idUser)))
-		{
-			System.out.println("idUser : " + idUser);
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_DOES_NOT_EXIST, Data.CODE_USER_DOES_NOT_EXIST);
-		}
+		
 		if(!UserTools.userExistsId (Integer.parseInt(idFriend)))
-		{
-			System.out.println("idFriend : " + idFriend);
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_FRIEND_DOES_NOT_EXIST, Data.CODE_FRIEND_DOES_NOT_EXIST);
-		}
 		
 		if(!UserTools.addFriend(idUser, idFriend))		// Ajout de la Friendship
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
