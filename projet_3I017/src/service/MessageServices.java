@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.mongodb.BasicDBObject;
+
 import base_de_donnees.MessageTools;
 import base_de_donnees.UserTools;
 import utils.Data;
@@ -34,9 +36,9 @@ public class MessageServices
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
 			String id = UserTools.getIdUserFromKey(key);
-			MessageTools.addMessage(id , message);
+			BasicDBObject storedMessage = MessageTools.addMessage(id , message);
 			
-			return ServiceTools.serviceAccepted().put("added_message", message);
+			return ServiceTools.serviceAccepted().put("added_message", storedMessage);
 		}
 		catch(JSONException e)
 		{
@@ -83,11 +85,13 @@ public class MessageServices
 		if(key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
-		{
-			if(!base_de_donnees.UserTools.isConnection(key))
-				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
+		{	
+			boolean order;
+			if (orderAsc == null)
+				order = false;
+			else
+				order = Boolean.parseBoolean(orderAsc);
 			
-			boolean order = Boolean.parseBoolean(orderAsc);
 			int limiteEntiere;
 			if (limite == null)
 				limiteEntiere = 0;
@@ -100,14 +104,16 @@ public class MessageServices
 			else
 				friends = amis.split("-");
 			
+			
 			JSONArray messages;
 			
 			String userId = base_de_donnees.UserTools.getIdUserFromKey(key); 
 			
-			if(userId == null || orderAsc == null)
-				messages = MessageTools.listMessage(limiteEntiere);
+			if(userId == null)
+				messages = MessageTools.listMessage(limiteEntiere, order);
 			else
 				messages = MessageTools.listMessage(userId, order, limiteEntiere, friends);
+				
 			if(messages == null)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 			

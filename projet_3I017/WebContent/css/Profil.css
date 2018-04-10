@@ -78,7 +78,7 @@ input[type=button],[value=connexion]{
     border-radius: inherit;
     cursor: pointer;
   }
-  #nom{
+  #login_profil{
     position: absolute;
 	left:4em;
 	transform: translate(0,-50%);

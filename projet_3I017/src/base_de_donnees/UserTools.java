@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -96,7 +97,6 @@ public class UserTools
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "INSERT INTO user(login, pwd, nom, prenom, mail) VALUES(\""+login+"\", PASSWORD(\""+pwd+"\"), \""+nom+"\", \""+prenom+"\", \""+email+"\");";
-			System.out.println("Insertion utilisateur : " + query);
 			int res = st.executeUpdate(query);
 			 
 			if (res == 0)
@@ -141,7 +141,6 @@ public class UserTools
 						//tkt bro ça marche
 					}
 					String query = "INSERT INTO session(id_user , skey , root) VALUES(\""+idUser+"\", \""+skey+"\", \""+root+"\");";
-					System.out.println("Insertion utilisateur : " + query);
 					int res = st.executeUpdate(query);
 					if (res == 0)
 						return null;
@@ -306,7 +305,6 @@ public class UserTools
 			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM user WHERE login = \""+login+"\" AND pwd = PASSWORD(\""+pwd+"\");";
-			System.out.println(query);
 			ResultSet rs = st.executeQuery(query);
 			if(rs.next())
 			{
@@ -388,7 +386,6 @@ public class UserTools
 				Connection c = DataBase.getMySQLConnection();
 				Statement st = c.createStatement();
 				String query = "INSERT INTO friend(id_user, id_friend) VALUES(\""+idUser+"\", \""+idFriend+"\");";
-				System.out.println("Ajout ami : " + query);
 				int res = st.executeUpdate(query); 
 				if (res == 0)
 					return false;
@@ -419,7 +416,6 @@ public class UserTools
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "DELETE FROM friend WHERE id_user=\""+idUser+"\" AND id_friend =\""+idFriend+"\";";
-			System.out.println("Supprimer ami : " + query);
 			int res = st.executeUpdate(query); 
 			if (res == 0)
 				return false;
@@ -439,22 +435,21 @@ public class UserTools
 	 * @param idUser L'id de l'utilisateur
 	 * @return La liste des amis de l'utilisateur.
 	 */
-	public static JSONArray listFriend(String idUser)
+	public static List<Integer> listFriend(String idUser)
 	{
 		try
 		{
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
-			System.out.println("List Ami: " + query);
 			ResultSet cursor = st.executeQuery(query);
-			JSONArray friendArray = new JSONArray();
+			List<Integer> friendArray = new ArrayList<Integer>();
 			while(cursor.next())
 			{
 				
 				JSONObject json = new JSONObject();
 				json.put("user_id",cursor.getString("id_friend"));
-				friendArray.put(json);
+				friendArray.add(cursor.getInt("id_friend"));
 			}
 			
 			return friendArray;
@@ -488,15 +483,14 @@ public class UserTools
 				{
 					if (!isRoot(key))		// L'utilisateur n'est pas root, on le déconnecte
 					{
-						System.out.println("On enlève la connexion");
 						removeConnection(key);
 						return false;
 					}
 					else
-						return false;
+						return true;
 				}
 				else if(!isRoot(key))						// Le temps n'est pas dépassé, et l'utilisateur n'est pas root
-					return updateDateSessionByKey(key);		//On met donc à jour la date de sa session
+					return updateDateSessionByKey(key);		// On met donc à jour la date de sa session
 				
 				else										// Le temps n'est pas dépassé, et l'utilisateur est root
 					return true;
@@ -524,7 +518,6 @@ public class UserTools
 			Statement st = c.createStatement();
 			
 			String query = "DELETE FROM session WHERE skey=\""+key+"\" ;";
-			System.out.println("Deconnexion : " + query);
 			int res = st.executeUpdate(query);
 			if (res == 0)
 				return false;
@@ -547,7 +540,6 @@ public class UserTools
 	private static String generate_key()
 	{
 		String key = UUID.randomUUID().toString().replaceAll("-", "");		//Génére une clé de 32 octets.
-		System.out.println(key.length());
 		return key;
 	}
 	
@@ -595,7 +587,6 @@ public class UserTools
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM user WHERE login LIKE \"%"+login+"%\";";
-			System.out.println("UserSearch: " + query);
 			ResultSet cursor = st.executeQuery(query);
 			JSONArray userArray = new JSONArray();
 			while(cursor.next())
@@ -627,7 +618,6 @@ public class UserTools
 			Connection c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
-			System.out.println("List Ami: " + query);
 			ResultSet cursor = st.executeQuery(query);
 			String amis = "";
 			while(cursor.next())
@@ -869,9 +859,7 @@ public class UserTools
 	private static String generateNewPwd()
 	{
 		String pwd = UUID.randomUUID().toString().replaceAll("-", "");		//Génére une clé de 32 octets.
-		System.out.println("ancien pwd : " + pwd);
 		pwd = pwd.substring(0, 9);
-		System.out.println("nouveau pwd : " + pwd);
 		
 		return pwd;
 	}

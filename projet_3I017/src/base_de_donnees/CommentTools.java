@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -33,7 +34,10 @@ public class CommentTools
 		comments.put("id_comment", objectId);
 		comments.put("content", commentaire);
 		comments.put("date", c.getTime());
-		comments.put("idAuthor",auteurId);
+		BasicDBObject auteur = new BasicDBObject();
+		auteur.put("idAuthor", auteurId);
+		auteur.put("login", UserTools.getLoginFromId(auteurId));
+		comments.put("author",auteur);
 		
 		BasicDBObject content = new BasicDBObject();
 		content.put("comments", comments);
@@ -44,9 +48,6 @@ public class CommentTools
 		BasicDBObject cond = new BasicDBObject();
 		cond.put("_id", new ObjectId(idMessage));
 		
-		System.out.println("condition : " + cond);
-		System.out.println("push : " + push);
-		
 		msg.update(cond , push);
 	}
 	
@@ -55,28 +56,20 @@ public class CommentTools
 	 * @param idMessage L'id du message (ID dans MongoDB).
 	 * @return Une liste des commentaires.
 	 */
-	public static JSONArray listComment(String idMessage)
+	public static BasicDBList listComment(String idMessage)
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", new ObjectId(idMessage));
 		DBCursor cursor = msg.find(query);
-		JSONArray comments = new JSONArray();
 		try
 		{
-			JSONObject json = new JSONObject();
-			BasicDBObject auteur = new BasicDBObject();
 			DBObject comment = cursor.next();
-			String id_user = (String) comment.get("user_id");
-			auteur.put("login", UserTools.getLoginFromId(id_user));
-			auteur.put("user_id", id_user);
-			json.put("comment", comment.get("comments"));
-			comments.put(json);
-			return comments;
+			return (BasicDBList)comment.get("comments");
 		}
 		catch(Exception e)
 		{
-			System.err.println("listMessage : " + e.getMessage());
+			System.err.println("listComment : " + e.getMessage());
 			return null;
 		}
 	}
@@ -87,14 +80,12 @@ public class CommentTools
 	 */
 	public static void removeComment(String idCommentaire)
 	{
-		System.out.println("#################");
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
 		BasicDBObject condition = new BasicDBObject("id_comment", new ObjectId(idCommentaire));
 		query.put("comments", condition);
 		BasicDBObject finalQuery = new BasicDBObject();
 		finalQuery.put("$pull", query);
-		System.out.println("Query : " +finalQuery);
 		msg.update(new BasicDBObject(), finalQuery, false, false);
 	}
 	
@@ -111,9 +102,7 @@ public class CommentTools
 			id = new ObjectId();
 			BasicDBObject query = new BasicDBObject();
 			query.put("id_comment", new BasicDBObject("$exists", true).put("$ne", id));
-			System.out.println(query);
 			DBCursor cursor = msg.find(query);
-			System.out.println("Taille curseur : " + cursor.size());
 			if (cursor.size() != 0)
 				break;
 		}
