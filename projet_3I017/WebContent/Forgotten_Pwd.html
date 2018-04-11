@@ -1,49 +1,19 @@
-<body>
-   <div id="main_connexion">
-   <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
-        <h1>Récuperation de mot de passe</h1>
-        <label id="error_vide"></label>
-        <label id="error_different"></label>
-        <div class="ids" id="mail" ><span>Entrez votre e-mail</span><input type="email" name="email" id="mail" value=""  /></div>
-        <div class="ids" id="mail" ><span>confirmez votre e-mail</span><input type="email" name="email"  id="mail2" value=""/></div>
-        <div class="button"><input type="submit" value="Connexion"/></div>
-        <div id="links">
-           <div class="button" style="float:left"><input type="submit" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/></div>
-            <div class="button" style="float:right"><input type="submit" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
-        </div>
+<div id="container_forgotten_pwd">
+    <div id="header">
+        <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
     </div>
-    
-     <!-- script pour verifier l'egalité entre les deux mot de passes -->
-     <!-- ne marche pas pour le moment 
-     <script type="text/javascript">
-   	 	document.querySelector('#mon_form').addEventListener('submit', function(e) {
-   	 		
-   	 		if(document.getElementById('mail').value==='' || document.getElementById('mail').value==='' )
-   	 			//alert('Attention, tout les champs doivent etre remplis !');
-   	 			{
-   	 				document.getElementById("error_vide").innerHTML="attention, tout les champs doivent etre remplis !!"; 
-   	 			}
-		    else if (document.getElementById('email').value !== document.getElementById('mail2').value) {
-		    	alert(document.getElementById("mail").value )
-		        document.getElementById("error_different").innerHTML="attention, les champs ne sont pas corrects !!"; 
-		        return false;
-		    }
-		    else {
-		    	document.getElementById("error_vide").innerHTML="";
-		    	document.getElementById("error_different").innerHTML="";
-		    }
-		}, false);
-	</script>
-	-->
-	</form>
-			
-    <footer>
-            Fodil Zaki - Ghallab Karim
-            <div class="lien_github" onclick=" window.open('https://github.com/PaulMorgon/Projet_3I017/', '_blank');">
-                <svg height="24" viewBox="0 0 16 16" version="1.1" width="24" aria-hidden="true" id="logo_github">
-                    <!-- Le SVG du logo de GitHub -->
-                    <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                </svg>
+    <div id="main_connexion">
+        <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
+            <h1>Récuperation de mot de passe</h1>
+            <label id="error_vide"></label>
+            <label id="error_different"></label>
+            <div class="ids" id="mail" ><span>Entrez votre e-mail</span><input type="email" name="email" id="mail_forgotten" value =""   /></div>
+            <div class="ids" id="mail" ><span>confirmez votre e-mail</span><input type="email" name="email"  id="mail2_forgotten"  value ="" /></div>
+            <div class="button"><input type="submit" value="Connexion" onclick="verif_egalite_mail()"/></div>
+            <div id="links">
+                <div class="button" style="float:left"><input type="submit" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/></div>
+                <div class="button" style="float:right"><input type="submit" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
             </div>
-        </footer>
-</body>
+        </form>
+    </div>
+</div> <!-- Conteneur de mot de passe oublié -->

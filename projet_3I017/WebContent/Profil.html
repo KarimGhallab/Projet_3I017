@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-    <title>Twister</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/Profil.css" />
-    <!--<script src="main.js"></script>-->
-</head>
-<body>
+<div id="container_profil"> <!-- Conteneur de Profil-->
     <header>
-        <div id="header">
-            <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
-            <div id="connexion"><input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/><input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
-            <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
-                <input type="button" value="Search" onclick="javascript:(function (){return;})()"/>
-            </div>
-        </div>
-    </header>
-  
-    <div id="stat"><span>je suis une stat</span> </div>
-    <div id="principale">
-        <div id="nouveau_msg">
-            <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
-        </div>
-        <div id="infos_user"> <div id="profil"><img  id="profil_img" src="image/profil.png"  alt="profil"/> <span id="nom"> Jordan La-louche </span> </div></div>
-       
-    </div>
+       <div id="header">
+           <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
+           <div id="connexion"><input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel()})()"/><input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/></div>
+           <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
+               <input type="button" value="Search" onclick="javascript:(function (){return;})()"/>
+           </div>
+       </div>
+   </header>
+ 
+   <div id="stat"><span>je suis une stat</span> </div>
+   <div id="principale">
+       <div id="nouveau_msg">
+           <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="" value="Publier"/>
+       </div>
+       <div id="infos_user"> <div id="profil"><img  id="profil_img" src="image/profil.png"  alt="profil"/> <label id="login_profil"> </label> </div></div>
+      
+   </div>
 
-</body>
-</html>
+
+</div> <!-- Conteneur du profil -->

@@ -1,42 +1,22 @@
-
-<body>
+<div id="container_inscription">
     <div id="header">
-            <div id="logo"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
+        <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
     </div>
     <div id="main_inscription">
-        <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
-            <h1>Inscription</h1>
-            <div class="ids" id="indication"><p>* le mot de passe doit contenir au moins 8 caractères.<br/></p></div>
-			<label id="mdp_error"></label>
-            <div class="ids" id="nom" ><span>Nom</span><input type="text" name="nom"/></div>
-            <div class="ids" id="prenom"><span>Prenom</span><input type="text" name="prenom"/></div>
-            <div class="ids" id="login"><span>login</span><input type="text" name="login"/></div>
-            <div class="ids" id="mail"><span>Mail</span><input type="email" name="email" id="input_mail" placeholder="toto@toto.toto"/></div>
-            <div class="ids" id="mdp"><span>Mot de passe</span><input type="password" id="pwd" name="pwd" size="32" minlength="8"/></div>
-            <div class="ids" id="mdp2"><span>Confirmer mot de passe</span><input type="password" id="pwd2" name="pwd2" size="32" minlength="8"/></div>
-            
-            <!-- script pour verifier l'egalité entre les deux mot de passes -->
-            <script type="text/javascript">
-				document.querySelector('#mon_form').addEventListener('submit', function(e) {
-			    	if (document.getElementById('pwd').value !== document.getElementById('pwd2').value) {
-				        alert('Attention, le mot de passe de confirmation est différent du mot de passe !');
-				        e.preventDefault();
-				        return false;
-			    	}
-				}, false);
-			</script>
-            
-            <input type="submit" value="Enregistrer" id="submit_button" onclick="javascript:checkMdp()"/>
-            <input type="button" value="Déjà un compte ?" id="cancel_button" onclick="javascript:(function (){makeConnexionPanel()})()"/>
-        </form>
+        <h1>Inscription</h1>
+        <div class="ids" id="indication">
+            <p>* le mot de passe doit contenir au moins 8 caractères.<br/></p>
+            <label id="mdp_error"></label>
+        </div>
+        
+        <div class="ids" id="nom" ><span>Nom</span><input id="first_input_inscription" type="text"  name="nom"/></div>
+        <div class="ids" id="prenom"><span>Prenom</span><input type="text"  id="prenom_ins" name="prenom"/></div>
+        <div class="ids" id="login"><span>login</span><input type="text" id="login_ins" name="login"/></div>
+        <div class="ids" id="mail"><span>Mail</span><input type="email" name="email" id="input_mail" placeholder="toto@toto.toto"/></div>
+        <div class="ids" id="mdp"><span>Mot de passe</span><input type="password" id="pwd" name="pwd" size="32" minlength="8" value=""/></div>
+        <div class="ids" id="mdp2"><span>Confirmer mot de passe</span><input type="password" id="pwd2" name="pwd2" size="32" minlength="8" value=""/></div>
+    
+        <input type="submit" value="Enregistrer" id="submit_button" onclick="mainInscription()"/>
+        <input type="button" value="Déjà un compte ?" id="cancel_button" onclick="javascript:(function (){makeConnexionPanel()})()"/>
     </div>
-    <footer>
-            Fodil Zaki - Ghallab Karim
-            <div class="lien_github" onclick=" window.open('https://github.com/PaulMorgon/Projet_3I017/', '_blank');">
-                <svg height="24" viewBox="0 0 16 16" version="1.1" width="24" aria-hidden="true" id="logo_github">
-                    <!-- Le SVG du logo de GitHub -->
-                    <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                </svg>
-            </div>
-        </footer>
-</body>
+</div>
