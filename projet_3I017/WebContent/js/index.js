@@ -1,12 +1,4 @@
 /* Ajout de message */
-$("#new_msg").keydown(enterHandler);
-
-function enterHandler(event)
-{
-        if(event.keyCode == 13){		// Touche "entrée"
-            mainAddMessage();
-        }	
-}
 
 function mainAddMessage()
 {
@@ -14,13 +6,13 @@ function mainAddMessage()
     if (input != ""){
         addMessage(input);	
     }
-    else
-        alert("Vous ne pouvez pas publier un message vide")
+    else{
+    	alert("Vous ne pouvez pas publier un message vide")
+    }
 }
 
 function addMessage(message)
 {
-    //var editedMessage = escapeHTMLEncode(message);
     var editedMessage = encodeURIComponent(message);
     
     $.ajax({
@@ -40,41 +32,50 @@ function addMessage(message)
 
 function reponseAddMessage(rep)
 {
+	$("#new_msg").val("");
     repD = JSON.parse(rep, revival);
     var message = repD.added_message;
     env.messages[repD.added_message.id] = message;
     
     $("#messages").prepend(message.getHTML());
+    $("#input_comment_"+message.id).keydown(enterHandlerAddComment);
 }
 
 
 function addComment(id){
-    var value = $("#input_comment").val();
-    $.ajax({
-        type: "POST",
-        url: "comment/addComment",
-        data: "key="+env.key+"&idMessage="+id+"&commentaire="+value,
-        dataType:"text",
-        success: function(rep){
-            reponseAddComment(rep, id);
-        },
-        error: function(XHR , textStatus , errorThrown){
-            alert(textStatus);
-        } 
-    })
+    var value = $("#input_comment_"+id).val();
+    if (value != "")
+	{
+    	$.ajax({
+            type: "POST",
+            url: "comment/addComment",
+            data: "key="+env.key+"&idMessage="+id+"&commentaire="+value,
+            dataType:"text",
+            success: function(rep){
+                reponseAddComment(rep, id);
+            },
+            error: function(XHR , textStatus , errorThrown){
+                alert(textStatus);
+            } 
+        })
+	}
+    else
+	{
+    	alert("Vous ne pouvez pas ajouter un commentaire vide");
+	}
     
 }
 
-function reponseAddComment(rep, id){
+function reponseAddComment(rep, id)
+{
+	$("#input_comment_"+id).val("");
     repD = JSON.parse(rep, revival);
-    env.messages[id].push(repD.addComment);
-    console.log(rep);
-    console.log(repD);
+    var new_comment = repD.added_comment;
+    env.messages[id].comments.push(new_comment)			// On ajoute le commentaire au message
+    
+    var el = $("#message_"+id+" .comments");
+    el.prepend(new_comment.getHTML());
 }
-
-/* Connexion */
-$("#login_co").keydown(enterHandler);
-$("#pwd_co").keydown(enterHandler);
 
 function mainConnexion()
 {
@@ -89,13 +90,6 @@ function mainConnexion()
         console.log("nope");
         connecte(login , pwd , 0);
     }
-}
-
-function enterHandler(event)
-{
-        if(event.keyCode == 13){		// Touche "entrée"
-            mainConnexion()
-        }	
 }
 
 
@@ -120,13 +114,14 @@ function connecte (login, pwd , save)
 }
 
 function reponseConnexion(rep){
-    var repD = JSON.parse(rep);
+	var repD = JSON.parse(rep);
     if(repD.status == "ko"){
         $("#error_connexion").html("Connexion error : " + repD.message);
     }
     else{
-        alert(repD.status);
-        console.log("status : " + repD.status);
+    	$("#login_co").val("");
+        $("#pwd_co").val("");
+        
         env.key = repD.key;
         env.fromId = repD.id;
         env.login = repD.login;
@@ -169,24 +164,11 @@ function mainInscription()
     }
 }
 
-function enterHandler(event)
-{
-     if(event.keyCode == 13){		// Touche "entrée"
-         mainInscription()
-     }	
-}
-
 
 function  inscrire (nom , prenom ,login , pwd , mail)
 {
-    console.log(pwd);
-    console.log(prenom);
-    console.log(nom);
-    console.log(login);
-    console.log(mail);
     
     if(!noConnection){
-        console.log("inscrire")
         $.ajax({
             type: "POST",
             url: "user/createUser",
@@ -269,7 +251,7 @@ Message.prototype.getHTML = function(){
         "<div>"+escapeHTMLEncode(this.texte)+"</div>"+
         "<div class = \"new_comment\">";
         if (env.fromId != -1){
-            s += "<input type =\"text\" id=\"input_comment\" placeholder=\"Un commentaire...\"/>"+
+            s += "<input type =\"text\" id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\"/>"+
             "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
         }
         s += "</div>" +
@@ -350,7 +332,6 @@ function init()
     ////////////////////////////////////
     /* Charger liste des utilisateurs */
     ////////////////////////////////////
-    hideAll();
     makeMainPanel();
 }
 
@@ -413,32 +394,6 @@ function reponseGetLogins(rep)
     env.all_users = repD.logins;
 }
 
-
-function hideCurrent()
-{
-    if(env.currentContainer == ContainerEnum.MAIN)
-    {
-        $("#messages").html("");        // On enlève les messages ajoutés au main
-        $("#nouveau_msg").show();
-    }
-    else if (env.currentContainer == ContainerEnum.CONNEXION)
-    {
-        $("#error_connexion").html("");
-        $("#login_co").val("");
-        $("#pwd_co").val("");
-        
-    }
-    console.log("Ancienne page : " + env.currentContainer);
-    env.containers[env.currentContainer].hide();
-}
-
-function hideAll()
-{
-    for(var key in env.containers) {
-        env.containers[key].hide();
-    }
-}
-
 ////////////////////////////////////
 // Fonctions de création de panel //
 ////////////////////////////////////
@@ -474,13 +429,14 @@ function makeProfilPanel()
 function makeConnexionPanel(){
     $("#container").load("Connexion.html", function(){
         $("#login_co").focus();
+        $("#login_co").keydown(enterHandlerConnexion);
+        $("#pwd_co").keydown(enterHandlerConnexion);
     });
     $("#changableLink").attr("href", "css/Connexion.css");
     env.currentContainer = ContainerEnum.CONNEXION;
 }
 
 function callbackMainPanel(){
-    console.log("Bonjourssssssssssss");
     var ajout = "";
     if (env.fromId == -1)
     {
@@ -500,8 +456,10 @@ function callbackMainPanel(){
         ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
         
         $("#new_msg").focus();
+        $("#new_msg").keydown(enterHandlerAddMessage);
     }
     
+    $("#input_search_main").keydown(enterHandlerSearch);
     $("#connexion").html(ajout);
     setUpMessages();
 }
@@ -538,18 +496,17 @@ function setUpMessages(){
 function reponseSetUpMessages(rep){
     var repD = JSON.parse(rep, revival);
     env.messages = {};		// On remet à zéro la liste des messages
-    console.log(repD);
     var messages = repD.list_message;
     for(var index in messages) {
         env.messages[messages[index].id] = messages[index];
     }
-    
     displayMessages();
 }
 
 function displayMessages(){
     for(index in env.messages){
         $("#messages").append(env.messages[index].getHTML());
+        $("#input_comment_"+env.messages[index].id).keydown(enterHandlerAddComment);
     }
 }
 
@@ -560,8 +517,6 @@ function getFriendList(id){
     }
     return res;
 }
-
-
 
 function mainDeconnexion()
 {
@@ -602,9 +557,11 @@ function reponseLogout(rep){
 
 function developpeMessage(id)
 {
-    console.log("ID : " + id);
     var m = env.messages[id];
     var el = $("#message_"+id+" .comments");
+    
+    el.html("");						// Au cas ou un nouveau commentaire aurait été écrit et affiché
+    
     for(var index in m.comments)
     {
         var c = m.comments[index];
@@ -638,15 +595,60 @@ function doSearch()
     console.log("Input : " + input);
 }
 
-$("#input_search_main").keydown(enterHandler);
+////////////////////////////////////
+////////// enterHandler ////////////
+////////////////////////////////////
 
-function enterHandler(event)
+function enterHandlerConnexion(event)
 {
-        if(event.keyCode == 13){		// Touche "entrée"
-            doSearch();
-        }	
+    if(event.keyCode == 13){
+        mainConnexion()
+    }	
 }
 
+function enterHandlerSearch(event)
+{
+    if(event.keyCode == 13){
+        doSearch();
+    }	
+}
+
+function enterHandlerAddMessage(event)
+{
+    if(event.keyCode == 13){
+        mainAddMessage();
+    }	
+}
+
+function enterHandlerAddComment(event)
+{
+	// Ici il faut obtenir l'id du message sur lequel on souhaite ajouter le commentaire
+	// L'id est présent sur le noeud source de l'évenement
+	var idMessage = event.currentTarget.id.split("_")[2];
+	console.log("Id message : " + idMessage);
+	
+	if(event.keyCode == 13)
+	{
+		if(idMessage != undefined)
+		{
+	        addComment(idMessage);
+		}
+		else
+		{
+			alert("Vous ne pouvez pas publier un message vide")
+		}
+        
+	}
+}
+
+function enterHandlerInscription(event)
+{
+     if(event.keyCode == 13){
+         mainInscription()
+     }	
+}
+
+// Retourne une chaine de caaractère pouvant être affichée dans des balises HTMLs
 function escapeHTMLEncode(str) {
     var div = document.createElement("div");
     var text = document.createTextNode(str);
