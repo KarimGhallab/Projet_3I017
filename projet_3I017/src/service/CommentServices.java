@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 
 import base_de_donnees.CommentTools;
 import base_de_donnees.MessageTools;
@@ -36,9 +37,9 @@ public class CommentServices
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
 			String idAuteur = UserTools.getIdUserFromKey(key);
-			CommentTools.addComment(idAuteur , idMessage, commentaire);
+			BasicDBObject commentaireDB = CommentTools.addComment(idAuteur , idMessage, commentaire);
 			
-			return ServiceTools.serviceAccepted().put("added_comment", commentaire);
+			return ServiceTools.serviceAccepted().put("added_comment", commentaireDB);
 		}
 		catch(JSONException e)
 		{

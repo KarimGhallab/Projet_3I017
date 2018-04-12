@@ -23,8 +23,9 @@ public class CommentTools
 	 * @param auteurId L'id de l'auteur du commentaire (ID dans MySQL).
 	 * @param idMessage L'id du message commenté (ID dans MongoDB).
 	 * @param commentaire Le contenu du commentaire.
+	 * @return 
 	 */
-	public static void addComment(String auteurId , String idMessage, String commentaire)
+	public static BasicDBObject addComment(String auteurId , String idMessage, String commentaire)
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject comments = new BasicDBObject();
@@ -49,6 +50,8 @@ public class CommentTools
 		cond.put("_id", new ObjectId(idMessage));
 		
 		msg.update(cond , push);
+		
+		return comments;
 	}
 	
 	/**
