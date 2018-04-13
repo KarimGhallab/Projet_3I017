@@ -1,3 +1,28 @@
+/* Ajout de image de profil */
+/*
+function uploadFile() {
+    var blobFile = $('#filechooser').files[0];
+    var formData = new FormData();
+    formData.append("fileToUpload", blobFile);
+
+    $.ajax({
+       url: "user/UploadImage",
+       type: "POST",
+       data: formData,
+       processData: false,
+       contentType: false,
+       success: function(response) {
+           // .. do something
+       },
+       error: function(jqXHR, textStatus, errorMessage) {
+           console.log(errorMessage); // Optional
+       }
+    });
+}
+
+function reponseUploadFile(){
+
+}*/
 /* Ajout de message */
 
 function mainAddMessage()
@@ -325,10 +350,14 @@ function init()
     env.all_users = [];
     env.currentContainer = ContainerEnum.MAIN;
     
+
+    
     initializeContainers();
     initializeAllLogins();
     setVirtualdb();
     setUpSearchBar();
+
+    console.log(env.all_users);
     ////////////////////////////////////
     /* Charger liste des utilisateurs */
     ////////////////////////////////////
@@ -392,6 +421,7 @@ function reponseGetLogins(rep)
 {
     var repD = JSON.parse(rep);
     env.all_users = repD.logins;
+    
 }
 
 ////////////////////////////////////
@@ -420,10 +450,24 @@ function callbackProfilPanel(){
     console.log("Je suis connecté, mon login est : " + env.login);
 }
 
-function makeProfilPanel()
-{
+
+function makeProfilPanel(id){
+    id = 4
     $("#container").load("Profil.html", callbackProfilPanel);
     $("#changableLink").attr("href", "css/Profil.css");
+    if(id!=null){
+        ajout="";
+        console.log(env.follows)
+        if(id!=env.fromId){
+            if(id in env.follows.id){
+                ajout = "<input type=\"button\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" ";
+            }
+            else{
+                ajout += "<input type=\"button\" value = \"se désabonner\" onclick=\"removeFriend("+id+")\" ";
+            }
+        }
+        $("#friends").html(ajout);
+    }
 }
 
 function makeConnexionPanel(){
@@ -461,7 +505,8 @@ function callbackMainPanel(){
     
     $("#input_search_main").keydown(enterHandlerSearch);
     $("#connexion").html(ajout);
-    setUpMessages();
+    //setUpMessages();
+    
 }
 
 function makeMainPanel()

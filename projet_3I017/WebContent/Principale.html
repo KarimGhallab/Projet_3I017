@@ -14,8 +14,8 @@
             <div id="header">
                 <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
                 <div id="connexion"><input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/><input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
-                <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
-                    <input type="button" value="Search" onclick="javascript:(function (){return;})()"/>
+                <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message" autocomplete="on"/>
+                    <input type="button" value="Search" onclick="doSearch()"/>
                 </div>
             </div>
         </header>
