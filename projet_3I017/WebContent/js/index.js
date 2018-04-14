@@ -260,7 +260,6 @@ function verif_egalite_mail(){
             data: "mail1="+valueMail1+"&mail2="+valueMail2,
             dataType:"text",
             success: function(rep){
-            	$("#dialog").dialog("close");
                 reponseForgottenPwd(rep, valueMail1);
             },
             error: function(XHR , textStatus , errorThrown){
@@ -279,10 +278,14 @@ function reponseForgottenPwd(rep, mail)
 	console.log(repD);
 	if (repD.status == "ko")
 	{
+		$("#dialog").dialog("close");
 		$("#error_vide").html(repD.message);
 	}
 	else
 	{
+		$("#dialog").dialog("close");
+    	$("#mail_forgotten").val("");
+    	$("#mail2_forgotten").val("");
 		alert("Votre nouveau mot de passe à été envoyé avec succès à l'adresse mail \"" + mail +"\".");
 	}
 }
