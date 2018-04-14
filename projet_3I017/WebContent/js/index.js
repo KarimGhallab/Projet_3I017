@@ -160,11 +160,11 @@ function reponseConnexion(rep){
 function verif_egalite_pwd(){
     if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
     {
-        $("#mdp_error").html("attention, tout les champs doivent etre remplis !!"); 
+        $("#mdp_error").html("Attention, tout les champs doivent etre remplis !!"); 
         return false;
     }
     else if (document.getElementById("pwd").value != document.getElementById("pwd2").value ){
-        $("#mdp_error").html("attention, les champs ne sont pas corrects !!"); 
+        $("#mdp_error").html("Attention, les champs ne sont pas corrects !!"); 
         return false;
     }
     else {
@@ -192,7 +192,12 @@ function mainInscription()
 
 function  inscrire (nom , prenom ,login , pwd , mail)
 {
-    
+    console.log("Nom : " + nom);
+    console.log("Préom : " + prenom);
+    console.log("Login : " + login);
+    console.log("Pwd : " + pwd);
+    console.log("Mail : " + mail);
+	
     if(!noConnection){
         $.ajax({
             type: "POST",
@@ -229,20 +234,57 @@ function reponseInscription(rep){
 
 /* Mot de passe oublié */
 function verif_egalite_mail(){
-    if( document.getElementById("mail_forgotten").value===  ""||  document.getElementById("mail2_forgotten").value==="")
+	var valueMail1 = $("#mail_forgotten").val();
+	var valueMail2 = $("#mail2_forgotten").val();
+	
+	console.log(valueMail1)
+	console.log(valueMail2)
+	
+    if( valueMail1 ===  "" ||  valueMail2 === "")
     {
-        $("#error_vide").html("attention, tout les champs doivent etre remplis !!"); 
+        $("#error_vide").html("Attention, tout les champs doivent etre remplis !!"); 
         return false;
     }
-    else if (document.getElementById("mail_forgotten").value != document.getElementById("mail2_forgotten").value )
+    else if (valueMail1 != valueMail2 )
     {
-        $("#error_vide").html("attention, les champs ne sont pas corrects !!"); 
+        $("#error_vide").html("Attention, les champs ne sont pas corrects !!"); 
         return false;
     }
     else {
         document.getElementById("error_vide").innerHTML="";
+        
+        $("#dialog").dialog( "open" );
+        $.ajax({
+            type: "POST",
+            url: "user/forgottenPassword",
+            data: "mail1="+valueMail1+"&mail2="+valueMail2,
+            dataType:"text",
+            success: function(rep){
+            	$("#dialog").dialog("close");
+                reponseForgottenPwd(rep, valueMail1);
+            },
+            error: function(XHR , textStatus , errorThrown){
+                alert(textStatus);
+                $("#dialog").dialog("close");
+            } 
+        })
         return true;
     }
+}
+
+function reponseForgottenPwd(rep, mail)
+{
+	var repD = JSON.parse(rep);
+	console.log(rep);
+	console.log(repD);
+	if (repD.status == "ko")
+	{
+		$("#error_vide").html(repD.message);
+	}
+	else
+	{
+		alert("Votre nouveau mot de passe à été envoyé avec succès à l'adresse mail \"" + mail +"\".");
+	}
 }
 
 /* Init - tous */
@@ -428,7 +470,7 @@ function reponseGetLogins(rep)
 // Fonctions de création de panel //
 ////////////////////////////////////
 function makeForgottenPwdPanel(){
-    $("#container").load("Forgotten_pwd.html", function(){
+    $("#container").load("Forgotten_Pwd.html", function(){
         $("#mail_forgotten").focus();
     });
     $("#changableLink").attr("href", "css/Connexion.css")    
@@ -439,6 +481,14 @@ function makeInscriptionPanel()
 {
     $("#container").load("Inscription.html", function(){
         $("#first_input_inscription").focus();
+        
+        $("#first_input_inscription").keydown(enterHandlerInscription);
+        $("#prenom_ins").keydown(enterHandlerInscription);
+        $("#login_ins").keydown(enterHandlerInscription);
+        $("#input_mail").keydown(enterHandlerInscription);
+        $("#prenom_ins").keydown(enterHandlerInscription);
+        $("#pwd").keydown(enterHandlerInscription);
+        $("#pwd2").keydown(enterHandlerInscription);
     });
     $("#changableLink").attr("href", "css/Inscription.css")
     env.currentContainer = ContainerEnum.INSCRIPTION;

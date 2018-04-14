@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
  */
 public abstract class Data
 {
+	public static String MAIL_ADDRESS = "twister.socialnetwork@gmail.com";
+	public static String MAIL_PASSWORD = "3I017Project";
+	
 	public static int CODE_MISSING_PARAMETERS = -1;
 	public static String MESSAGE_MISSING_PARAMETERS = "Missing parameter(s).";
 	
@@ -36,8 +39,11 @@ public abstract class Data
 	public static int CODE_ERROR_DB = -1;
 	public static String MESSAGE_ERROR_DB = "Error database.";
 	
-	public static int CODE_LENGTH_PARAMETER = 1005;
+	public static int CODE_LENGTH_PARAMETER = 1006;
 	public static String MESSAGE_LENGTH_PARAMETER = "Error login must have a length of 5, and password must have a length of 8";
+	
+	public static int CODE_MAIL_NOT_FIND = 1007;
+	public static String MESSAGE_MAIL_NOT_FIND= "This email address is not associated with any of our user accounts.";
 	
 	public static long DUREE_AVANT_DECO = 60000;//3600000;		//1 Heure
 	

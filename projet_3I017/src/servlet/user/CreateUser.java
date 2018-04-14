@@ -25,7 +25,7 @@ public class CreateUser extends HttpServlet
 		String prenom = request.getParameter("prenom");
 		String email = request.getParameter("email");
 		
-		JSONObject json = service.UserServices.createUser(login, pwd, prenom, prenom, email);
+		JSONObject json = service.UserServices.createUser(login, pwd, prenom, nom, email);
 		
 		PrintWriter out = response.getWriter();
 		

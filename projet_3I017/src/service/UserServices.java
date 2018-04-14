@@ -128,15 +128,17 @@ public class UserServices
 		}
 	}
 	
-	public static JSONObject sendRecoveryPassword(String key, String mail1, String mail2)
+	public static JSONObject sendRecoveryPassword(String mail1, String mail2)
 	{
-		if (key == null || mail1 == null || mail2 == null)
+		if (mail1 == null || mail2 == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
-		if(!base_de_donnees.UserTools.isConnection(key))
-			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		if (!mail1.equals(mail2))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MAIL_MATCHING_ERROR, Data.CODE_MAIL_MATCHING_ERROR);
-		boolean res = UserTools.sendRecoveryPassword(key);
+		
+		int idUser = UserTools.mailExists(mail1);
+		if (idUser == -1)
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_MAIL_NOT_FIND, Data.CODE_MAIL_NOT_FIND);
+		boolean res = UserTools.sendRecoveryPassword(idUser, mail1);
 		if(res)
 			return ServiceTools.serviceAccepted();
 		else

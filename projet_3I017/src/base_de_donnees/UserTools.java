@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mysql.jdbc.StringUtils;
+
+import utils.Data;
 /**
  * Classe contenant les méthodes statiques permettant à un utilisateur d'intéragir avec la base de données MySQL.
  *
@@ -77,6 +79,31 @@ public class UserTools
 		{
 			System.err.println("Error userExists : " + e.getMessage());
 			return false;
+		}
+	}
+	
+	/**
+	 * Vérifie si un mail est présent dans la base de données MySQL.
+	 * @param mail Le mail à vérifier.
+	 * @return L'id sous si le mail existe, -1 sinon.
+	 */
+	public static int mailExists (String mail)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT id FROM user WHERE mail = \""+mail+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getInt(1);
+			return -1;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error mailExists : " + e.getMessage());
+			return -1;
 		}
 	}
 	
@@ -793,23 +820,22 @@ public class UserTools
 	 * @param key La clé de connexion.
 	 * @return Un booléen indiquant la bonne execution ou non de l'envoi de mail.
 	 */
-	public static boolean sendRecoveryPassword(String key)
+	public static boolean sendRecoveryPassword(int id, String mail)
 	{
-		String id = getIdUserFromKey(key);
-		String formerPwd = getPassword(id);
+		String idStr = Integer.toString(id);
+		String formerPwd = getPassword(idStr);
 		if (formerPwd == null)		// On a pas pu récupérer le mot de passe
 			return false;
 		else
-		{
-			String mail = getMailFromId(id);
-			
+		{	
 			// Envoi du mail
-			final String username = "toto.to@gmail.com";
-			final String password = "password";
+			final String username = Data.MAIL_ADDRESS;
+			final String password = Data.MAIL_PASSWORD
+					;
 			final String newPwd = generateNewPwd();
-			if(!setNewPwd(id, newPwd))		// erreur lors de la mise en place du nouveau mot de passe
+			if(!setNewPwd(idStr, newPwd))		// erreur lors de la mise en place du nouveau mot de passe
 			{
-				setFormerPwd(id, formerPwd);		// On rétablie le précedent mot de passe
+				setFormerPwd(idStr, formerPwd);		// On rétablie le précedent mot de passe
 				return false;
 			}
 			else
@@ -831,7 +857,7 @@ public class UserTools
 				try
 				{
 					Message message = new MimeMessage(session);
-					message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(username));
+					message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail));
 					message.setSubject("Password recovery");
 					message.setText("Your new password is : \"" + newPwd +"\".");
 					
@@ -844,7 +870,7 @@ public class UserTools
 				{
 					System.err.println("sendRecoveryPassword : " + e.getMessage());
 					
-					setFormerPwd(id, formerPwd);
+					setFormerPwd(idStr, formerPwd);
 					return false;
 				}
 

@@ -15,11 +15,10 @@ public class ForgottenPassword extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		String key = request.getParameter("key");
 		String mail1 = request.getParameter("mail1");
 		String mail2 = request.getParameter("mail2");
 		
-		JSONObject json = service.UserServices.sendRecoveryPassword(key, mail1, mail2);
+		JSONObject json = service.UserServices.sendRecoveryPassword(mail1, mail2);
 		
 		PrintWriter out = response.getWriter();
 		

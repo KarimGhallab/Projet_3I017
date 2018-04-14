@@ -5,15 +5,62 @@
     <div id="main_connexion">
         <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
             <h1>Récuperation de mot de passe</h1>
-            <label id="error_vide"></label>
+            <label id="error_vide" style="color:DarkRed;"></label>
             <label id="error_different"></label>
             <div class="ids" id="mail" ><span>Entrez votre e-mail</span><input type="email" name="email" id="mail_forgotten" value =""   /></div>
             <div class="ids" id="mail" ><span>confirmez votre e-mail</span><input type="email" name="email"  id="mail2_forgotten"  value ="" /></div>
-            <div class="button"><input type="submit" value="Connexion" onclick="verif_egalite_mail()"/></div>
+            <div class="button"><input type="submit" value="Générer un nouveau mot de passe" onclick="verif_egalite_mail()"/></div>
             <div id="links">
                 <div class="button" style="float:left"><input type="submit" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/></div>
                 <div class="button" style="float:right"><input type="submit" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
             </div>
         </form>
+        <!-- Les élements pour l'affichage de la barre de progression -->
+        <div>
+        	<script>
+			  $( function() {
+			    var progressTimer,
+			      progressbar = $( "#progressbar" ),
+			      progressLabel = $( ".progress-label" ),
+			      /*dialogButtons = [{
+			        text: "Cancel Download",
+			        click: closeDownload
+			      }],*/
+			      dialog = $( "#dialog" ).dialog({
+			        autoOpen: false,
+			        closeOnEscape: false,
+			        resizable: false,
+			      }),
+			      downloadButton = $( "#downloadButton" )
+			        .button()
+			        .on( "click", function() {
+			          dialog.dialog( "open" );
+			        });
+			 
+			    progressbar.progressbar({
+			      value: false,			// Barre de progression indéterminée
+			    });
+			  } );
+			  </script>
+			  <style>
+			  #progressbar {
+			    margin-top: 20px;
+			  }
+			 
+			  .progress-label {
+			    font-weight: bold;
+			    text-shadow: 1px 1px 0 #fff;
+			  }
+			 
+			  .ui-dialog-titlebar-close {
+			    display: none;
+			  }
+			  </style>
+	        <div id="dialog" title="Envoi du mail">
+			  <div class="progress-label">Envoi du mail en cours...</div>
+			  <div id="progressbar"></div>
+			</div>
+			<button id="downloadButton" style="display:none;">Start Download</button>
+        </div>
     </div>
 </div> <!-- Conteneur de mot de passe oublié -->
