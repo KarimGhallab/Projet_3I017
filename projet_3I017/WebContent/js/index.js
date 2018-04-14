@@ -57,13 +57,20 @@ function addMessage(message)
 
 function reponseAddMessage(rep)
 {
-	$("#new_msg").val("");
-    repD = JSON.parse(rep, revival);
-    var message = repD.added_message;
-    env.messages[repD.added_message.id] = message;
-    
-    $("#messages").prepend(message.getHTML());
-    $("#input_comment_"+message.id).keydown(enterHandlerAddComment);
+    var repD = JSON.parse(rep, revival);   
+    if (repD.status == "ko")
+	{
+    	alert(repD.message);
+	}
+    else
+	{
+    	$("#new_msg").val("");
+    	var message = repD.added_message;
+        env.messages[repD.added_message.id] = message;
+        
+        $("#messages").prepend(message.getHTML());
+        $("#input_comment_"+message.id).keydown(enterHandlerAddComment);
+	}
 }
 
 
@@ -93,13 +100,20 @@ function addComment(id){
 
 function reponseAddComment(rep, id)
 {
-	$("#input_comment_"+id).val("");
-    repD = JSON.parse(rep, revival);
-    var new_comment = repD.added_comment;
-    env.messages[id].comments.push(new_comment)			// On ajoute le commentaire au message
-    
-    var el = $("#message_"+id+" .comments");
-    el.prepend(new_comment.getHTML());
+	var repD = JSON.parse(rep, revival);   
+    if (repD.status == "ko")
+	{
+    	alert(repD.message);
+	}
+    else
+	{
+    	$("#input_comment_"+id).val("");
+    	var new_comment = repD.added_comment;
+        env.messages[id].comments.push(new_comment)			// On ajoute le commentaire au message
+        
+        var el = $("#message_"+id+" .comments");
+        el.prepend(new_comment.getHTML());
+	}
 }
 
 function mainConnexion()
@@ -558,7 +572,7 @@ function callbackMainPanel(){
     
     $("#input_search_main").keydown(enterHandlerSearch);
     $("#connexion").html(ajout);
-    //setUpMessages();
+    setUpMessages();
     
 }
 
