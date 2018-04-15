@@ -408,9 +408,8 @@ function revival(key, value) {
 ////// Fonctions pour init /////
 ////////////////////////////////
 function init()
-{
+{	
     noConnection = false;
-    ContainerEnum = {MAIN: 0, INSCRIPTION: 1, CONNEXION: 2, FORGOTTEN_PWD: 3, PROFIL: 4};
     
     env = new Object();
     env.login="";

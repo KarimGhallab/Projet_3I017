@@ -29,20 +29,29 @@
    		initializeAllLogins();
    		setUpSearchBar();
    		
-   		window.onscroll = scrollWithInput;
+   		window.onscroll = scrollReact;
 
         var header = document.getElementById("nouveau_msg");
         var sticky = header.offsetTop;
 
-        function scrollWithInput()
+        function scrollReact()
         {
+        	// Gestion de la barre de recherche
             if (window.pageYOffset >= sticky - 10){      // 10 est la valeur du margin-bottom du header// 10 est la valeur du margin-bottom du header
                 header.classList.add("sticky");
             }
-            else {
+            else
+            {
                 header.classList.remove("sticky");
             }
-        }
+            
+        	// Gestion de l'affcihage des messages supplémentaires
+            var scrollHeight = $(document).height();
+        	var scrollPosition = $(window).height() + $(window).scrollTop();
+        	
+        	if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+        	    console.log("Bottom !");
+        	}        }
         
         /* Mise en place des suggestions de la barre de recherche */
         function setUpSearchBar()
