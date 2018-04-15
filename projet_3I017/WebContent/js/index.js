@@ -327,8 +327,8 @@ function Message(id , auteur , texte , comments , date){
 Message.prototype.getHTML = function(){
     s="<div id=\"message_"+this.id+"\" class=\"msg\" >"+
         "<div>"+
-            "<div>"+this.auteur.getHTML()+"</div>"+
-            "<div>"+dateToString(this.date)+"</div>"+
+            "<div style=\"display:inline-block\">"+this.auteur.getHTML()+"</div>"+
+            "<div style=\"float:right;\">"+dateToString(this.date)+"</div>"+
         "</div>"+
         "<div>"+escapeHTMLEncode(this.texte)+"</div>"+
         "<div class = \"new_comment\">";
@@ -353,10 +353,14 @@ function Commentaire(id , auteur , texte , date){
 }
 Commentaire.prototype.getHTML = function(){
     s="<div id=\"commentaire_"+this.id+"\">"+
-        "<div><div>"+this.auteur.getHTML()+"</div><div>"+dateToString(this.date)+"</div></div>"+
-        "<div>"+this.texte+"</div>"+
+        "<div>" +
+        	"<div style=\"display:inline-block\">"+this.auteur.getHTML()+"</div>" +
+			"<div style=\"float:right;\">"+dateToString(this.date)+"</div>" +
+		"</div>"+
+        "<div style=\"display:inline-block;\">"+this.texte+"</div>"+
         "</div>";
     return s;
+	
 }
 
 // Classe Auteur
@@ -365,7 +369,7 @@ function Auteur(id , login){
     this.login=login;
 }
 Auteur.prototype.getHTML = function(){
-    s="<div id=\"auteur_"+this.id+"\" style=\"float:left; margin-right:10px;\">"+
+    s="<div id=\"auteur_"+this.id+"\" style=\"float:left;\">"+
         "<div>"+this.login+"</div>"+
         "</div>";
     return s;
