@@ -545,11 +545,9 @@ public class UserTools
 			Statement st = c.createStatement();
 			
 			String query = "DELETE FROM session WHERE skey=\""+key+"\" ;";
-			int res = st.executeUpdate(query);
-			if (res == 0)
-				return false;
-			else
-				return true;
+			st.executeUpdate(query);
+			
+			return true;
 		
 		}
 		catch (Exception e)

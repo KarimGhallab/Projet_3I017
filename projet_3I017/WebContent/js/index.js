@@ -60,7 +60,11 @@ function reponseAddMessage(rep)
     var repD = JSON.parse(rep, revival);   
     if (repD.status == "ko")
 	{
-    	alert(repD.message);
+    	if (!isConnexion(repD))
+		{
+    		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
+    		mainDeconnexion();
+		}
 	}
     else
 	{
@@ -70,6 +74,9 @@ function reponseAddMessage(rep)
         
         $("#messages").prepend(message.getHTML());
         $("#input_comment_"+message.id).keydown(enterHandlerAddComment);
+        
+        // Scroll jusqu'au top de la page
+        $("html, body").animate({ scrollTop: 0 }, "slow");
 	}
 }
 
@@ -102,7 +109,11 @@ function reponseAddComment(rep, id)
 	var repD = JSON.parse(rep, revival);   
     if (repD.status == "ko")
 	{
-    	alert(repD.message);
+    	if (!isConnexion(repD))
+		{
+    		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
+    		mainDeconnexion();
+		}
 	}
     else
 	{
@@ -327,13 +338,13 @@ function Message(id , auteur , texte , comments , date){
 Message.prototype.getHTML = function(){
     s="<div id=\"message_"+this.id+"\" class=\"msg\" >"+
         "<div>"+
-            "<div style=\"display:inline-block\">"+this.auteur.getHTML()+"</div>"+
-            "<div style=\"float:right;\">"+dateToString(this.date)+"</div>"+
+            "<div onclick=\"makeProfilPanel("+this.auteur.id+")\" style=\"display:inline-block;\" class=\"auteur\">"+this.auteur.getHTML()+"</div>"+
+            "<div style=\"float:right;\" class=\"date\">"+dateToString(this.date)+"</div>"+
         "</div>"+
-        "<div>"+escapeHTMLEncode(this.texte)+"</div>"+
+        "<div class=\"text_msg\">"+escapeHTMLEncode(this.texte)+"</div>"+
         "<div class = \"new_comment\">";
         if (env.fromId != -1){
-            s += "<input type =\"text\" id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\"/>"+
+            s += "<input id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\" class=\"input_comment\"/>"+
             "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
         }
         s += "</div>" +
@@ -352,12 +363,12 @@ function Commentaire(id , auteur , texte , date){
     this.texte=texte;
 }
 Commentaire.prototype.getHTML = function(){
-    s="<div id=\"commentaire_"+this.id+"\">"+
+    s="<div id=\"commentaire_"+this.id+"\" style=\"margin-top:5px;\">"+
         "<div>" +
-        	"<div style=\"display:inline-block\">"+this.auteur.getHTML()+"</div>" +
-			"<div style=\"float:right;\">"+dateToString(this.date)+"</div>" +
+        	"<div style=\"display:inline-block;\" class=\"auteur\" onclick=\"makeProfilPanel("+this.auteur.id+")\">"+this.auteur.getHTML()+"</div>" +
+			"<div style=\"float:right;\" class=\"date\">"+dateToString(this.date)+"</div>" +
 		"</div>"+
-        "<div style=\"display:inline-block;\">"+this.texte+"</div>"+
+        "<div class=\"text_comment\">"+this.texte+"</div>"+
         "</div>";
     return s;
 	
@@ -398,7 +409,6 @@ function revival(key, value) {
 ////////////////////////////////
 function init()
 {
-	
     noConnection = false;
     ContainerEnum = {MAIN: 0, INSCRIPTION: 1, CONNEXION: 2, FORGOTTEN_PWD: 3, PROFIL: 4};
     
@@ -411,20 +421,11 @@ function init()
     env.containers = {};
     env.messages = {};
     env.all_users = [];
-    env.currentContainer = ContainerEnum.MAIN;
     
     // Dictionnaire pour la conversion de la date
     env.monthConversion = {"Jan": "Janvier", "Feb": "Fevrier", "Mar": "Mars", "Apr": "Avril", "May": "May", "Jun": "Juin", "Jul": "Juillet", "Aug": "Aout", "Sep": "Septembre", "Oct": "Octobre", "Nov": "Novembre", "Dec": "Decembre"};
     env.dayConversion = {"Mon": "Lundi", "Tue": "Mardi", "Wed": "Mercredi", "Thu": "Jeudi", "Fri": "Vendredi", "Sat": "Samedi", "Sun": "Dimanche"};
-    
-    initializeContainers();
-    initializeAllLogins();
-    setVirtualdb();
-    setUpSearchBar();
 
-    ////////////////////////////////////
-    /* Charger liste des utilisateurs */
-    ////////////////////////////////////
     makeMainPanel();
 }
 
@@ -446,46 +447,6 @@ function setVirtualdb()
     follows[2].add(3)
     follows[3] = new Set()
     follows[3].add(1)
-
-    /*com1 = new Commentaire(1, u2, "Comment ca va", new Date());
-    com2 =  new Commentaire(2, u3, "Ca va bien", new Date());
-
-    msg = new Message( 1 , u1 , "yo !" , [com1 , com2] , new Date());
-
-    env.messages[msg.id] = msg;*/
-}
-
-function initializeAllLogins()
-{
-    $.ajax({
-            type: "POST",
-            url: "user/getAllLogins",
-            dataType:"text",
-            async: false,
-            success: function(rep)
-            {
-                reponseGetLogins(rep);
-            },
-            error: function(XHR , textStatus , errorThrown){
-                alert(textStatus);
-            } 
-        })
-}
-
-function initializeContainers()
-{
-    env.containers[ContainerEnum.MAIN] = $("#container_main");
-    env.containers[ContainerEnum.CONNEXION] = $("#container_connexion");
-    env.containers[ContainerEnum.INSCRIPTION] = $("#container_inscription");
-    env.containers[ContainerEnum.FORGOTTEN_PWD] = $("#container_forgotten_pwd");
-    env.containers[ContainerEnum.PROFIL] =  $("#container_profil");
-}
-
-function reponseGetLogins(rep)
-{
-    var repD = JSON.parse(rep);
-    env.all_users = repD.logins;
-    
 }
 
 ////////////////////////////////////
@@ -496,7 +457,6 @@ function makeForgottenPwdPanel(){
         $("#mail_forgotten").focus();
     });
     $("#changableLink").attr("href", "css/Connexion.css")    
-    env.currentContainer = ContainerEnum.FORGOTTEN_PWD;
 }
 
 function makeInscriptionPanel()
@@ -513,12 +473,10 @@ function makeInscriptionPanel()
         $("#pwd2").keydown(enterHandlerInscription);
     });
     $("#changableLink").attr("href", "css/Inscription.css")
-    env.currentContainer = ContainerEnum.INSCRIPTION;
 }
 
 function callbackProfilPanel(){
     document.getElementById("login_profil").innerHTML=env.login;
-    env.currentContainer = ContainerEnum.PROFIL;
     console.log("Je suis connecté, mon login est : " + env.login);
 }
 
@@ -548,7 +506,6 @@ function makeConnexionPanel(){
         $("#pwd_co").keydown(enterHandlerConnexion);
     });
     $("#changableLink").attr("href", "css/Connexion.css");
-    env.currentContainer = ContainerEnum.CONNEXION;
 }
 
 function callbackMainPanel(){
@@ -584,7 +541,6 @@ function makeMainPanel()
 {
     $("#changableLink").attr("href", "css/Principale.css");
     $("#container").load("Main.html", callbackMainPanel);
-    env.currentContainer = ContainerEnum.MAIN;
 }
 
 function setUpMessages(){
@@ -611,6 +567,11 @@ function setUpMessages(){
 
 function reponseSetUpMessages(rep){
     var repD = JSON.parse(rep, revival);
+    if (!isConnexion(repD))
+	{
+		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
+		mainDeconnexion();
+	}
     env.messages = {};		// On remet à zéro la liste des messages
     var messages = repD.list_message;
     for(var index in messages) {
@@ -636,7 +597,6 @@ function getFriendList(id){
 
 function mainDeconnexion()
 {
-	alert("Bonjour !");
     if(env.fromId==-1){
         console.log("erreur deconnexion")
     }
@@ -665,6 +625,17 @@ function reponseLogout(rep){
         env.fromId=-1;
         makeMainPanel();
     }
+}
+
+function isConnexion(repD){
+	if(repD.status == "ko" && repD.code == 1005){
+		console.log("Pas connectée");
+		return false;
+	}
+	else{
+		console.log("connectée");
+		return true;
+	}
 }
 
 
@@ -698,13 +669,6 @@ function replieMessage(id)
 //////////////////////////////////////
 // Gestion de la barre de recherche //
 //////////////////////////////////////
-function setUpSearchBar()
-{
-    $("#input_search_main").autocomplete({
-        source: env.all_users
-    });
-}
-
 function doSearch()
 {
     console.log("Search");
@@ -772,9 +736,9 @@ function escapeHTMLEncode(str) {
     return div.innerHTML;
 }
 
+// Retourne la date au format Jour Mois Année hh:mm:ss
 function dateToString(date){
 	var splitedDate = date.split(" ");
-	console.log(splitedDate);
 	
 	var s = "";
 	s += env.dayConversion[splitedDate[0]]+" ";				// Le jour

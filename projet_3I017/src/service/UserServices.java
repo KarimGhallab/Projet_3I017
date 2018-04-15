@@ -65,8 +65,6 @@ public class UserServices
 	{
 		if(key == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
-		if(!UserTools.isConnection(key))		// Utilisateur non connecté
-			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
 		if(UserTools.removeConnection(key))		//On enleve la connextion
 			return ServiceTools.serviceAccepted();

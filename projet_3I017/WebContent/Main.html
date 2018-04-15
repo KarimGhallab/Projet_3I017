@@ -4,7 +4,7 @@
             <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
             <div id="connexion">
                 
-               </div>
+            </div>
             <div id="search">
                 <label class="hidden" for="input_search_main"></label>
                 <input id="input_search_main" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
@@ -12,7 +12,8 @@
             </div>
         </div>
     </header>
-        <div id="stat">Je suis une stat</div>
+    
+    <div id="stat">Je suis une stat</div>
     <div id="principale">
         <div id="nouveau_msg">
             <input id="new_msg" type="text" name="new_message" placeholder="Ecrire un nouveau message"/><input type="button" onclick="mainAddMessage()" value="Publier"/>
@@ -21,10 +22,13 @@
         </div>
     </div>
     
-    <!-- Script pour la barre d'ajout de message -->
+    <!-- Script pour la barre d'ajout de message et la barre de recherche -->
    <script type="text/javascript">
         
-        window.onscroll = scrollWithInput;
+   		initializeAllLogins();
+   		setUpSearchBar();
+   		
+   		window.onscroll = scrollWithInput;
 
         var header = document.getElementById("nouveau_msg");
         var sticky = header.offsetTop;
@@ -37,6 +41,39 @@
             else {
                 header.classList.remove("sticky");
             }
+        }
+        
+        /* Mise en place des suggestions de la barre de recherche */
+        function setUpSearchBar()
+        {
+        	console.log("bonjour"),
+        	console.log(env.all_users);
+            $("#input_search_main").autocomplete({
+                source: env.all_users
+            });
+        }
+        
+        function initializeAllLogins()
+        {
+            $.ajax({
+                    type: "POST",
+                    url: "user/getAllLogins",
+                    dataType:"text",
+                    async: false,
+                    success: function(rep)
+                    {
+                        reponseGetLogins(rep);
+                    },
+                    error: function(XHR , textStatus , errorThrown){
+                        alert(textStatus);
+                    } 
+                })
+        }
+
+        function reponseGetLogins(rep)
+        {
+            var repD = JSON.parse(rep);
+            env.all_users = repD.logins;
         }
     </script>
 </div> <!-- Conteneur du main -->
