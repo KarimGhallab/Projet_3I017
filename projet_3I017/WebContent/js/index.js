@@ -95,7 +95,6 @@ function addComment(id){
 	{
     	alert("Vous ne pouvez pas ajouter un commentaire vide");
 	}
-    
 }
 
 function reponseAddComment(rep, id)
@@ -304,7 +303,7 @@ function reponseForgottenPwd(rep, mail)
 	}
 }
 
-/* Init - tous */
+/* 			Init - tous 		*/
 /* ############################ */
 /* Classes JavaScript du projet */
 /* ############################ */
@@ -330,7 +329,7 @@ Message.prototype.getHTML = function(){
         "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
         "<div>"+
             "<div>"+this.auteur.getHTML()+"</div>"+
-            "<div>"+this.date+"</div>"+
+            "<div>"+dateToString(this.date)+"</div>"+
         "</div>"+
         "<div>"+escapeHTMLEncode(this.texte)+"</div>"+
         "<div class = \"new_comment\">";
@@ -354,7 +353,7 @@ function Commentaire(id , auteur , texte , date){
 }
 Commentaire.prototype.getHTML = function(){
     s="<div id=\"commentaire_"+this.id+"\">"+
-        "<div><div>"+this.auteur.getHTML()+"</div><div>"+this.date+"</div></div>"+
+        "<div><div>"+this.auteur.getHTML()+"</div><div>"+dateToString(this.date)+"</div></div>"+
         "<div>"+this.texte+"</div>"+
         "</div>";
     return s;
@@ -378,7 +377,7 @@ function revival(key, value) {
         return new Message(value.id , value.author, value.content , value.comments , value.date);
     }
     else if(value.content != undefined){
-        return new Commentaire(value.id_comment , value.author ,value.content, value.date);
+        return new Commentaire(value.id_comment , value.author ,value.content, new Date(value.date));
     }
     if(key == "author") {
         return new Auteur(value.idAuthor , value.login);
@@ -395,6 +394,7 @@ function revival(key, value) {
 ////////////////////////////////
 function init()
 {
+	
     noConnection = false;
     ContainerEnum = {MAIN: 0, INSCRIPTION: 1, CONNEXION: 2, FORGOTTEN_PWD: 3, PROFIL: 4};
     
@@ -409,7 +409,9 @@ function init()
     env.all_users = [];
     env.currentContainer = ContainerEnum.MAIN;
     
-
+    // Dictionnaire pour la conversion de la date
+    env.monthConversion = {"Jan": "Janvier", "Feb": "Fevrier", "Mar": "Mars", "Apr": "Avril", "May": "May", "Jun": "Juin", "Jul": "Juillet", "Aug": "Aout", "Sep": "Septembre", "Oct": "Octobre", "Nov": "Novembre", "Dec": "Decembre"};
+    env.dayConversion = {"Mon": "Lundi", "Tue": "Mardi", "Wed": "Mercredi", "Thu": "Jeudi", "Fri": "Vendredi", "Sat": "Samedi", "Sun": "Dimanche"};
     
     initializeContainers();
     initializeAllLogins();
@@ -632,6 +634,7 @@ function getFriendList(id){
 
 function mainDeconnexion()
 {
+	alert("Bonjour !");
     if(env.fromId==-1){
         console.log("erreur deconnexion")
     }
@@ -766,4 +769,19 @@ function escapeHTMLEncode(str) {
     var text = document.createTextNode(str);
     div.appendChild(text);
     return div.innerHTML;
+}
+
+function dateToString(date){
+	var splitedDate = date.split(" ");
+	console.log(splitedDate);
+	
+	var s = "";
+	s += env.dayConversion[splitedDate[0]]+" ";				// Le jour
+	s += splitedDate[2]+" ";								// Le numéro
+	s += env.monthConversion[splitedDate[1]]+" ";			// Le mois
+	s += splitedDate[5]+" à ";								// L'année
+	
+	s += splitedDate[3];									// L'heure
+	
+	return s;
 }
