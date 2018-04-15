@@ -326,7 +326,6 @@ function Message(id , auteur , texte , comments , date){
 
 Message.prototype.getHTML = function(){
     s="<div id=\"message_"+this.id+"\" class=\"msg\" >"+
-        "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
         "<div>"+
             "<div>"+this.auteur.getHTML()+"</div>"+
             "<div>"+dateToString(this.date)+"</div>"+
@@ -338,6 +337,7 @@ Message.prototype.getHTML = function(){
             "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
         }
         s += "</div>" +
+        "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
         "<div class = \"comments\">"+
         "</div>" +
     "</div>";
@@ -365,7 +365,7 @@ function Auteur(id , login){
     this.login=login;
 }
 Auteur.prototype.getHTML = function(){
-    s="<div id=\"auteur_"+this.id+"\">"+
+    s="<div id=\"auteur_"+this.id+"\" style=\"float:left; margin-right:10px;\">"+
         "<div>"+this.login+"</div>"+
         "</div>";
     return s;
@@ -377,7 +377,7 @@ function revival(key, value) {
         return new Message(value.id , value.author, value.content , value.comments , value.date);
     }
     else if(value.content != undefined){
-        return new Commentaire(value.id_comment , value.author ,value.content, new Date(value.date));
+        return new Commentaire(value.id_comment , value.author ,value.content, value.date);
     }
     if(key == "author") {
         return new Auteur(value.idAuthor , value.login);
@@ -418,7 +418,6 @@ function init()
     setVirtualdb();
     setUpSearchBar();
 
-    console.log(env.all_users);
     ////////////////////////////////////
     /* Charger liste des utilisateurs */
     ////////////////////////////////////
@@ -526,7 +525,6 @@ function makeProfilPanel(id){
     $("#changableLink").attr("href", "css/Profil.css");
     if(id!=null){
         ajout="";
-        console.log(env.follows)
         if(id!=env.fromId){
             if(id in env.follows.id){
                 ajout = "<input type=\"button\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" ";
@@ -740,7 +738,6 @@ function enterHandlerAddComment(event)
 	// Ici il faut obtenir l'id du message sur lequel on souhaite ajouter le commentaire
 	// L'id est présent sur le noeud source de l'évenement
 	var idMessage = event.currentTarget.id.split("_")[2];
-	console.log("Id message : " + idMessage);
 	
 	if(event.keyCode == 13)
 	{
