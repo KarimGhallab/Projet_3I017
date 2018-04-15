@@ -140,6 +140,7 @@ body
     border-radius: 5px;
     transition: 0.5s;
 }
+
 #main_connexion input[type=submit]:hover
 {
     background: #66b3ff;

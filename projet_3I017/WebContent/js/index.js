@@ -581,6 +581,7 @@ function reponseSetUpMessages(rep){
 }
 
 function displayMessages(){
+	$("#messages").html("");
     for(index in env.messages){
         $("#messages").append(env.messages[index].getHTML());
         $("#input_comment_"+env.messages[index].id).keydown(enterHandlerAddComment);
@@ -664,6 +665,11 @@ function replieMessage(id)
     var el = $("#message_"+id+" .comments");
     el.html("");
     $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
+}
+
+function refreshMessages(){
+	console.log("refresh des messages")
+	setUpMessages();
 }
 
 //////////////////////////////////////
