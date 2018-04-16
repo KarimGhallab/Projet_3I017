@@ -527,8 +527,9 @@ function mainProfil(login, id){
     // gestion de la fonctionnalité follow/unfollow
     if((id != null) && (env.fromId != -1) && (id != env.fromId))
     {
-        ajout="";
-        if(id in env.follows[env.fromId])
+        ajout = "";
+        console.log(env.follows[env.fromId]);
+        if(!env.follows[env.fromId].includes(id))
         {
             ajout = "<input type=\"button\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" ";
         }
@@ -536,7 +537,7 @@ function mainProfil(login, id){
         {
             ajout += "<input type=\"button\" value = \"se désabonner\" onclick=\"removeFriend("+id+")\" ";
         }
-        $("#friends").html(ajout);
+        $("#friends").html("<div style=\"text-align:right;\">" + ajout + "</div>");
     }
 }
 
@@ -609,15 +610,12 @@ function setUpMessages(id){
 	env.keepListingMessage = false;
 	var query = "";
 	if (id != undefined){		// On affiche les message de l'id
-		console.log("seul les messages de l'id");
 		query = "idUser="+id+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage+"&amis="+[];
 	}
 	else if(env.fromId == -1) {	// On affiche tous les messages
-		console.log("Tous les messages");
         query = "idUser="+env.fromId+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage;
     }
     else {		// On affiche les message de l'utilisateur et de ses amis
-    	console.log("Mes messages et ceux de mes amis");
     	query = "idUser="+env.fromId+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage+"&amis="+getFriendList(env.fromId);
     }
     $.ajax({
@@ -765,7 +763,6 @@ function refreshReact(id){
 //////////////////////////////////////
 function doSearch(target)
 {
-    console.log("Search");
     var input = target.value;
     makeProfilPanel(input);
 }
