@@ -122,7 +122,7 @@ function reponseAddComment(rep, id)
         env.messages[id].comments.push(new_comment)			// On ajoute le commentaire au message
         
         var el = $("#message_"+id+" .comments");
-        el.prepend(new_comment.getHTML());
+        el.append(new_comment.getHTML());
 	}
 }
 
@@ -420,6 +420,10 @@ function init()
     env.containers = {};
     env.messages = {};
     env.all_users = [];
+    env.fromMessage = 0;
+    env.nbMessage = 5;
+    env.keepListingMessage = true;
+    env.refreshing = false;
     
     // Dictionnaire pour la conversion de la date
     env.monthConversion = {"Jan": "Janvier", "Feb": "Fevrier", "Mar": "Mars", "Apr": "Avril", "May": "May", "Jun": "Juin", "Jul": "Juillet", "Aug": "Aout", "Sep": "Septembre", "Oct": "Octobre", "Nov": "Novembre", "Dec": "Decembre"};
@@ -481,7 +485,7 @@ function callbackProfilPanel(){
 
 
 function makeProfilPanel(id){
-    id = 4
+	id = 4
     $("#container").load("Profil.html", callbackProfilPanel);
     $("#changableLink").attr("href", "css/Profil.css");
     if(id!=null){
@@ -532,6 +536,7 @@ function callbackMainPanel(){
     
     $("#input_search_main").keydown(enterHandlerSearch);
     $("#connexion").html(ajout);
+    env.fromMessage = 0;
     setUpMessages();
     
 }
@@ -543,12 +548,13 @@ function makeMainPanel()
 }
 
 function setUpMessages(){
-    var query = "";
+	env.keepListingMessage = false;
+	var query = "";
     if(env.fromId == -1) {
-        query = "key="+env.key;
+        query = "key="+env.key+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage;
     }
     else {
-        query = "key="+env.key+"&amis="+getFriendList(env.fromId);
+        query = "key="+env.key+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage+"&amis="+getFriendList(env.fromId);
     }
     $.ajax({
         type: "POST",
@@ -571,19 +577,25 @@ function reponseSetUpMessages(rep){
 		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
 		mainDeconnexion();
 	}
-    env.messages = {};		// On remet à zéro la liste des messages
-    var messages = repD.list_message;
-    for(var index in messages) {
-        env.messages[messages[index].id] = messages[index];
+    if (env.fromMessage == 0){
+    	env.messages = {};		// On remet à zéro la liste des messages
+    	$("#messages").html("");
     }
-    displayMessages();
+    env.fromMessage += env.nbMessage;
+    var messages = repD.list_message;
+    var i;
+    for(i=0; i< messages.length-1; i++) {		// Le dernier élément indique s'il reste un ou des messages à afficher
+		env.messages[messages[i].id] = messages[i];
+    }
+    env.keepListingMessage = (messages[i].end == "yes");
+    messages.pop();
+    displayMessages(messages);
 }
 
-function displayMessages(){
-	$("#messages").html("");
-    for(index in env.messages){
-        $("#messages").append(env.messages[index].getHTML());
-        $("#input_comment_"+env.messages[index].id).keydown(enterHandlerAddComment);
+function displayMessages(messages){
+    for(var index in messages){
+        $("#messages").append(messages[index].getHTML());
+        $("#input_comment_"+messages[index].id).keydown(enterHandlerAddComment);
     }
 }
 
@@ -667,8 +679,14 @@ function replieMessage(id)
 }
 
 function refreshMessages(){
-	console.log("refresh des messages")
+	env.fromMessage = 0;
+	env.refreshing = true
+	$("html").animate({ scrollTop: 0 }, "fast", refreshReact);
+}
+
+function refreshReact(){
 	setUpMessages();
+	env.refreshing = false
 }
 
 //////////////////////////////////////

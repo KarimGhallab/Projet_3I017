@@ -80,9 +80,9 @@ public class MessageServices
 	 * @param amis Les amis pour lequel on veut lister les messages.
 	 * @return La liste des messages.
 	 */
-	public static JSONObject listMessage(String key , String orderAsc, String limite, String amis)
+	public static JSONObject listMessage(String key , String orderAsc, String from, String nbMessage, String amis)
 	{
-		if(key == null)
+		if(key == null ||from == null || nbMessage == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
 		{	
@@ -91,12 +91,6 @@ public class MessageServices
 				order = false;
 			else
 				order = Boolean.parseBoolean(orderAsc);
-			
-			int limiteEntiere;
-			if (limite == null)
-				limiteEntiere = 0;
-			else
-				limiteEntiere = Integer.parseInt(limite);
 			
 			String[] friends;
 			if (amis == null)
@@ -110,9 +104,9 @@ public class MessageServices
 			String userId = base_de_donnees.UserTools.getIdUserFromKey(key); 
 			
 			if(userId == null)
-				messages = MessageTools.listMessage(limiteEntiere, order);
+				messages = MessageTools.listMessage(Integer.parseInt(from), Integer.parseInt(nbMessage), order);
 			else
-				messages = MessageTools.listMessage(userId, order, limiteEntiere, friends);
+				messages = MessageTools.listMessage(userId, order, Integer.parseInt(from), Integer.parseInt(nbMessage), friends);
 				
 			if(messages == null)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);

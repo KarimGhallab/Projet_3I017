@@ -22,6 +22,8 @@ import com.mongodb.DBObject;
  */
 public class MessageTools
 {
+	
+	private static DBCursor currentCursor;
 	/**
 	 * Ajouter un message à la base de données.
 	 * @param login Le login utilisateur qui souhaite ajouter un message.
@@ -68,37 +70,42 @@ public class MessageTools
 	 * Renvoyer la liste des messages d'un utilisateur et de ses amis
 	 * @param login Le login pour lequel il faut chercher la liste des messages.
 	 * @param orderAsc Indique si on effectue un trie des messages par date croissante.
-	 * @param limite Le nombre de messag à afficher. Si la limte est inférieur ou égal à 0, on affiche tous les messages.
+	 * @param from Le point de départ de l'affichage des messages.
+	 * @param nbMessage Le nombre de message à lister.
+	 * @param id_friends La liste des amis pour lesquels il faut récuperer les messages.
 	 * @return La liste des messages de l'utilisateur et de ses amis. Ou uniquement la liste des messages de l'utilisateur si id_friends est null. Ou null en cas d'erreur.
 	 */
-	public static JSONArray listMessage(String id_user, boolean orderAsc, int limite, String[] id_friends) 
+	public static JSONArray listMessage(String id_user, boolean orderAsc, int from, int nbMessage, String[] id_friends) 
 	{
-		DBCollection msg = DataBase.getMongoCollection("Message");
-		BasicDBObject query = new BasicDBObject();
-		if(id_friends == null)		// On renvoit la liste des messages de l'utilisateur
-			query.put("user_id", id_user);
-		else						
+		if (from == 0)		// On repart de zéro, il faut effectuer la requête
 		{
-			ArrayList<String> friends = new ArrayList<String>();
-			friends.add(id_user);
-			friends.addAll(Arrays.asList(id_friends));
-			
-			query.put("user_id", new BasicDBObject("$in", friends));
+			DBCollection msg = DataBase.getMongoCollection("Message");
+			BasicDBObject query = new BasicDBObject();
+			if(id_friends == null)		// On renvoit la liste des messages de l'utilisateur
+				query.put("user_id", id_user);
+			else						
+			{
+				ArrayList<String> friends = new ArrayList<String>();
+				friends.add(id_user);
+				friends.addAll(Arrays.asList(id_friends));
+				
+				query.put("user_id", new BasicDBObject("$in", friends));
+			}
+			currentCursor = msg.find(query);
+			if (!orderAsc)
+				currentCursor.sort(new BasicDBObject("date", -1));
+			else
+				currentCursor.sort(new BasicDBObject("date", 1));
 		}
-		DBCursor messagesCursor = msg.find(query);
-		if (!orderAsc)
-			messagesCursor.sort(new BasicDBObject("date", -1));
-		else
-			messagesCursor.sort(new BasicDBObject("date", 1));
-		if (limite > 0)
-			messagesCursor.limit(limite);
+		// Ici le curseur est prét, on peut itérer
 		JSONArray userMessages = new JSONArray();
 		try
 		{
-			while(messagesCursor.hasNext())
+			int cpt = 0;
+			while( (cpt < nbMessage) && (currentCursor.hasNext()))
 			{
 				JSONObject json = new JSONObject();
-				DBObject document = messagesCursor.next();
+				DBObject document = currentCursor.next();
 				json.put("content", document.get("content"));
 				json.put("author", document.get("author"));
 				json.put("date", document.get("date"));
@@ -106,7 +113,16 @@ public class MessageTools
 				json.put("comments", CommentTools.listComment(document.get("_id").toString()));
 				
 				userMessages.put(json);
+				
+				cpt++;
 			}
+			JSONObject ajout = new JSONObject();
+			if(!currentCursor.hasNext())
+				ajout.put("end", "no");
+			else
+				ajout.put("end", "yes");
+			
+			userMessages.put(ajout);
 			return userMessages;
 		}
 		catch(Exception e)
@@ -119,35 +135,50 @@ public class MessageTools
 	
 	/**
 	 * Liste l'ensemble des messages de l'application.
-	 * @param limite Le nombre de message à afficher.
+	 * @param from Le point de départ de l'affichage des messages.
+	 * @param nbMessage Le nombre de message à lister.
 	 * @return La liste des messages.
 	 */
-	public static JSONArray listMessage(int limite, boolean orderAsc) 
+	public static JSONArray listMessage(int from, int nbMessage, boolean orderAsc) 
 	{
-		DBCollection msg = DataBase.getMongoCollection("Message");
-		DBCursor messagesCursor = msg.find();
+		if (from == 0)
+		{
+			DBCollection msg = DataBase.getMongoCollection("Message");
+			currentCursor = msg.find();
+			
+			if (!orderAsc)
+				currentCursor.sort(new BasicDBObject("date", -1));
+			else
+				currentCursor.sort(new BasicDBObject("date", 1));
+		}
 		
-		if (!orderAsc)
-			messagesCursor.sort(new BasicDBObject("date", -1));
-		else
-			messagesCursor.sort(new BasicDBObject("date", 1));
-		if (limite > 0)
-			messagesCursor.limit(limite);
 		JSONArray userMessages = new JSONArray();
 		try
 		{
-			while(messagesCursor.hasNext())
+			int cpt = 0;
+			while( (cpt < nbMessage) && (currentCursor.hasNext()))
 			{
 				JSONObject json = new JSONObject();
-				DBObject document = messagesCursor.next();
+				DBObject document = currentCursor.next();
 				
 				json.put("content", document.get("content"));
 				json.put("date", document.get("date"));
 				json.put("author", document.get("author"));
 				json.put("id", document.get("_id"));
 				json.put("comments", CommentTools.listComment( document.get("_id").toString()));
+				
 				userMessages.put(json);
+				
+				cpt++;
 			}
+			JSONObject ajout = new JSONObject();
+			if(!currentCursor.hasNext())
+				ajout.put("end", "no");
+			else
+				ajout.put("end", "yes");
+			
+			userMessages.put(ajout);
+			
 			return userMessages;
 		}
 		catch(Exception e)

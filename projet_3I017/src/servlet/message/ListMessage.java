@@ -21,10 +21,11 @@ public class ListMessage extends HttpServlet
 	{
 		String key = request.getParameter("key");
 		String orderAsc = request.getParameter("orderAsc");
-		String limite = request.getParameter("limite");
+		String from = request.getParameter("from");
+		String nbMessage = request.getParameter("nbMessage");
 		String amis = request.getParameter("amis");
 		
-		JSONObject json = service.MessageServices.listMessage(key, orderAsc, limite, amis);
+		JSONObject json = service.MessageServices.listMessage(key, orderAsc, from, nbMessage, amis);
 		
 		PrintWriter out = response.getWriter();
 		

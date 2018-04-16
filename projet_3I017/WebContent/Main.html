@@ -49,15 +49,16 @@
             var scrollHeight = $(document).height();
         	var scrollPosition = $(window).height() + $(window).scrollTop();
         	
-        	if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-        	    console.log("Bottom !");
-        	}        }
+        	if (( (scrollHeight - scrollPosition) / scrollHeight === 0) && (!env.refreshing)) {
+        	    if(env.keepListingMessage){
+        	    	setUpMessages();	
+        	    }
+        	}        
+       	}
         
         /* Mise en place des suggestions de la barre de recherche */
         function setUpSearchBar()
         {
-        	console.log("bonjour"),
-        	console.log(env.all_users);
             $("#input_search_main").autocomplete({
                 source: env.all_users
             });
