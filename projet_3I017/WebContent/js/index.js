@@ -176,6 +176,7 @@ function reponseConnexion(rep){
         env.login = repD.login;
         env.follows[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
         
+        env.fromMessage = 0;
         makeMainPanel();
     }
 }
@@ -248,7 +249,7 @@ function reponseInscription(rep){
         $("#error_Inscription").html("Inscription error : " + repD.message);
     }
     else{
-       env.key = repD.key;
+    	env.key = repD.key;
         env.fromId = repD.id;
         env.login = repD.login;
         env.follows[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
@@ -298,8 +299,6 @@ function verif_egalite_mail(){
 function reponseForgottenPwd(rep, mail)
 {
 	var repD = JSON.parse(rep);
-	console.log(rep);
-	console.log(repD);
 	if (repD.status == "ko")
 	{
 		$("#dialog").dialog("close");
@@ -338,12 +337,13 @@ function Message(id , auteur , texte , comments , date){
 Message.prototype.getHTML = function(){
     s="<div id=\"message_"+this.id+"\" class=\"msg\" >"+
         "<div>"+
-            "<div onclick=\"makeProfilPanel("+this.auteur.id+")\" style=\"display:inline-block;\" class=\"auteur\">"+this.auteur.getHTML()+"</div>"+
+            "<div onclick=\"makeProfilPanel('"+this.auteur.login+"')\" style=\"display:inline-block;\" class=\"auteur\">"+this.auteur.getHTML()+"</div>"+
             "<div style=\"float:right;\" class=\"date\">"+dateToString(this.date)+"</div>"+
         "</div>"+
         "<div class=\"text_msg\">"+escapeHTMLEncode(this.texte)+"</div>"+
         "<div class = \"new_comment\">";
-        if (env.fromId != -1){
+        if ((env.fromId != -1) && ((env.fromId == this.auteur.id) || (env.follows[env.fromId].includes(this.auteur.id))))		// On ne peux commenter que si on est connecter et que le message est le notre ou bien celui d'un amis
+        {
             s += "<input id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\" class=\"input_comment\"/>"+
             "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
         }
@@ -365,7 +365,7 @@ function Commentaire(id , auteur , texte , date){
 Commentaire.prototype.getHTML = function(){
     s="<div id=\"commentaire_"+this.id+"\" style=\"margin-top:5px;\">"+
         "<div>" +
-        	"<div style=\"display:inline-block;\" class=\"auteur\" onclick=\"makeProfilPanel("+this.auteur.id+")\">"+this.auteur.getHTML()+"</div>" +
+        	"<div style=\"display:inline-block;\" class=\"auteur\" onclick=\"makeProfilPanel('"+this.auteur.login+"')\">"+this.auteur.getHTML()+"</div>" +
 			"<div style=\"float:right;\" class=\"date\">"+dateToString(this.date)+"</div>" +
 		"</div>"+
         "<div class=\"text_comment\">"+this.texte+"</div>"+
@@ -478,28 +478,86 @@ function makeInscriptionPanel()
     $("#changableLink").attr("href", "css/Inscription.css")
 }
 
-function callbackProfilPanel(){
-    document.getElementById("login_profil").innerHTML=env.login;
-    console.log("Je suis connecté, mon login est : " + env.login);
+function makeProfilPanel(login){
+	if (login != "")
+	{
+		$.ajax({
+	        type: "POST",
+	        url: "user/getIdFromLogin",
+	        data: "loginUser="+login,
+	        dataType:"text",
+	        success: function(rep){
+	            reponseProfil(rep, login);
+	        },
+	        error: function(XHR , textStatus , errorThrown){
+	            alert(textStatus);
+	        } 
+	    })
+	}
 }
 
-
-function makeProfilPanel(id){
-	id = 4
-    $("#container").load("Profil.html", callbackProfilPanel);
-    $("#changableLink").attr("href", "css/Profil.css");
-    if(id!=null){
+function mainProfil(login, id){
+	$("#login_profil").html(login);
+	
+	// Affiche des boutons dans le header
+    var ajout = "";
+    if (env.fromId == -1)
+    {
+        console.log("Je ne suis pas connecté");
+        
+        ajout += '<input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/>';
+        ajout += '<input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/>';
+    }
+    else
+    {
+        console.log("Je suis connecté, mon login est : " + env.login);
+        
+        ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\"'+env.login+'\")})()"/>';
+        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
+    }
+    
+    $("#input_search_profil").focus();
+    $("#input_search_profil").keydown(enterHandlerSearch);
+    $("#connexion_profil").html(ajout);
+    
+    // Gestion du bouton pour raffraichir les messages
+    var toAddButton = '<input type="submit" value="Rafraîchir les messages" id="submit_button" onclick="refreshMessages('+id+')" class="refresh_button"/>'
+    $("#principale").append(toAddButton);
+    
+    // gestion de la fonctionnalité follow/unfollow
+    if((id != null) && (env.fromId != -1) && (id != env.fromId))
+    {
         ajout="";
-        if(id!=env.fromId){
-            if(id in env.follows.id){
-                ajout = "<input type=\"button\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" ";
-            }
-            else{
-                ajout += "<input type=\"button\" value = \"se désabonner\" onclick=\"removeFriend("+id+")\" ";
-            }
+        if(id in env.follows[env.fromId])
+        {
+            ajout = "<input type=\"button\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" ";
+        }
+        else
+        {
+            ajout += "<input type=\"button\" value = \"se désabonner\" onclick=\"removeFriend("+id+")\" ";
         }
         $("#friends").html(ajout);
     }
+}
+
+function reponseProfil(rep, login){
+	var repD = JSON.parse(rep);
+	
+	if(repD.status == "ok")
+	{
+		$("#changableLink").attr("href", "css/Profil.css");
+	    $("#container").load("Profil.html", function (){
+	    	mainProfil(login, repD.idUser)
+	    	
+	    	env.fromMessage = 0;
+	    	setUpMessages(repD.idUser);
+	    	
+	    });
+	}
+	else
+	{
+		alert(repD.message);
+	}
 }
 
 function makeConnexionPanel(){
@@ -527,7 +585,7 @@ function callbackMainPanel(){
     {
         console.log("Je suis connecté, mon login est : " + env.login);
         
-        ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel()})()"/>';
+        ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\"'+env.login+'\")})()"/>';
         ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
         
         $("#new_msg").focus();
@@ -547,14 +605,20 @@ function makeMainPanel()
     $("#container").load("Main.html", callbackMainPanel);
 }
 
-function setUpMessages(){
+function setUpMessages(id){
 	env.keepListingMessage = false;
 	var query = "";
-    if(env.fromId == -1) {
-        query = "key="+env.key+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage;
+	if (id != undefined){		// On affiche les message de l'id
+		console.log("seul les messages de l'id");
+		query = "idUser="+id+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage+"&amis="+[];
+	}
+	else if(env.fromId == -1) {	// On affiche tous les messages
+		console.log("Tous les messages");
+        query = "idUser="+env.fromId+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage;
     }
-    else {
-        query = "key="+env.key+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage+"&amis="+getFriendList(env.fromId);
+    else {		// On affiche les message de l'utilisateur et de ses amis
+    	console.log("Mes messages et ceux de mes amis");
+    	query = "idUser="+env.fromId+"&from="+env.fromMessage+"&nbMessage="+env.nbMessage+"&amis="+getFriendList(env.fromId);
     }
     $.ajax({
         type: "POST",
@@ -678,25 +742,32 @@ function replieMessage(id)
     $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
 }
 
-function refreshMessages(){
+function refreshMessages(id){
 	env.fromMessage = 0;
 	env.refreshing = true
-	$("html").animate({ scrollTop: 0 }, "fast", refreshReact);
+		$("html").animate({ scrollTop: 0 }, "fast", function(){
+			refreshReact(id)
+		});
 }
 
-function refreshReact(){
-	setUpMessages();
+function refreshReact(id){
+	if (id == undefined){
+		setUpMessages();
+	}
+	else{
+		setUpMessages(id);
+	}
 	env.refreshing = false
 }
 
 //////////////////////////////////////
 // Gestion de la barre de recherche //
 //////////////////////////////////////
-function doSearch()
+function doSearch(target)
 {
     console.log("Search");
-    var input = $("#input_search_main").val();
-    console.log("Input : " + input);
+    var input = target.value;
+    makeProfilPanel(input);
 }
 
 ////////////////////////////////////
@@ -713,7 +784,7 @@ function enterHandlerConnexion(event)
 function enterHandlerSearch(event)
 {
     if(event.keyCode == 13){
-        doSearch();
+        doSearch(event.target);
     }	
 }
 

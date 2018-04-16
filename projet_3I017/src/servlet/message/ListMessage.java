@@ -19,13 +19,13 @@ public class ListMessage extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		String key = request.getParameter("key");
+		String idUser = request.getParameter("idUser");
 		String orderAsc = request.getParameter("orderAsc");
 		String from = request.getParameter("from");
 		String nbMessage = request.getParameter("nbMessage");
 		String amis = request.getParameter("amis");
 		
-		JSONObject json = service.MessageServices.listMessage(key, orderAsc, from, nbMessage, amis);
+		JSONObject json = service.MessageServices.listMessage(idUser, orderAsc, from, nbMessage, amis);
 		
 		PrintWriter out = response.getWriter();
 		

@@ -47,6 +47,7 @@ public class UserServices
 			{
 				JSONObject j =  ServiceTools.serviceAccepted().put("key", key);
 				j.put("friends", UserTools.listFriend(UserTools.getIdUserFromKey(key)));
+				j.put("id", UserTools.getIdUserFromKey(key));
 				return j.put("login" , login);
 			}
 			catch (JSONException e) 
@@ -161,5 +162,57 @@ public class UserServices
 		}
 		else
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+	}
+	
+	/**
+	 * Récupère le login d'un utilisateur à partir de son id.
+	 * @param id L'id de l'utilisateur
+	 * @return Le login de l'utilisateur.
+	 */
+	public static JSONObject getLoginFromId(String id)
+	{
+		{
+			if(id == null)
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
+			String login = UserTools.getLoginFromId(id);
+			if(login == null)
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+			
+			try
+			{
+				return ServiceTools.serviceAccepted().put("login", login);
+			}
+			catch (JSONException e)
+			{
+				System.err.println("Error get Login From ID : " + e.getMessage());
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+			}
+		}
+	}
+	
+	/**
+	 * Récupère l'id d'un utilisateur à partir de son login.
+	 * @param login Le login de l'utilisateur
+	 * @return L'id de l'utilisateur.
+	 */
+	public static JSONObject getIdFromLogin(String login)
+	{
+		{
+			if(login == null)
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
+			int id = UserTools.getIdUserFromLogin(login);
+			if(id == -1)
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_NOT_FIND, Data.CODE_USER_NOT_FIND);
+			
+			try
+			{
+				return ServiceTools.serviceAccepted().put("idUser", id);
+			}
+			catch (JSONException e)
+			{
+				System.err.println("Error get ID From Login : " + e.getMessage());
+				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+			}
+		}
 	}
 }

@@ -45,6 +45,9 @@ public abstract class Data
 	public static int CODE_MAIL_NOT_FIND = 1007;
 	public static String MESSAGE_MAIL_NOT_FIND= "This email address is not associated with any of our user accounts.";
 	
+	public static int CODE_USER_NOT_FIND = 1009;
+	public static String MESSAGE_USER_NOT_FIND= "We cannot find this user.";
+	
 	public static long DUREE_AVANT_DECO = 3600000;		//1 Heure
 
 }

@@ -40,15 +40,13 @@ input[type=text]:focus
 input[type=button]
 {
 	border-radius:12px 0 12px 0;
-	background: #f5f5f5;
 	border:none;
-	color:#555;
 	font:bold 12px Verdana;
 	padding:6px 0 6px 0;
 	box-shadow:1px 1px 3px #999;
-	background-color: #5270ff;
+	background-color: #2883C9;
 	color: white;
-	
+	margin-left:10px;
 }
 
 input[type=button],[value=connexion]{
@@ -59,6 +57,90 @@ input[type=button],[value=connexion]{
 #principale {
 	
 }
+
+.refresh_button{
+	position: fixed;
+    right: 20px;
+    bottom: 30px;
+}
+
+input[type=submit]
+{
+    border: none;
+    padding: 8px 15px 8px 15px;
+    background: #0099ff;
+    color: #fff;
+    border-radius: 5px;
+    transition: 0.5s;
+}
+
+input[type=submit]:hover
+{
+    background: #66b3ff;
+    color: #fff;
+}
+
+.msg
+{
+	width:50%;
+    margin:auto;  
+    background-color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.text_msg
+{
+    font-weight: bold;
+    margin-left: 20px;
+    color: #3A3A3A;
+}
+
+.text_comment
+{
+    font-weight: bold;
+    margin-left: 20px;
+    color: #3A3A3A;
+}
+
+.auteur
+{
+	font-style:italic;
+    color: #0c6cd7;
+    cursor:pointer;
+}
+
+.date
+{
+	opacity: 0.6;
+}
+
+.input_comment
+{
+	padding: 4px 5px;
+    border: 2px solid #fff;     /* Remplace les bordures qui par défaut sont grises */
+    border-radius: 5px;
+    transition: 0.5s;
+    outline: none;
+}
+
+.input_comment:focus
+{
+    border: 2px solid #007acc;
+    border-radius: 4px;
+    box-shadow:1px 1px 3px #999;
+}
+
+.new_comment{
+	margin-top:5px;
+}
+
+.comments{
+    width: 95%;
+    margin: auto;
+}
+
 #infos_user{	
 	width:65%;
     margin:auto;  
@@ -70,22 +152,22 @@ input[type=button],[value=connexion]{
     height: 150px;
     border-radius: 50%;
     position: relative;
-  }
-  
-  #profil_img{
-    width: inherit;
-    height: inherit;
-    border-radius: inherit;
-    cursor: pointer;
-  }
-  #login_profil{
-    position: absolute;
+}
+ 
+#profil_img{
+	width: inherit;
+	height: inherit;
+	border-radius: inherit;
+	cursor: pointer;
+}
+#login_profil{
+	position: absolute;
 	left:4em;
-	transform: translate(0,-50%);
-	top: 50%;
-	font-family: Georgia;
-	font-size: 3em;
-  }
+transform: translate(0,-50%);
+top: 50%;
+font-family: Georgia;
+font-size: 3em;
+ }
 
 /* Le header */
 #header{
@@ -120,7 +202,7 @@ input[type=button],[value=connexion]{
   cursor: pointer;
 }
 
-#connexion{
+#connexion_profil{
 	float: right;
 	transform: translate(-20%, -50%);
 	position: absolute;
@@ -128,7 +210,7 @@ input[type=button],[value=connexion]{
 	top:50%;
 }
 
-#input_search
+#input_search_profil
 {
 	width: 60%;
 }
@@ -145,17 +227,8 @@ input[type=button],[value=connexion]{
 
 #messages
 {
-	position: absolute;
-	top :22%;
-	width: 98%;
+	margin-top: 30px;
 	margin-bottom: 50px;
-}
-
-.msg
-{
-	width:50%;
-    margin:auto;  
-    background-color: rgba(255, 255, 255, 0.7);
 }
 
 #stat{
