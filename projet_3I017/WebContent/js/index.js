@@ -1,18 +1,21 @@
 /* Ajout de image de profil */
-/*
+
 function uploadFile() {
-    var blobFile = $('#filechooser').files[0];
+	console.log($('#filechooser'));
+	console.log($('#filechooser').files);
+	console.log($('#filechooser')[0].files[0]);
+    var blobFile = $('#filechooser')[0].files[0];
     var formData = new FormData();
     formData.append("fileToUpload", blobFile);
 
     $.ajax({
-       url: "user/UploadImage",
+       url: "user/uploadImage",
        type: "POST",
        data: formData,
        processData: false,
        contentType: false,
        success: function(response) {
-           // .. do something
+           console.log("success : " + response);
        },
        error: function(jqXHR, textStatus, errorMessage) {
            console.log(errorMessage); // Optional
@@ -20,11 +23,7 @@ function uploadFile() {
     });
 }
 
-function reponseUploadFile(){
-
-}*/
 /* Ajout de message */
-
 function mainAddMessage()
 {
     var input = $("#new_msg").val();
@@ -209,8 +208,10 @@ function mainInscription()
         var nom = document.getElementById("first_input_inscription").value;
         var prenom = document.getElementById("prenom_ins").value;
         var mail = document.getElementById("input_mail").value;
-
+        
+        uploadFile();
         inscrire(nom , prenom ,login , pwd , mail);
+        
     }
 }
 

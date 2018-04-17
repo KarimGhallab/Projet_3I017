@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"> 
-<web-app> 
+<web-app>
 	<display-name>Projet - 3I017</display-name>
-	 
+ 	 
 	 <!-- Servlet User -->
 	<servlet> 
 		<servlet-name>createUser</servlet-name> 
@@ -27,6 +27,10 @@
 	<servlet> 
 		<servlet-name>getIdFromLogin</servlet-name> 
 		<servlet-class>servlet.user.GetIdFromLogin</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>uploadImage</servlet-name> 
+		<servlet-class>servlet.user.UploadImage</servlet-class> 
 	</servlet>
 	
 	<!-- Servlet Friend -->  
@@ -95,6 +99,10 @@
 	<servlet-mapping> 
 		<servlet-name>getIdFromLogin</servlet-name> 
 		<url-pattern>/user/getIdFromLogin</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>uploadImage</servlet-name> 
+		<url-pattern>/user/uploadImage</url-pattern> 
 	</servlet-mapping>
 	
 	<!-- Servlet-mapping Friend -->

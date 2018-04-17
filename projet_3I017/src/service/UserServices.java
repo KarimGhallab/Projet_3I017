@@ -215,4 +215,10 @@ public class UserServices
 			}
 		}
 	}
+
+	public static JSONObject uploadImage()
+	{
+		
+		return null;
+	}
 }
