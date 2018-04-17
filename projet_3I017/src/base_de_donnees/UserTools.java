@@ -918,7 +918,6 @@ public class UserTools
 			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "UPDATE user SET image = \""+pathImage+"\" WHERE login = \""+login+"\";";
-			System.out.println(query);
 			if(st.executeUpdate(query) == 0)
 				return false;
 			return true;

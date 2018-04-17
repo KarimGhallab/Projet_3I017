@@ -202,33 +202,44 @@ function reponseConnexion(rep){
 function verif_egalite_pwd(){
     if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
     {
-        $("#mdp_error").html("Attention, tout les champs doivent etre remplis !!"); 
+    	$("#error_inscription").html("Attention, tout les champs doivent etre remplis !!"); 
         return false;
     }
     else if (document.getElementById("pwd").value != document.getElementById("pwd2").value ){
-        $("#mdp_error").html("Attention, les champs ne sont pas corrects !!"); 
+    	$("#error_inscription").html("Attention, deux mot de passe ne correspondent pas"); 
         return false;
     }
     else {
-        document.getElementById("mdp_error").innerHTML="";
+    	$("#error_inscription").html("");
         return true;
     }
 }
 
+function validateMail(mail){
+	var re = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+	return re.test(mail);
+}
 
 
 function mainInscription()
 {
     if(verif_egalite_pwd())
     {
-        var login = document.getElementById("login_ins").value;
-        var pwd = document.getElementById("pwd").value;
-        var nom = document.getElementById("first_input_inscription").value;
-        var prenom = document.getElementById("prenom_ins").value;
-        var mail = document.getElementById("input_mail").value;
-        
-        inscrire(nom , prenom ,login , pwd , mail);
-        
+    	if (validateMail(document.getElementById("input_mail").value))
+		{
+    		$("#error_inscription").html("");
+    		
+    		var login = document.getElementById("login_ins").value;
+            var pwd = document.getElementById("pwd").value;
+            var nom = document.getElementById("first_input_inscription").value;
+            var prenom = document.getElementById("prenom_ins").value;
+            var mail = document.getElementById("input_mail").value;
+            
+            inscrire(nom , prenom ,login , pwd , mail);
+		}
+    	else{
+    		$("#error_inscription").html("L'adresse mail n'est pas correcte");
+    	}
     }
 }
 
@@ -241,19 +252,13 @@ function  inscrire (nom , prenom ,login , pwd , mail)
 	pwd = encodeInput(pwd);
 	mail = encodeInput(mail);
 	
-    console.log("Nom : " + nom);
-    console.log("Préom : " + prenom);
-    console.log("Login : " + login);
-    console.log("Pwd : " + pwd);
-    console.log("Mail : " + mail);
-	
     if(!noConnection){
         $.ajax({
             type: "POST",
             url: "user/createUser",
             data: "nom="+nom+"&prenom="+prenom+"&login="+login+"&pwd="+pwd+"&email="+mail,
             dataType:"text",
-            success: function(rep){   
+            success: function(rep){
                 reponseInscription(rep , login , pwd);
             },
             error: function(XHR , textStatus , errorThrown){
@@ -269,7 +274,7 @@ function  inscrire (nom , prenom ,login , pwd , mail)
 function reponseInscription(rep, login, pwd){
     var repD = JSON.parse(rep);
     if(repD.status == "ko"){
-        $("#error_Inscription").html("Inscription error : " + repD.message);
+        $("#error_inscription").html("Inscription error : " + repD.message);
     }
     else{
     	env.key = repD.key;
@@ -278,7 +283,6 @@ function reponseInscription(rep, login, pwd){
         env.follows[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
         
         var blobFile = $('#filechooser')[0].files[0]
-        console.log("BlobFile : " + blobFile);
         uploadImage(login, pwd, blobFile);
     }
 }
@@ -287,9 +291,6 @@ function reponseInscription(rep, login, pwd){
 function verif_egalite_mail(){
 	var valueMail1 = $("#mail_forgotten").val();
 	var valueMail2 = $("#mail2_forgotten").val();
-	
-	console.log(valueMail1)
-	console.log(valueMail2)
 	
     if( valueMail1 ===  "" ||  valueMail2 === "")
     {
@@ -509,7 +510,6 @@ function makeProfilPanel(login){
 	if (login != "")
 	{
 		login = encodeInput(login);
-		console.log("Login search : " + login);
 		$.ajax({
 	        type: "POST",
 	        url: "user/getProfilFromLogin",
@@ -531,16 +531,12 @@ function mainProfil(login, id, path){
 	// Affiche des boutons dans le header
     var ajout = "";
     if (env.fromId == -1)
-    {
-        console.log("Je ne suis pas connecté");
-        
+    {   
         ajout += '<input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/>';
         ajout += '<input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/>';
     }
     else
-    {
-        console.log("Je suis connecté, mon login est : " + env.login);
-        
+    {   
         ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\''+env.login+'\')})()"/>';
         ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
     }
@@ -557,7 +553,6 @@ function mainProfil(login, id, path){
     if((id != null) && (env.fromId != -1) && (id != env.fromId))
     {
         ajout = "";
-        console.log(env.follows[env.fromId]);
         if(!env.follows[env.fromId].includes(id))
         {
             ajout = "<input type=\"button\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" ";
@@ -581,8 +576,6 @@ function mainProfil(login, id, path){
 
 function reponseProfil(rep, login){
 	var repD = JSON.parse(rep);
-	console.log("repD profil");
-	console.log(repD);
 	if(repD.status == "ok")
 	{
 		$("#changableLink").attr("href", "css/Profil.css");
@@ -613,8 +606,6 @@ function callbackMainPanel(){
     var ajout = "";
     if (env.fromId == -1)
     {
-        console.log("Je ne suis pas connecté");
-        
         ajout += '<input type="button" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/>';
         ajout += '<input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/>';
         
@@ -622,14 +613,8 @@ function callbackMainPanel(){
         $("#input_search").focus();
     }
     else
-    {
-        console.log("Je suis connecté, mon login est : " + env.login);
-        
-        //ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel("'+env.login+'")})()"/>'
+    {   
         ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\''+env.login+'\')})()"/>'
-        //ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\"'+env.login+'\")})()"/>'
-        
-        
         ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
         
         $("#new_msg").focus();
@@ -741,7 +726,6 @@ function mainDeconnexion()
 function reponseLogout(rep){
     var repD = JSON.parse(rep, revival);
     if(repD.status == "ko"){
-        console.log("erreur deconnexion : " + repD.message);
         alert(repD.message);
     }
     else{
@@ -752,11 +736,9 @@ function reponseLogout(rep){
 
 function isConnexion(repD){
 	if(repD.status == "ko" && repD.code == 1005){
-		console.log("Pas connectée");
 		return false;
 	}
 	else{
-		console.log("connectée");
 		return true;
 	}
 }
@@ -893,9 +875,7 @@ function dateToString(date){
 }
 
 function encodeInput(string){
-	console.log("avant : " + string);
 	var tmp = escapeHTMLEncode(string);
 	var tmp2 =  encodeURIComponent(tmp);
-	console.log("après: " + tmp2 + "\n");
 	return tmp2;
 }

@@ -27,48 +27,45 @@ import utils.ServiceTools;
 public class UserServices 
 {
 	
-	public static JSONObject uploadImage(List<FileItem> fileItems) throws IOException{
-	    BufferedWriter writer = new BufferedWriter(new FileWriter("/users/nfs/Etu8/3772468/log.txt", true));
-	    
-	    
-		JSONObject json = new JSONObject();
+	public static JSONObject uploadImage(List<FileItem> fileItems) throws IOException
+	{
 		try
-		{ 
+		{
+			 int lastDot = -1;
 	         // Process the uploaded file items
-	         Iterator i = fileItems.iterator();
+	         Iterator<FileItem> i = fileItems.iterator();
 	         String fileName = "";
 	         String login = "";
+	         FileItem fileItem = null;
 	         
-	         int cpt = 0;
 	         while ( i.hasNext () )
 	         {
-	           FileItem fi = (FileItem)i.next();
-	           writer.append(cpt + " : " + fi.getName() + "\n");
+	            FileItem fi = (FileItem)i.next();
 	            if ( !fi.isFormField() )
-	            {
-	               // Get the uploaded file parameters
-	               fileName = fi.getName();
-	               
-	               File file = new File( Data.FILEPATH + fileName);
-	               // Write the file
-	               fi.write( file ) ;
+	            {	            	
+					// Get the uploaded file parameters
+					fileName = fi.getName();					   
+					lastDot = fileName.lastIndexOf(".");
+					fileItem = fi;
 	            }
-	            else		// Le login ?
-            	{	writer.append("dans le else");
-            		writer.append("getFieldName" + fi.getFieldName() + "\n");
-            		writer.append("getName" + fi.getName() + "\n");
-            		writer.append("getString" + fi.getString() + "\n");
-            		writer.append("get" + fi.get() + "\n");
-	            	json.put("login", fi.getString());
+	            else		// Le login
 	            	login = fi.getString();
-            	}
-	            cpt++;
 	         }
-	         writer.close();
+	         String newFileName;
+	         if (lastDot == -1)		// On ecrit l'image au format jpg
+	        	 newFileName = "login_"+UserTools.getIdUserFromLogin(login)+".jpg";
+	         else					// On garde le format de l'image
+	        	 newFileName = "login_"+UserTools.getIdUserFromLogin(login)+"."+fileName.substring(lastDot+1, fileName.length());
+	         
+	         File file = new File( Data.FILEPATH + newFileName);
+	         
+	         // Write the file
+	         fileItem.write(file);
+	         
 	         if (UserTools.updateImage(login, Data.FILEPATH + fileName))
-	 			return ServiceTools.serviceAccepted().put("res", json);
+	 			return ServiceTools.serviceAccepted();
 	         else
-	             return   ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+	             return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
          }
 		catch(Exception ex)
 		{
