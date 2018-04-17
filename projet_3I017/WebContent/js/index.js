@@ -37,6 +37,16 @@ function reponseUploadImage(rep, login, pwd){
 		
 	
 }
+/* Suppression de message */
+function removeMessage(id){
+	console.log("Je supprime le message : " + id);
+}
+
+/* Suppression de commentaire*/
+function removeComment(id){
+	console.log("Je supprime le commentaire : " + id);
+}
+
 
 /* Ajout de message */
 function mainAddMessage()
@@ -368,12 +378,22 @@ Message.prototype.getHTML = function(){
             "<div onclick=\"makeProfilPanel('"+this.auteur.login+"')\" style=\"display:inline-block;\" class=\"auteur\">"+this.auteur.getHTML()+"</div>"+
             "<div style=\"float:right;\" class=\"date\">"+dateToString(this.date)+"</div>"+
         "</div>"+
-        "<div class=\"text_msg\">"+escapeHTMLEncode(this.texte)+"</div>"+
+        "<div class=\"text_msg\">"+escapeHTMLEncode(this.texte);
+    	if (env.fromId == this.auteur.id){		// Je suis l'auteur du message
+    		s += " <img class='delete_button' style='cursor:pointer;margin-left:10px' src='image/delete_logo.png' onclick='removeMessage(\""+this.id+"\")'/>";
+    	}
+    	s += "</div>"+
         "<div class = \"new_comment\">";
-        if ((env.fromId != -1) && ((env.fromId == this.auteur.id) || (env.follows[env.fromId].includes(this.auteur.id))))		// On ne peux commenter que si on est connecter et que le message est le notre ou bien celui d'un amis
+
+    	// On ne peux commenter que si on est connecter et que le message est le notre ou bien celui d'un amis
+        if (env.fromId != -1)
         {
-            s += "<input id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\" class=\"input_comment\"/>"+
-            "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
+        	var res = $.inArray(this.auteur.id, env.follows[env.fromId]);
+        	console.log((env.fromId == this.auteur.id)+ " ou " +( env.follows[env.fromId].includes(parseInt(this.auteur.id)) ));
+        	if ((env.fromId == this.auteur.id) || (env.follows[env.fromId].includes(parseInt(this.auteur.id)))){
+        		s += "<input id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\" class=\"input_comment\"/>"+
+                "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
+        	}
         }
         s += "</div>" +
         "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
@@ -396,7 +416,11 @@ Commentaire.prototype.getHTML = function(){
         	"<div style=\"display:inline-block;\" class=\"auteur\" onclick=\"makeProfilPanel('"+this.auteur.login+"')\">"+this.auteur.getHTML()+"</div>" +
 			"<div style=\"float:right;\" class=\"date\">"+dateToString(this.date)+"</div>" +
 		"</div>"+
-        "<div class=\"text_comment\">"+this.texte+"</div>"+
+        "<div class=\"text_comment\">"+this.texte;
+    if (env.fromId == this.auteur.id){		// Je suis l'auteur du commentaire
+		s += " <img class='delete_button' style='cursor:pointer;margin-left:10px' src='image/delete_logo.png' onclick='removeComment(\""+this.id+"\")'/>";
+	}
+	s += "</div>"+
         "</div>";
     return s;
 	
@@ -761,14 +785,14 @@ function developpeMessage(id)
         el.append(c.getHTML());
     }
 
-    $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage('"+id+"')\"/>")
+    $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer;\" class=\"expand\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage('"+id+"')\"/>")
 }
 
 function replieMessage(id)
 {
     var el = $("#message_"+id+" .comments");
     el.html("");
-    $("#message_"+id+" img" ).replaceWith("<img style=\"cursor:pointer;\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
+    $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer;\" class=\"expand\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
 }
 
 function refreshMessages(id){
