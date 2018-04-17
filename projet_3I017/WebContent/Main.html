@@ -6,8 +6,8 @@
                 
             </div>
             <div id="search">
-                <label class="hidden" for="input_search_main"></label>
-                <input id="input_search_main" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
+                <label class="hidden" for="input_search"></label>
+                <input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
                    <input type="button" value="Search" onclick="doSearch()"/>
             </div>
         </div>
@@ -59,7 +59,7 @@
         /* Mise en place des suggestions de la barre de recherche */
         function setUpSearchBar()
         {
-            $("#input_search_main").autocomplete({
+            $("#input_search").autocomplete({
                 source: env.all_users
             });
         }

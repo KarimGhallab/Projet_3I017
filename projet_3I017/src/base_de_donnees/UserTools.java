@@ -342,7 +342,7 @@ public class UserTools
 		catch (Exception e) 
 		{
 			System.err.println("Error checkPwd : " + e.getMessage());
-			return true;
+			return false;
 		}
 	}
 	
@@ -907,6 +907,46 @@ public class UserTools
 		catch (Exception e) 
 		{
 			System.err.println("Error getAllLogins : " + e.getMessage());
+			return null;
+		}
+	}
+
+	public static boolean updateImage(String login, String pathImage) {
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "UPDATE user SET image = \""+pathImage+"\" WHERE login = \""+login+"\";";
+			System.out.println(query);
+			if(st.executeUpdate(query) == 0)
+				return false;
+			return true;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error updateImage : " + e.getMessage());
+			return false;
+		}
+	}
+
+	public static String getPathUserFromLogin(String login)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT image FROM user WHERE login = \""+login+"\";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getString(1);
+			else
+				return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getPathFromLogin : " + e.getMessage());
 			return null;
 		}
 	}

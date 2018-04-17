@@ -1,7 +1,16 @@
 package service;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +26,56 @@ import utils.ServiceTools;
  */
 public class UserServices 
 {
+	
+	public static JSONObject uploadImage(List<FileItem> fileItems) throws IOException{
+	    BufferedWriter writer = new BufferedWriter(new FileWriter("/users/nfs/Etu8/3772468/log.txt", true));
+	    
+	    
+		JSONObject json = new JSONObject();
+		try
+		{ 
+	         // Process the uploaded file items
+	         Iterator i = fileItems.iterator();
+	         String fileName = "";
+	         String login = "";
+	         
+	         int cpt = 0;
+	         while ( i.hasNext () )
+	         {
+	           FileItem fi = (FileItem)i.next();
+	           writer.append(cpt + " : " + fi.getName() + "\n");
+	            if ( !fi.isFormField() )
+	            {
+	               // Get the uploaded file parameters
+	               fileName = fi.getName();
+	               
+	               File file = new File( Data.FILEPATH + fileName);
+	               // Write the file
+	               fi.write( file ) ;
+	            }
+	            else		// Le login ?
+            	{	writer.append("dans le else");
+            		writer.append("getFieldName" + fi.getFieldName() + "\n");
+            		writer.append("getName" + fi.getName() + "\n");
+            		writer.append("getString" + fi.getString() + "\n");
+            		writer.append("get" + fi.get() + "\n");
+	            	json.put("login", fi.getString());
+	            	login = fi.getString();
+            	}
+	            cpt++;
+	         }
+	         writer.close();
+	         if (UserTools.updateImage(login, Data.FILEPATH + fileName))
+	 			return ServiceTools.serviceAccepted().put("res", json);
+	         else
+	             return   ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
+         }
+		catch(Exception ex)
+		{
+           return   ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+		}
+	}
+	
 	/**
 	 * Permet à un utilisateur de se connecter.
 	 * @param login Le login de l'utilisateur.
@@ -195,7 +254,7 @@ public class UserServices
 	 * @param login Le login de l'utilisateur
 	 * @return L'id de l'utilisateur.
 	 */
-	public static JSONObject getIdFromLogin(String login)
+	public static JSONObject getProfilFromLogin(String login)
 	{
 		{
 			if(login == null)
@@ -204,21 +263,21 @@ public class UserServices
 			if(id == -1)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_NOT_FIND, Data.CODE_USER_NOT_FIND);
 			
+			String path = UserTools.getPathUserFromLogin(login);
+			
+			if (path == null)
+				path = Data.FILEPATH_ANON;
 			try
 			{
-				return ServiceTools.serviceAccepted().put("idUser", id);
+				return ServiceTools.serviceAccepted().put("idUser", id).put("path", path);
 			}
 			catch (JSONException e)
 			{
-				System.err.println("Error get ID From Login : " + e.getMessage());
+				System.err.println("Error get Profil From Login : " + e.getMessage());
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
 			}
 		}
 	}
 
-	public static JSONObject uploadImage()
-	{
-		
-		return null;
-	}
+
 }

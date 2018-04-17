@@ -1,26 +1,41 @@
 /* Ajout de image de profil */
 
-function uploadFile() {
-	console.log($('#filechooser'));
-	console.log($('#filechooser').files);
-	console.log($('#filechooser')[0].files[0]);
-    var blobFile = $('#filechooser')[0].files[0];
+function uploadImage(login, pwd, blobFile) {
     var formData = new FormData();
     formData.append("fileToUpload", blobFile);
-
+    console.log("undefined :: "+login);
+    formData.append("login", login);
+    console.log(formData);
     $.ajax({
        url: "user/uploadImage",
        type: "POST",
-       data: formData,
+       data: formData ,
        processData: false,
        contentType: false,
        success: function(response) {
            console.log("success : " + response);
+           reponseUploadImage(response, login, pwd);
        },
        error: function(jqXHR, textStatus, errorMessage) {
            console.log(errorMessage); // Optional
        }
     });
+}
+
+function reponseUploadImage(rep, login, pwd){
+	console.log(rep);
+	var repD = JSON.parse(rep);
+	console.log("reponseUploadImage : ");
+	console.log(repD);
+	
+	if(repD.status == "ko"){
+		alert(repD.message)
+	}
+	else{
+		connecte(login , pwd , 0);
+	}
+		
+	
 }
 
 /* Ajout de message */
@@ -81,13 +96,14 @@ function reponseAddMessage(rep)
 
 
 function addComment(id){
+	
     var value = $("#input_comment_"+id).val();
     if (value != "")
 	{
     	$.ajax({
             type: "POST",
             url: "comment/addComment",
-            data: "key="+env.key+"&idMessage="+id+"&commentaire="+value,
+            data: "key="+env.key+"&idMessage="+id+"&commentaire="+encodeInput(value),
             dataType:"text",
             success: function(rep){
                 reponseAddComment(rep, id);
@@ -143,6 +159,8 @@ function mainConnexion()
 
 function connecte (login, pwd , save)
 {
+	login = encodeInput(login);
+	pwd = encodeInput(pwd);
     if(!noConnection)
         $.ajax({
             type: "POST",
@@ -209,7 +227,6 @@ function mainInscription()
         var prenom = document.getElementById("prenom_ins").value;
         var mail = document.getElementById("input_mail").value;
         
-        uploadFile();
         inscrire(nom , prenom ,login , pwd , mail);
         
     }
@@ -218,6 +235,12 @@ function mainInscription()
 
 function  inscrire (nom , prenom ,login , pwd , mail)
 {
+	login = encodeInput(login);
+	nom = encodeInput(nom);
+	prenom = encodeInput(prenom);
+	pwd = encodeInput(pwd);
+	mail = encodeInput(mail);
+	
     console.log("Nom : " + nom);
     console.log("Préom : " + prenom);
     console.log("Login : " + login);
@@ -231,8 +254,7 @@ function  inscrire (nom , prenom ,login , pwd , mail)
             data: "nom="+nom+"&prenom="+prenom+"&login="+login+"&pwd="+pwd+"&email="+mail,
             dataType:"text",
             success: function(rep){   
-                reponseInscription(rep);
-                connecte(login , pwd , 0);
+                reponseInscription(rep , login , pwd);
             },
             error: function(XHR , textStatus , errorThrown){
                 alert(textStatus);
@@ -244,7 +266,7 @@ function  inscrire (nom , prenom ,login , pwd , mail)
     }
 }
 
-function reponseInscription(rep){
+function reponseInscription(rep, login, pwd){
     var repD = JSON.parse(rep);
     if(repD.status == "ko"){
         $("#error_Inscription").html("Inscription error : " + repD.message);
@@ -255,6 +277,9 @@ function reponseInscription(rep){
         env.login = repD.login;
         env.follows[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
         
+        var blobFile = $('#filechooser')[0].files[0]
+        console.log("BlobFile : " + blobFile);
+        uploadImage(login, pwd, blobFile);
     }
 }
 
@@ -278,7 +303,8 @@ function verif_egalite_mail(){
     }
     else {
         document.getElementById("error_vide").innerHTML="";
-        
+        valueMail1 = encodeInput(valueMail1);
+        valueMail2 = encodeInput(valueMail2);
         $("#dialog").dialog( "open" );
         $.ajax({
             type: "POST",
@@ -482,9 +508,11 @@ function makeInscriptionPanel()
 function makeProfilPanel(login){
 	if (login != "")
 	{
+		login = encodeInput(login);
+		console.log("Login search : " + login);
 		$.ajax({
 	        type: "POST",
-	        url: "user/getIdFromLogin",
+	        url: "user/getProfilFromLogin",
 	        data: "loginUser="+login,
 	        dataType:"text",
 	        success: function(rep){
@@ -497,7 +525,7 @@ function makeProfilPanel(login){
 	}
 }
 
-function mainProfil(login, id){
+function mainProfil(login, id, path){
 	$("#login_profil").html(login);
 	
 	// Affiche des boutons dans le header
@@ -513,12 +541,12 @@ function mainProfil(login, id){
     {
         console.log("Je suis connecté, mon login est : " + env.login);
         
-        ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\"'+env.login+'\")})()"/>';
+        ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\''+env.login+'\')})()"/>';
         ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
     }
     
-    $("#input_search_profil").focus();
-    $("#input_search_profil").keydown(enterHandlerSearch);
+    $("#input_search").focus();
+    $("#input_search").keydown(enterHandlerSearch);
     $("#connexion_profil").html(ajout);
     
     // Gestion du bouton pour raffraichir les messages
@@ -540,16 +568,26 @@ function mainProfil(login, id){
         }
         $("#friends").html("<div style=\"text-align:right;\">" + ajout + "</div>");
     }
+    
+    ///////////////////////////////////////
+    ///////// Gestion de l'image //////////
+    // ERREUR AFFICHAGE D'UN FICHIER LOCAL/
+    ///////////////////////////////////////
+    /*console.log("path : " + path)
+    $("#profil_img").attr("src", "file:/"+path);*/
+    
+    
 }
 
 function reponseProfil(rep, login){
 	var repD = JSON.parse(rep);
-	
+	console.log("repD profil");
+	console.log(repD);
 	if(repD.status == "ok")
 	{
 		$("#changableLink").attr("href", "css/Profil.css");
 	    $("#container").load("Profil.html", function (){
-	    	mainProfil(login, repD.idUser)
+	    	mainProfil(login, repD.idUser, repD.path);
 	    	
 	    	env.fromMessage = 0;
 	    	setUpMessages(repD.idUser);
@@ -581,20 +619,24 @@ function callbackMainPanel(){
         ajout += '<input type="button" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/>';
         
         $("#nouveau_msg").hide();
-        $("#input_search_main").focus();
+        $("#input_search").focus();
     }
     else
     {
         console.log("Je suis connecté, mon login est : " + env.login);
         
-        ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\"'+env.login+'\")})()"/>';
+        //ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel("'+env.login+'")})()"/>'
+        ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\''+env.login+'\')})()"/>'
+        //ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\"'+env.login+'\")})()"/>'
+        
+        
         ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
         
         $("#new_msg").focus();
         $("#new_msg").keydown(enterHandlerAddMessage);
     }
     
-    $("#input_search_main").keydown(enterHandlerSearch);
+    $("#input_search").keydown(enterHandlerSearch);
     $("#connexion").html(ajout);
     env.fromMessage = 0;
     setUpMessages();
@@ -640,19 +682,24 @@ function reponseSetUpMessages(rep){
 		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
 		mainDeconnexion();
 	}
-    if (env.fromMessage == 0){
-    	env.messages = {};		// On remet à zéro la liste des messages
-    	$("#messages").html("");
+    if (repD.status != "ko"){
+    	if (env.fromMessage == 0){
+        	env.messages = {};		// On remet à zéro la liste des messages
+        	$("#messages").html("");
+        }
+        env.fromMessage += env.nbMessage;
+        var messages = repD.list_message;
+        var i;
+        for(i=0; i< messages.length-1; i++) {		// Le dernier élément indique s'il reste un ou des messages à afficher
+    		env.messages[messages[i].id] = messages[i];
+        }
+        env.keepListingMessage = (messages[i].end == "yes");
+        messages.pop();
+        displayMessages(messages);
     }
-    env.fromMessage += env.nbMessage;
-    var messages = repD.list_message;
-    var i;
-    for(i=0; i< messages.length-1; i++) {		// Le dernier élément indique s'il reste un ou des messages à afficher
-		env.messages[messages[i].id] = messages[i];
+    else{
+    	alert(repD.message);
     }
-    env.keepListingMessage = (messages[i].end == "yes");
-    messages.pop();
-    displayMessages(messages);
 }
 
 function displayMessages(messages){
@@ -695,6 +742,7 @@ function reponseLogout(rep){
     var repD = JSON.parse(rep, revival);
     if(repD.status == "ko"){
         console.log("erreur deconnexion : " + repD.message);
+        alert(repD.message);
     }
     else{
         env.fromId=-1;
@@ -764,7 +812,8 @@ function refreshReact(id){
 //////////////////////////////////////
 function doSearch(target)
 {
-    var input = target.value;
+	
+    var input = document.getElementById("input_search").value;
     makeProfilPanel(input);
 }
 
@@ -782,7 +831,7 @@ function enterHandlerConnexion(event)
 function enterHandlerSearch(event)
 {
     if(event.keyCode == 13){
-        doSearch(event.target);
+        doSearch();
     }	
 }
 
@@ -820,7 +869,7 @@ function enterHandlerInscription(event)
      }	
 }
 
-// Retourne une chaine de caaractère pouvant être affichée dans des balises HTMLs
+// Retourne une chaine de caractère pouvant être affichée dans des balises HTMLs
 function escapeHTMLEncode(str) {
     var div = document.createElement("div");
     var text = document.createTextNode(str);
@@ -841,4 +890,12 @@ function dateToString(date){
 	s += splitedDate[3];									// L'heure
 	
 	return s;
+}
+
+function encodeInput(string){
+	console.log("avant : " + string);
+	var tmp = escapeHTMLEncode(string);
+	var tmp2 =  encodeURIComponent(tmp);
+	console.log("après: " + tmp2 + "\n");
+	return tmp2;
 }

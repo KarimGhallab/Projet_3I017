@@ -25,8 +25,8 @@
 		<servlet-class>servlet.user.GetAllLogins</servlet-class> 
 	</servlet>
 	<servlet> 
-		<servlet-name>getIdFromLogin</servlet-name> 
-		<servlet-class>servlet.user.GetIdFromLogin</servlet-class> 
+		<servlet-name>getProfilFromLogin</servlet-name> 
+		<servlet-class>servlet.user.GetProfilFromLogin</servlet-class> 
 	</servlet>
 	<servlet> 
 		<servlet-name>uploadImage</servlet-name> 
@@ -97,8 +97,8 @@
 		<url-pattern>/user/getAllLogins</url-pattern> 
 	</servlet-mapping>
 	<servlet-mapping> 
-		<servlet-name>getIdFromLogin</servlet-name> 
-		<url-pattern>/user/getIdFromLogin</url-pattern> 
+		<servlet-name>getProfilFromLogin</servlet-name> 
+		<url-pattern>/user/getProfilFromLogin</url-pattern> 
 	</servlet-mapping>
 	<servlet-mapping> 
 		<servlet-name>uploadImage</servlet-name> 

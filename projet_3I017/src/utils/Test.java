@@ -3,6 +3,8 @@ import java.sql.Time;
 
 import org.bson.types.*;
 
+import base_de_donnees.UserTools;
+
 public class Test 
 {
 	/**
@@ -86,7 +88,9 @@ public class Test
 		
 		
 		
-		
+		//System.out.println(UserTools.updateImage("aaaaa", "jordan va  a la plage !! :)"));
+		System.out.println("1 : " + UserTools.insererConnexion("aaaaa", "console.log(\"jason\")", 0));
+		System.out.println("2 : " + UserTools.insererConnexion("aaaaa", "console.log(%22jason%22)", 0));
 		
 		
 		
@@ -94,11 +98,11 @@ public class Test
 		
 		// Test des commentaires
 		//System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
-		System.out.println(service.UserServices.login("totot", "4b3304b4d", "0"));
+		/*System.out.println(service.UserServices.login("totot", "4b3304b4d", "0"));
 		
 		int idToto = base_de_donnees.UserTools.getIdUserFromLogin("totot");
 		service.UserServices.login("totot", "totototo", ""+0);
-		String keyToto = base_de_donnees.UserTools.getKey(idToto);
+		String keyToto = base_de_donnees.UserTools.getKey(idToto);*/
 		
 		//service.MessageServices.addMessage(keyToto, "Vive Jason");
 		//String idMessage = "5aa181b246ec75cfec8b7f47";

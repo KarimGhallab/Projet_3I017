@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-public class GetIdFromLogin extends HttpServlet
+public class GetProfilFromLogin extends HttpServlet
 {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		String login = request.getParameter("loginUser");
 		
-		JSONObject json = service.UserServices.getIdFromLogin(login);
+		JSONObject json = service.UserServices.getProfilFromLogin(login);
 		
 		PrintWriter out = response.getWriter();
 		

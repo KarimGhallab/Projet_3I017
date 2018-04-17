@@ -9,6 +9,12 @@ import java.util.regex.Pattern;
  */
 public abstract class Data
 {
+	public static String FILEPATH_ANON = "/users/nfs/Etu8/3772468/twister_images/anon.png";
+	public static String FILEPATH = "/users/nfs/Etu8/3772468/twister_images/";
+
+	//filePath = "/users/nfs/Etu8/3674226/twister_images/";
+	//public static String FILEPATH_ANON = "/users/nfs/Etu8/3674226/twister_images/anon.png";
+	
 	public static String MAIL_ADDRESS = "twister.socialnetwork@gmail.com";
 	public static String MAIL_PASSWORD = "3I017Project";
 	
