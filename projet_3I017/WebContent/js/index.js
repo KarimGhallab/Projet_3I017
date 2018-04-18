@@ -472,6 +472,7 @@ function init()
     env.containers = {};
     env.messages = {};
     env.all_users = [];
+    env.users=[];
     env.fromMessage = 0;
     env.nbMessage = 5;
     env.keepListingMessage = true;
@@ -530,7 +531,7 @@ function makeInscriptionPanel()
     $("#changableLink").attr("href", "css/Inscription.css")
 }
 
-function makeProfilPanel(login){
+function makeProfilPanel (login){
 	if (login != "")
 	{
 		login = encodeInput(login);
@@ -549,6 +550,65 @@ function makeProfilPanel(login){
 	}
 }
 
+
+function addFriend(id){
+    
+    $.ajax({
+        type: "POST",
+        url: "friend/addFriend",
+        data: "idFriend="+id+"&key="+env.key,
+        dataType:"text",
+        success: function(rep){
+        	console.log(rep);
+            reponseAddFriend(rep , id);
+        },
+        error: function(XHR , textStatus , errorThrown){
+            alert(textStatus);
+        } 
+    })
+}
+function reponseAddFriend(rep , id){
+    repD = JSON.parse(rep);
+    console.log(repD)
+    if(repD.status == "ko"){
+        console.log("erreur :" + rep.message );
+    }
+    else{
+    	env.follows[env.fromId].push(id);
+        makeProfilPanel(env.all_users[id]);
+    }
+}
+function removeFriend(id){
+    
+
+    $.ajax({
+        type: "POST",
+        url: "friend/removeFriend",
+        data: "idFriend="+id+"&key="+env.key,
+        dataType:"text",
+        success: function(rep){
+            reponseRemoveFriend(rep , id);
+        },
+        error: function(XHR , textStatus , errorThrown){
+            alert(textStatus);
+        } 
+    })
+}
+
+function reponseRemoveFriend(rep , id){
+    repD = JSON.parse(rep);
+    console.log(repD)
+    if(repD.status == "ko"){
+        console.log("erreur :" + rep.message );
+    }
+    else{
+    	var i = env.follows[env.fromId].indexOf(id);
+        if(i != -1) {
+            env.follows[env.fromId].splice(i, 1);
+        }
+        makeProfilPanel(env.all_users[id]);
+    }
+}
 function mainProfil(login, id, path){
 	$("#login_profil").html(login);
 	
@@ -570,23 +630,33 @@ function mainProfil(login, id, path){
     $("#connexion_profil").html(ajout);
     
     // Gestion du bouton pour raffraichir les messages
-    var toAddButton = '<input type="submit" value="Rafraîchir les messages" id="submit_button" onclick="refreshMessages('+id+')" class="refresh_button"/>'
+    var toAddButton = '<input type="submit" value="Rafraîchir les messages"  onclick="refreshMessages('+id+')" class="refresh_button"/>'
     $("#principale").append(toAddButton);
     
     // gestion de la fonctionnalité follow/unfollow
-    if((id != null) && (env.fromId != -1) && (id != env.fromId))
-    {
-        ajout = "";
-        if(!env.follows[env.fromId].includes(id))
-        {
-            ajout = "<input type=\"button\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" ";
+    ajout="";
+    if(env.fromId!=-1){
+        if(id!=env.fromId){
+            if(env.follows[env.fromId] == [] ){
+                
+                ajout = "<input type=\"button\" id=\"friends\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" >";
+                console.log('1 '+ ajout );
+            }
+            else if(env.follows[env.fromId].includes(id)){
+
+                ajout = "<input type=\"button\" id=\"friends\" value = \"se désabonner\" onclick=\"removeFriend("+id+")\" >";
+                console.log('2 '+ ajout );
+            }
+            else{
+                
+                ajout = "<input type=\"button\" id=\"friends\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" >";
+                console.log('3 '+ ajout );
+            }
         }
-        else
-        {
-            ajout += "<input type=\"button\" value = \"se désabonner\" onclick=\"removeFriend("+id+")\" ";
-        }
-        $("#friends").html("<div style=\"text-align:right;\">" + ajout + "</div>");
+
+        document.getElementById("profil").innerHTML+=ajout;
     }
+    
     
     ///////////////////////////////////////
     ///////// Gestion de l'image //////////
@@ -613,6 +683,7 @@ function reponseProfil(rep, login){
 	}
 	else
 	{
+		console.log("je suis dans reponse Profil")
 		alert(repD.message);
 	}
 }
@@ -679,6 +750,7 @@ function setUpMessages(id){
             reponseSetUpMessages(rep);
         },
         error: function(XHR , textStatus , errorThrown){
+        	console.log("dans setUpMessage")
             alert(textStatus);
         } 
     })

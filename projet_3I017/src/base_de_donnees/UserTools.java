@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -888,19 +889,21 @@ public class UserTools
 		return pwd;
 	}
 
-	public static ArrayList<String> getAllLogins()
+	public static HashMap<Integer , String> getAllLogins()
 	{
 		Connection c;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
-			String query = "SELECT login FROM user";
+			String query = "SELECT id , login FROM user";
 			ResultSet rs = st.executeQuery(query);
 			
-			ArrayList<String> logins = new ArrayList<String>();
+			HashMap<Integer , String> logins = new HashMap<Integer, String>();
 			while(rs.next())
-				logins.add(rs.getString(1));
+				//logins.add(rs.getString(1));
+				logins.put(rs.getInt(1) , rs.getString(2));
+			System.out.println(logins);
 			
 			return logins;
 		} 

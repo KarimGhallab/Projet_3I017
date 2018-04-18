@@ -59,8 +59,11 @@
         /* Mise en place des suggestions de la barre de recherche */
         function setUpSearchBar()
         {
+        	console.log(env.all_users);
+            console.log(env.users)
+            
             $("#input_search").autocomplete({
-                source: env.all_users
+                source: env.users
             });
         }
         
@@ -83,8 +86,15 @@
 
         function reponseGetLogins(rep)
         {
-            var repD = JSON.parse(rep);
+        	var repD = JSON.parse(rep);
+        	console.log(repD);
             env.all_users = repD.logins;
+            if(env.users[0] == undefined){
+                for( var i in env.all_users){
+                    if( env.all_users.hasOwnProperty( i ) ) 
+                        env.users.push(env.all_users[i])   
+                }
+            }	
         }
     </script>
 </div> <!-- Conteneur du main -->

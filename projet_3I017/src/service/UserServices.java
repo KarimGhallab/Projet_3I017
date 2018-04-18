@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -204,7 +205,7 @@ public class UserServices
 	public static JSONObject getAllLogins()
 	{
 		
-		ArrayList<String> res = UserTools.getAllLogins();
+		HashMap<Integer , String> res = UserTools.getAllLogins();
 		if(res != null)
 		{
 			try
@@ -219,6 +220,7 @@ public class UserServices
 		else
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 	}
+
 	
 	/**
 	 * Récupère le login d'un utilisateur à partir de son id.
