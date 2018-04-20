@@ -21,6 +21,10 @@ body
 	z-index: 9999;
   }
 
+.expand{
+	position: relative;
+	left: 95%;
+}
 
 input[type=text], input[type=password], input[type=email]
 {

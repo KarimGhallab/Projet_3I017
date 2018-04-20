@@ -40,13 +40,68 @@ function reponseUploadImage(rep, login, pwd){
 /* Suppression de message */
 function removeMessage(id){
 	console.log("Je supprime le message : " + id);
+	var query = "message="+id+"&key="+env.key
+	
+	console.log(query);
+	$.ajax({
+	       url: "message/removeMessage",
+	       type: "POST",
+	       data: query ,
+	       success: function(response) {
+	           console.log("success : " + response);
+	           reponseRemoveMessage(response);
+	       },
+	       error: function(jqXHR, textStatus, errorMessage) {
+	           console.log(textStatus); // Optional
+	       }
+	    });
+}
+function reponseRemoveMessage(response){
+	var repD = JSON.parse(response);
+	console.log("reponse remove message: " + repD)
+	if(repD.status == "ko"){
+		alert("erreur lors de la suppression du message: "+repD.message);
+	}
+	else{
+		 refreshMessages();
+	}
 }
 
 /* Suppression de commentaire*/
 function removeComment(id){
 	console.log("Je supprime le commentaire : " + id);
+	var query = "idCommentaire="+id+"&key="+env.key
+	
+	console.log(query);
+	$.ajax({
+	       url: "comment/removeComment",
+	       type: "POST",
+	       data: query ,
+	       success: function(response) {
+	           console.log("success : " + response);
+	           reponseRemoveComment(response , id);
+	       },
+	       error: function(jqXHR, textStatus, errorMessage) {
+	           console.log(textStatus); // Optional
+	       }
+	    });
 }
-
+function reponseRemoveComment(response , id){
+	console.log("response : " + response);
+	var repD = JSON.parse(response);
+	console.log("reponse remove Comment: " + repD)
+	if(repD.status == "ko"){
+		alert("erreur lors de la suppression du commentaire : "+repD.message);
+		if (!isConnexion(repD))
+		{
+    		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
+    		mainDeconnexion();
+		}
+	}
+	else{
+		 refreshMessages();
+	}
+}
 
 /* Ajout de message */
 function mainAddMessage()
@@ -121,7 +176,7 @@ function addComment(id){
             error: function(XHR , textStatus , errorThrown){
                 alert(textStatus);
             } 
-        })
+        });
 	}
     else
 	{
@@ -148,6 +203,7 @@ function reponseAddComment(rep, id)
         
         var el = $("#message_"+id+" .comments");
         el.append(new_comment.getHTML());
+        $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments");
 	}
 }
 
@@ -192,7 +248,10 @@ function connecte (login, pwd , save)
 function reponseConnexion(rep){
 	var repD = JSON.parse(rep);
     if(repD.status == "ko"){
+    	console.log(repD)
         $("#error_connexion").html("Connexion error : " + repD.message);
+    	env.fromId= -1;
+    	makeMainPanel();
     }
     else{
     	$("#login_co").val("");
@@ -380,7 +439,7 @@ Message.prototype.getHTML = function(){
         "</div>"+
         "<div class=\"text_msg\">"+escapeHTMLEncode(this.texte);
     	if (env.fromId == this.auteur.id){		// Je suis l'auteur du message
-    		s += " <img class='delete_button' style='cursor:pointer;margin-left:10px' src='image/delete_logo.png' onclick='removeMessage(\""+this.id+"\")'/>";
+    		s += " <img class='delete_button' style='cursor:pointer;margin-left:10px;transform: translate(0 , 3px);' src='image/delete_logo.png' onclick='removeMessage(\""+this.id+"\")'/>";
     	}
     	s += "</div>"+
         "<div class = \"new_comment\">";
@@ -389,14 +448,14 @@ Message.prototype.getHTML = function(){
         if (env.fromId != -1)
         {
         	var res = $.inArray(this.auteur.id, env.follows[env.fromId]);
-        	console.log((env.fromId == this.auteur.id)+ " ou " +( env.follows[env.fromId].includes(parseInt(this.auteur.id)) ));
+        	
         	if ((env.fromId == this.auteur.id) || (env.follows[env.fromId].includes(parseInt(this.auteur.id)))){
         		s += "<input id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\" class=\"input_comment\"/>"+
                 "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
         	}
         }
         s += "</div>" +
-        "<img class='expand' style='cursor:pointer;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
+        "<label  style=\"color: #0c6cd7;\" class=\"nbr_comments\">"+env.messages[this.id].comments.length+" Comments</label><img class='expand' style='cursor:pointer; position: relative ; left: 80%;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
         "<div class = \"comments\">"+
         "</div>" +
     "</div>";
@@ -474,7 +533,7 @@ function init()
     env.all_users = [];
     env.users=[];
     env.fromMessage = 0;
-    env.nbMessage = 5;
+    env.nbMessage = 8;
     env.keepListingMessage = true;
     env.refreshing = false;
     
@@ -784,6 +843,7 @@ function reponseSetUpMessages(rep){
 }
 
 function displayMessages(messages){
+	
     for(var index in messages){
         $("#messages").append(messages[index].getHTML());
         $("#input_comment_"+messages[index].id).keydown(enterHandlerAddComment);
@@ -857,14 +917,16 @@ function developpeMessage(id)
         el.append(c.getHTML());
     }
 
-    $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer;\" class=\"expand\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage('"+id+"')\"/>")
+    $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer; position: relative ; left: 80%;\" class=\"expand\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage('"+id+"')\"/>")
+    $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments")
 }
 
 function replieMessage(id)
 {
     var el = $("#message_"+id+" .comments");
     el.html("");
-    $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer;\" class=\"expand\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
+    $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer;position: relative ; left: 80%;\" class=\"expand\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
+     $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments")
 }
 
 function refreshMessages(id){
@@ -890,7 +952,6 @@ function refreshReact(id){
 //////////////////////////////////////
 function doSearch(target)
 {
-	
     var input = document.getElementById("input_search").value;
     makeProfilPanel(input);
 }
@@ -931,6 +992,7 @@ function enterHandlerAddComment(event)
 		if(idMessage != undefined)
 		{
 	        addComment(idMessage);
+	        
 		}
 		else
 		{
