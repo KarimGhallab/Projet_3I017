@@ -250,8 +250,7 @@ function reponseConnexion(rep){
     if(repD.status == "ko"){
     	console.log(repD)
         $("#error_connexion").html("Connexion error : " + repD.message);
-    	env.fromId= -1;
-    	makeMainPanel();
+    	env.fromId = -1;
     }
     else{
     	$("#login_co").val("");

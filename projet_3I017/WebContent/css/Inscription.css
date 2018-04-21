@@ -122,8 +122,7 @@ body
 
 #submit_button
 {
-    position:absolute;
-    right:0px;
+    float:right;
     border: none;
     padding: 8px 15px 8px 15px;
     background: #0099ff;
@@ -138,7 +137,6 @@ body
     color: #fff;
 }
 
-in
 #cancel_button
 {
     border: none;
