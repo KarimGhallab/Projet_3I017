@@ -33,13 +33,12 @@ public class CommentTools
 		
 		ObjectId objectId = genererObjectId();
 		comments.put("id_comment", objectId);
-		comments.put("content", commentaire);
 		comments.put("date", c.getTime());
 		BasicDBObject auteur = new BasicDBObject();
 		auteur.put("idAuthor", auteurId);
 		auteur.put("login", UserTools.getLoginFromId(auteurId));
 		comments.put("author",auteur);
-		
+		comments.put("content", commentaire);
 		BasicDBObject content = new BasicDBObject();
 		content.put("comments", comments);
 		
@@ -50,7 +49,8 @@ public class CommentTools
 		cond.put("_id", new ObjectId(idMessage));
 		
 		msg.update(cond , push);
-		
+	
+		comments.put("idMessage", idMessage);
 		return comments;
 	}
 	
@@ -81,7 +81,7 @@ public class CommentTools
 	 * Supprime un commentaire.
 	 * @param idCommentaire L'id du commentaire à supprimer (ID dans MongoDB).
 	 */
-	public static void removeComment(String idCommentaire)
+	public static void removeComment( String idMessage , String idCommentaire)
 	{
 		DBCollection msg = DataBase.getMongoCollection("Message");
 		BasicDBObject query = new BasicDBObject();
@@ -89,7 +89,8 @@ public class CommentTools
 		query.put("comments", condition);
 		BasicDBObject finalQuery = new BasicDBObject();
 		finalQuery.put("$pull", query);
-		msg.update(new BasicDBObject(), finalQuery, false, false);
+		System.out.println(finalQuery);
+		msg.update(new BasicDBObject("_id" , new ObjectId(idMessage)), finalQuery, false, false);
 	}
 	
 	/**

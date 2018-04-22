@@ -192,6 +192,8 @@ public class UserServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MAIL_MATCHING_ERROR, Data.CODE_MAIL_MATCHING_ERROR);
 		
 		int idUser = UserTools.mailExists(mail1);
+		System.out.println(idUser);
+		
 		if (idUser == -1)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MAIL_NOT_FIND, Data.CODE_MAIL_NOT_FIND);
 		boolean res = UserTools.sendRecoveryPassword(idUser, mail1);

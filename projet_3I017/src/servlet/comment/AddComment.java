@@ -20,6 +20,7 @@ public class AddComment extends HttpServlet
 		String idMessage = request.getParameter("idMessage");
 		String commentaire = request.getParameter("commentaire");
 		
+		
 		PrintWriter out = response.getWriter();
 		
 		JSONObject res = service.CommentServices.addComment(key, idMessage, commentaire);

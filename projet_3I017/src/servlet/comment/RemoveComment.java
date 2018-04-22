@@ -20,10 +20,11 @@ public class RemoveComment extends HttpServlet
 	{
 		String key = request.getParameter("key");
 		String idCommentaire = request.getParameter("idCommentaire");
+		String idMessage = request.getParameter("idMessage");
 		
 		PrintWriter out = response.getWriter();
 		
-		JSONObject res = service.CommentServices.removeComment(key, idCommentaire);
+		JSONObject res = service.CommentServices.removeComment(key, idCommentaire , idMessage);
 		out.println(res);
 	}
 	
@@ -32,3 +33,4 @@ public class RemoveComment extends HttpServlet
 		doGet(request, response);
 	}
 }
+

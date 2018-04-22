@@ -68,9 +68,9 @@ function reponseRemoveMessage(response){
 }
 
 /* Suppression de commentaire*/
-function removeComment(id){
+function removeComment(id , idMessage){
 	console.log("Je supprime le commentaire : " + id);
-	var query = "idCommentaire="+id+"&key="+env.key
+	var query = "idCommentaire="+id+"&key="+env.key+"&idMessage="+idMessage;
 	
 	console.log(query);
 	$.ajax({
@@ -87,9 +87,12 @@ function removeComment(id){
 	    });
 }
 function reponseRemoveComment(response , id){
-	console.log("response : " + response);
+	console.log("response : ");
+	console.log (response);
+	console.log('id =' + id)
 	var repD = JSON.parse(response);
-	console.log("reponse remove Comment: " + repD)
+	console.log("reponse remove Comment: " );
+	console.log(repD)
 	if(repD.status == "ko"){
 		alert("erreur lors de la suppression du commentaire : "+repD.message);
 		if (!isConnexion(repD))
@@ -186,6 +189,8 @@ function addComment(id){
 
 function reponseAddComment(rep, id)
 {
+	console.log("rep")
+	console.log(rep)
 	var repD = JSON.parse(rep, revival);   
     if (repD.status == "ko")
 	{
@@ -197,13 +202,17 @@ function reponseAddComment(rep, id)
 	}
     else
 	{
+    	console.log("addComment")
+    	console.log(repD);
     	$("#input_comment_"+id).val("");
     	var new_comment = repD.added_comment;
+    	console.log(new_comment);
         env.messages[id].comments.push(new_comment)			// On ajoute le commentaire au message
         
         var el = $("#message_"+id+" .comments");
         el.append(new_comment.getHTML());
         $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments");
+        refreshReact(env.fromId);
 	}
 }
 
@@ -395,6 +404,7 @@ function verif_egalite_mail(){
 function reponseForgottenPwd(rep, mail)
 {
 	var repD = JSON.parse(rep);
+	console.log(repD);
 	if (repD.status == "ko")
 	{
 		$("#dialog").dialog("close");
@@ -430,7 +440,7 @@ function Message(id , auteur , texte , comments , date){
     this.comments=comments;
 }
 
-Message.prototype.getHTML = function(){
+Message.prototype.getHTML = function() {
     s="<div id=\"message_"+this.id+"\" class=\"msg\" >"+
         "<div>"+
             "<div onclick=\"makeProfilPanel('"+this.auteur.login+"')\" style=\"display:inline-block;\" class=\"auteur\">"+this.auteur.getHTML()+"</div>"+
@@ -462,13 +472,14 @@ Message.prototype.getHTML = function(){
 }
 
 // Classe Commentaire
-function Commentaire(id , auteur , texte , date){
+function Commentaire(id , auteur , texte , date , idMessage){
     this.id = id;
     this.auteur=auteur;
     this.date=date;
     this.texte=texte;
+    this.idMessage = idMessage;
 }
-Commentaire.prototype.getHTML = function(){
+Commentaire.prototype.getHTML = function () {
     s="<div id=\"commentaire_"+this.id+"\" style=\"margin-top:5px;\">"+
         "<div>" +
         	"<div style=\"display:inline-block;\" class=\"auteur\" onclick=\"makeProfilPanel('"+this.auteur.login+"')\">"+this.auteur.getHTML()+"</div>" +
@@ -476,7 +487,7 @@ Commentaire.prototype.getHTML = function(){
 		"</div>"+
         "<div class=\"text_comment\">"+this.texte;
     if (env.fromId == this.auteur.id){		// Je suis l'auteur du commentaire
-		s += " <img class='delete_button' style='cursor:pointer;margin-left:10px' src='image/delete_logo.png' onclick='removeComment(\""+this.id+"\")'/>";
+		s += " <img class='delete_button' style='cursor:pointer;margin-left:10px' src='image/delete_logo.png' onclick='removeComment(\""+this.id+"\" , \""+this.idMessage+"\")'/>";
 	}
 	s += "</div>"+
         "</div>";
@@ -502,13 +513,14 @@ function revival(key, value) {
         return new Message(value.id , value.author, value.content , value.comments , value.date);
     }
     else if(value.content != undefined){
-        return new Commentaire(value.id_comment , value.author ,value.content, value.date);
+        return new Commentaire(value.id_comment , value.author ,value.content, value.date , value.idMessage);
     }
     if(key == "author") {
         return new Auteur(value.idAuthor , value.login);
     }
     if(key=="date") {
         return value;
+        
     }
     return value;
 }
@@ -906,13 +918,17 @@ function isConnexion(repD){
 function developpeMessage(id)
 {
     var m = env.messages[id];
+    console.log(m);
     var el = $("#message_"+id+" .comments");
     
     el.html("");						// Au cas ou un nouveau commentaire aurait été écrit et affiché
     
     for(var index in m.comments)
     {
+    	
         var c = m.comments[index];
+        console.log(c.getHTML());
+    	console.log(c);
         el.append(c.getHTML());
     }
 

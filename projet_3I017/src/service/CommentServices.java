@@ -33,6 +33,7 @@ public class CommentServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 		try
 		{
+			
 			if(!base_de_donnees.UserTools.isConnection(key))
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 			
@@ -78,7 +79,7 @@ public class CommentServices
 	 * @param idCommentaire L'id du commentaire.
 	 * @return Un objet JSON indiquant le résultat de l'opération.
 	 */
-	public static JSONObject removeComment(String key, String idCommentaire)
+	public static JSONObject removeComment(String key, String idCommentaire , String idMessage)
 	{
 		if(key == null || idCommentaire == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
@@ -86,7 +87,7 @@ public class CommentServices
 		if(!base_de_donnees.UserTools.isConnection(key))
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
-		base_de_donnees.CommentTools.removeComment(idCommentaire);
+		base_de_donnees.CommentTools.removeComment(idMessage ,idCommentaire);
 		return ServiceTools.serviceAccepted();
 	}
 }

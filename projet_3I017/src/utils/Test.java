@@ -3,7 +3,9 @@ import java.sql.Time;
 
 import org.bson.types.*;
 
+import base_de_donnees.CommentTools;
 import base_de_donnees.UserTools;
+import service.UserServices;
 
 public class Test 
 {
@@ -89,12 +91,12 @@ public class Test
 		
 		
 		//System.out.println(UserTools.updateImage("aaaaa", "jordan va  a la plage !! :)"));
-		System.out.println("1 : " + UserTools.insererConnexion("aaaaa", "console.log(\"jason\")", 0));
-		System.out.println("2 : " + UserTools.insererConnexion("aaaaa", "console.log(%22jason%22)", 0));
+		//System.out.println("1 : " + UserTools.insererConnexion("aaaaa", "console.log(\"jason\")", 0));
+		//System.out.println("2 : " + UserTools.insererConnexion("aaaaa", "console.log(%22jason%22)", 0));
 		
 		
-		
-		
+		//UserServices.sendRecoveryPassword("fodzakaria69@gmail.com" , "fodzakaria69@gmail.com");
+		CommentTools.removeComment("5adc6a26d399bea0e7cba0e8","5adc6a5bd399bea0e7cba0e9");
 		
 		// Test des commentaires
 		//System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
