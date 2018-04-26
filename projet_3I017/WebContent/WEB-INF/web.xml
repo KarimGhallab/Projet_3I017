@@ -32,7 +32,11 @@
 		<servlet-name>uploadImage</servlet-name> 
 		<servlet-class>servlet.user.UploadImage</servlet-class> 
 	</servlet>
-	
+	<servlet>
+		<servlet-name>changePwd</servlet-name>
+		<servlet-class>servlet.user.ChangePwd</servlet-class>
+	</servlet>
+
 	<!-- Servlet Friend -->  
 	<servlet> 
 		<servlet-name>addFriend</servlet-name> 
@@ -104,7 +108,11 @@
 		<servlet-name>uploadImage</servlet-name> 
 		<url-pattern>/user/uploadImage</url-pattern> 
 	</servlet-mapping>
-	
+	<servlet-mapping>
+		<servlet-name>changePwd</servlet-name>
+		<url-pattern>/user/changePwd</url-pattern>
+	</servlet-mapping>
+
 	<!-- Servlet-mapping Friend -->
 	<servlet-mapping> 
 		<servlet-name>addFriend</servlet-name> 

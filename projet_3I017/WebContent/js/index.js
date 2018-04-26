@@ -275,6 +275,46 @@ function reponseConnexion(rep){
     }
 }
 
+function mainChangePwd(){
+	console.log("Changement password");
+	
+	var ancien = $("#ancien_pwd").val();
+	var pwd1 = $("#pwd").val();
+	var pwd2 = $("#pwd2").val();
+	
+	ancien = encodeInput(ancien);
+	pwd1 = encodeInput(pwd1);
+	pwd2 = encodeInput(pwd2);
+	
+	console.log(ancien);
+	console.log(pwd1);
+	console.log(pwd2);
+	 $.ajax({
+         type: "POST",
+         url: "user/changePwd",
+         data: "ancien="+ancien+"&pwd1="+pwd1+"&pwd2="+pwd2+"&key="+env.key,
+         dataType:"text",
+         success: function(rep){
+             reponseChangePwd(rep);
+         },
+         error: function(XHR , textStatus , errorThrown){
+             alert(textStatus +" " + errorThrown);
+         } 
+     })
+}
+
+function reponseChangePwd(rep){
+	console.log(rep)
+	
+	var repD = JSON.parse(rep);
+	if(repD.status=="ko"){
+		alert("error : "+repD.message);
+	}
+	else{
+		makeConnexionPanel();
+	}
+}
+
 /* Inscription */
 function verif_egalite_pwd(){
     if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
@@ -578,6 +618,13 @@ function setVirtualdb()
 ////////////////////////////////////
 // Fonctions de création de panel //
 ////////////////////////////////////
+function makeChangePwdPanel(){
+	 $("#container").load("Change_Pwd.html", function(){
+	        $("#ancien_pwd").focus();
+	    });
+	    $("#changableLink").attr("href", "css/Connexion.css")    
+}
+
 function makeForgottenPwdPanel(){
     $("#container").load("Forgotten_Pwd.html", function(){
         $("#mail_forgotten").focus();
@@ -780,7 +827,8 @@ function callbackMainPanel(){
     else
     {   
         ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\''+env.login+'\')})()"/>'
-        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
+        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>'
+        ajout += '<input type="button" value="Changer Mdp" onclick="javascript:(function (){makeChangePwdPanel()})()"/>';
         
         $("#new_msg").focus();
         $("#new_msg").keydown(enterHandlerAddMessage);

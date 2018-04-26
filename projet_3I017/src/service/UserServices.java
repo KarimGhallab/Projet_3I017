@@ -257,7 +257,7 @@ public class UserServices
 	 */
 	public static JSONObject getProfilFromLogin(String login)
 	{
-		{
+		
 			if(login == null)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 			int id = UserTools.getIdUserFromLogin(login);
@@ -277,8 +277,29 @@ public class UserServices
 				System.err.println("Error get Profil From Login : " + e.getMessage());
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
 			}
-		}
 	}
+	
 
+	public static JSONObject ChangePwd(String ancien, String pwd1, String pwd2 ,String key) {
+		if(ancien == null || pwd1 == null || pwd2 == null || key == null) {
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
+		}
+		
+		String id = UserTools.getIdUserFromKey(key);
+		System.out.println(id);
+		if(id==null)	
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_USER_NOT_FIND, Data.CODE_USER_NOT_FIND);
+		
+		String login = UserTools.getLoginFromId(id);
+		System.out.println(login);
+		if(UserTools.checkPwd(login, ancien)) {
+			if(pwd1.equals(pwd2)) {
+				if(UserTools.setNewPwd(id , pwd1))
+					return ServiceTools.serviceAccepted();
+			}
+		}
+		return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+		
+	}
 
 }

@@ -96,8 +96,9 @@ public class Test
 		
 		
 		//UserServices.sendRecoveryPassword("fodzakaria69@gmail.com" , "fodzakaria69@gmail.com");
-		CommentTools.removeComment("5adc6a26d399bea0e7cba0e8","5adc6a5bd399bea0e7cba0e9");
-		
+		//CommentTools.removeComment("5adc6a26d399bea0e7cba0e8","5adc6a5bd399bea0e7cba0e9");
+		System.out.println(UserServices.ChangePwd("4e5b03661","12345678","12345678" , "03c5530a94634635b851889a5ef739be"));
+		//UserTools.setNewPwd("7", UserTools.generateNewPwd());
 		// Test des commentaires
 		//System.out.println(service.UserServices.createUser("totot", "totototo", "to", "to", "to@to.to.com").toString());
 		/*System.out.println(service.UserServices.login("totot", "4b3304b4d", "0"));

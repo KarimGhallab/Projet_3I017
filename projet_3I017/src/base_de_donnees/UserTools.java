@@ -884,11 +884,11 @@ public class UserTools
 	 * Génére un nouveau mot de passe de 10 caractères.
 	 * @return Le nouveau mot de passe généré.
 	 */
-	private static String generateNewPwd()
+	public static String generateNewPwd()
 	{
 		String pwd = UUID.randomUUID().toString().replaceAll("-", "");		//Génére une clé de 32 octets.
 		pwd = pwd.substring(0, 9);
-		
+		System.out.println(pwd);
 		return pwd;
 	}
 
@@ -955,4 +955,5 @@ public class UserTools
 			return null;
 		}
 	}
+
 }

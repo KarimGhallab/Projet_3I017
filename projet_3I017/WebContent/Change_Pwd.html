@@ -1,0 +1,37 @@
+<div id="container_change_pwd">
+    <div id="header">
+        <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo"/><span id="title">Twister</span></div>
+    </div>
+    <div id="main_connexion">
+        <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
+            <h1>Changement de mot de passe</h1>
+            <label id="error_Inscription" style="color:DarkRed;"></label>
+            <label id="error_different" style="color:DarkRed;"></label>
+            <div class="ids" id="ancien" ><span>Entrez votre ancien mot de passe</span><input type="text" name="ancien" id="ancien_pwd" value =""   /></div>
+            <div class="ids" id="nouveau1" ><span>Entrez votre nouveau mot de passe</span><input type="text" name="nouveau" id="pwd" value =""   /></div>
+            <div class="ids" id="nouveau2" ><span>confirmez votre nouveau mot de passe</span><input type="text" name="nouveau"  id="pwd2"  value ="" /></div>
+            <div class="button"><input type="submit" value="Confirmer" onclick="javascript:(function (){if(verif_egalite_pwd()){ mainChangePwd();}})()"/></div>
+            <div id="links">
+                <div class="button" style="float:left"><input type="submit" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/></div>
+                <div class="button" style="float:right"><input type="submit" value="Inscription" onclick="javascript:(function (){makeInscriptionPanel()})()"/></div>
+            </div>
+        </form>
+        <!-- Les élements pour l'affichage de la barre de progression -->
+        <div>
+			  <style>
+				  #progressbar {
+				    margin-top: 20px;
+				  }
+				 
+				  .progress-label {
+				    font-weight: bold;
+				    text-shadow: 1px 1px 0 #fff;
+				  }
+				 
+				  .ui-dialog-titlebar-close {
+				    display: none;
+				  }
+			  </style>
+        </div>
+    </div>
+</div> <!-- Conteneur de mot de passe oublié -->
