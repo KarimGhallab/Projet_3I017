@@ -754,17 +754,17 @@ function mainProfil(login, id, path){
         if(id!=env.fromId){
             if(env.follows[env.fromId] == [] ){
                 
-                ajout = "<input type=\"button\" id=\"friends\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" >";
+                ajout = "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
                 console.log('1 '+ ajout );
             }
             else if(env.follows[env.fromId].includes(id)){
 
-                ajout = "<input type=\"button\" id=\"friends\" value = \"se désabonner\" onclick=\"removeFriend("+id+")\" >";
+                ajout = "<input type=\"button\" id=\"friends\" value = \"Se désabonner\" onclick=\"removeFriend("+id+")\" >";
                 console.log('2 '+ ajout );
             }
             else{
                 
-                ajout = "<input type=\"button\" id=\"friends\" value = \"s'abonner\" onclick=\"addFriend("+id+")\" >";
+                ajout = "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
                 console.log('3 '+ ajout );
             }
         }
@@ -929,13 +929,17 @@ function setUpStats(){
 function reponseSetUpStats(rep){
 	var repD = JSON.parse(rep);
 	console.log(repD)
-	var nbUser = repD.stats.nb_user;
-	var nbUserCo = repD.stats.nb_user_co;
-	var nbMsg = repD.stats.nb_msg;
+	$("#stat").append(statToHTML("Nombre d'utilisateur", repD.stats.nb_user));
+	$("#stat").append(statToHTML("Nombre d'utilisateur connecté", repD.stats.nb_user_co));
+	$("#stat").append(statToHTML("Nombre de message publié", repD.stats.nb_msg));
 	if (env.fromId != -1){
-		var nbFriend = repD.stats.nb_friend;
-		var nbMsg = repD.stats.nb_msg;
+		$("#stat").append(statToHTML("Nombre personne que vous suivez" ,repD.stats.nb_friend));
+		$("#stat").append(statToHTML("Nombre de message que vous avez publié", repD.stats.nb_owned_msg));
 	}
+}
+
+function statToHTML(name, value){
+	return "<div> "+name+" : "+value+"</div>";
 }
 
 function getFriendList(id){
