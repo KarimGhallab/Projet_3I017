@@ -647,27 +647,61 @@ public class UserTools
 	}
 	
 	/**
-	 * Lister les amis d'un utilisateur.
+	 * Lister les amis d'un utilisateur (les IDs).
 	 * @param idUser L'id de l'utilisateur
 	 * @return La liste des amis de l'utilisateur.
 	 */
-	public static List<Integer> listFriend(String idUser)
+	public static List<Integer> listFriendId(String idUser)
 	{
 		Connection c = null;
 		try
 		{
 			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
-			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
+			String query = "SELECT id_friend FROM friend WHERE id_user=\""+idUser+"\";";
 			ResultSet cursor = st.executeQuery(query);
 			List<Integer> friendArray = new ArrayList<Integer>();
 			while(cursor.next())
-			{
-				
-				JSONObject json = new JSONObject();
-				json.put("user_id",cursor.getString("id_friend"));
 				friendArray.add(cursor.getInt("id_friend"));
+			
+			return friendArray;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error listFriend : " + e.getMessage());
+			return null;
+		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
 			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Lister les amis d'un utilisateur (les logins).
+	 * @param idUser L'id de l'utilisateur
+	 * @return La liste des amis de l'utilisateur.
+	 */
+	public static List<String> listFriendLogin(String idUser)
+	{
+		Connection c = null;
+		try
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT user.login FROM user, friend WHERE friend.id_user = "+idUser+" AND user.id = friend.id_friend;";
+			ResultSet cursor = st.executeQuery(query);
+			List<String> friendArray = new ArrayList<String>();
+			while(cursor.next())
+				friendArray.add(cursor.getString(1));
 			
 			return friendArray;
 		}

@@ -42,7 +42,14 @@ public class FriendServices
 		if(!UserTools.addFriend(idUser, idFriend))		// Ajout de la Friendship
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		
-		return ServiceTools.serviceAccepted();
+		try
+		{
+			return ServiceTools.serviceAccepted().put("login_friend", UserServices.getLoginFromId(idFriend));
+		}
+		catch (JSONException e)
+		{
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+		}
 	}
 	
 	/**
@@ -83,7 +90,7 @@ public class FriendServices
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_NOT_CONNECTED, Data.CODE_NOT_CONNECTED);
 		
 		String idUser = base_de_donnees.UserTools.getIdUserFromKey(key); 
-		List<Integer> liste = UserTools.listFriend(idUser);
+		List<Integer> liste = UserTools.listFriendId(idUser);
 		if(liste == null)
 			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_DB, Data.CODE_ERROR_DB);
 		

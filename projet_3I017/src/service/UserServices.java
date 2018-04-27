@@ -103,7 +103,8 @@ public class UserServices
 			try
 			{
 				JSONObject j =  ServiceTools.serviceAccepted().put("key", key);
-				j.put("friends", UserTools.listFriend(UserTools.getIdUserFromKey(key)));
+				j.put("friendsId", UserTools.listFriendId(UserTools.getIdUserFromKey(key)));
+				j.put("friendsLogin", UserTools.listFriendLogin(UserTools.getIdUserFromKey(key)));
 				j.put("id", UserTools.getIdUserFromKey(key));
 				return j.put("login" , login);
 			}

@@ -13,7 +13,6 @@ function uploadImage(login, pwd, blobFile) {
        processData: false,
        contentType: false,
        success: function(response) {
-           console.log("success : " + response);
            reponseUploadImage(response, login, pwd);
        },
        error: function(jqXHR, textStatus, errorMessage) {
@@ -23,7 +22,6 @@ function uploadImage(login, pwd, blobFile) {
 }
 
 function reponseUploadImage(rep, login, pwd){
-	console.log(rep);
 	var repD = JSON.parse(rep);
 	console.log("reponseUploadImage : ");
 	console.log(repD);
@@ -39,7 +37,6 @@ function reponseUploadImage(rep, login, pwd){
 }
 /* Suppression de message */
 function removeMessage(id){
-	console.log("Je supprime le message : " + id);
 	var query = "message="+id+"&key="+env.key
 	
 	$.ajax({
@@ -67,10 +64,8 @@ function reponseRemoveMessage(response){
 
 /* Suppression de commentaire*/
 function removeComment(id , idMessage){
-	console.log("Je supprime le commentaire : " + id + "appartenant au message  : " + idMessage);
 	var query = "idCommentaire="+id+"&key="+env.key+"&idMessage="+idMessage;
 	
-	console.log(query);
 	$.ajax({
 	       url: "comment/removeComment",
 	       type: "POST",
@@ -255,7 +250,8 @@ function reponseConnexion(rep){
         env.key = repD.key;
         env.fromId = repD.id;
         env.login = repD.login;
-        env.follows[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
+        env.followsId[repD.id] =  repD.friendsId;		// On ajoute les amis de l'utilisateur
+        env.followsLogin[repD.id] =  repD.friendsLogin;		// On ajoute les amis de l'utilisateur
         
         env.fromMessage = 0;
         makeMainPanel();
@@ -263,8 +259,6 @@ function reponseConnexion(rep){
 }
 
 function mainChangePwd(){
-	console.log("Changement password");
-	
 	var ancien = $("#ancien_pwd").val();
 	var pwd1 = $("#pwd").val();
 	var pwd2 = $("#pwd2").val();
@@ -301,19 +295,15 @@ function reponseChangePwd(rep){
 
 /* Inscription */
 function verif_egalite_pwd_inscription(){
-    if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
-    {
-    	console.log("1");
+    if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value===""){
     	$("#error_inscription").html("Attention, tout les champs doivent etre remplis !!"); 
         return false;
     }
     else if (document.getElementById("pwd").value != document.getElementById("pwd2").value ){
-    	console.log("2");
     	$("#error_inscription").html("Attention, les deux mot de passe ne correspondent pas"); 
         return false;
     }
     else {
-    	console.log("3");
     	$("#error_inscription").html("");
         return true;
     }
@@ -343,7 +333,6 @@ function validateMail(mail){
 
 function mainInscription()
 {
-	console.log("Inscrire")
     if(verif_egalite_pwd_inscription())
     {
     	if (validateMail(document.getElementById("input_mail").value))
@@ -373,8 +362,6 @@ function  inscrire (nom , prenom ,login , pwd , mail)
 	pwd = encodeInput(pwd);
 	mail = encodeInput(mail);
 	
-	console.log("nom="+nom+"&prenom="+prenom+"&login="+login+"&pwd="+pwd+"&email="+mail)
-	
     if(!noConnection){
         $.ajax({
             type: "POST",
@@ -403,10 +390,15 @@ function reponseInscription(rep, login, pwd){
     	env.key = repD.key;
         env.fromId = repD.id;
         env.login = repD.login;
-        env.follows[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
+        env.followsId[repD.id] =  repD.friends;		// On ajoute les amis de l'utilisateur
         
         var blobFile = $('#filechooser')[0].files[0]
-        uploadImage(login, pwd, blobFile);
+        if (blobFile != undefined){
+        	uploadImage(login, pwd, blobFile);
+        }
+        else {
+        	connecte(login , pwd , 0);
+    	}
     }
 }
 
@@ -501,9 +493,9 @@ Message.prototype.getHTML = function() {
     	// On ne peux commenter que si on est connecter et que le message est le notre ou bien celui d'un amis
         if (env.fromId != -1)
         {
-        	var res = $.inArray(this.auteur.id, env.follows[env.fromId]);
+        	var res = $.inArray(this.auteur.id, env.followsId[env.fromId]);
         	
-        	if ((env.fromId == this.auteur.id) || (env.follows[env.fromId].includes(parseInt(this.auteur.id)))){
+        	if ((env.fromId == this.auteur.id) || (env.followsId[env.fromId].includes(parseInt(this.auteur.id)))){
         		s += "<input id=\"input_comment_"+this.id+"\" placeholder=\"Un commentaire...\" class=\"input_comment\"/>"+
                 "<input type=\"button\" value=\"Commenter\" onclick='addComment(\""+this.id+"\")'/>";
         	}
@@ -558,8 +550,6 @@ function revival(key, value) {
         return new Message(value.id , value.author, value.content , value.comments , value.date);
     }
     else if(value.content != undefined){
-    	console.log("Commentaire");
-    	console.log(value);
         return new Commentaire(value.id_comment , value.author ,value.content, value.date , value.idMessage);
     }
     if(key == "author") {
@@ -584,7 +574,8 @@ function init()
     env.login="";
     env.key = "abcd";
     env.fromId = -1;
-    env.follows = {};
+    env.followsId = {};
+    env.followsLogin = {};
     env.containers = {};
     env.messages = {};
     env.all_users = [];
@@ -682,7 +673,6 @@ function addFriend(id){
         data: "idFriend="+id+"&key="+env.key,
         dataType:"text",
         success: function(rep){
-        	console.log(rep);
             reponseAddFriend(rep , id);
         },
         error: function(XHR , textStatus , errorThrown){
@@ -692,12 +682,14 @@ function addFriend(id){
 }
 function reponseAddFriend(rep , id){
     repD = JSON.parse(rep);
-    console.log(repD)
     if(repD.status == "ko"){
         console.log("erreur :" + rep.message );
     }
     else{
-    	env.follows[env.fromId].push(id);
+    	console.log("addFriend :");
+    	console.log(repD);
+    	env.followsId[env.fromId].push(id);
+    	env.followsLogin[env.fromId].push(repD.login_friend.login);
         makeProfilPanel(env.all_users[id]);
     }
 }
@@ -720,14 +712,14 @@ function removeFriend(id){
 
 function reponseRemoveFriend(rep , id){
     repD = JSON.parse(rep);
-    console.log(repD)
     if(repD.status == "ko"){
         console.log("erreur :" + rep.message );
     }
     else{
-    	var i = env.follows[env.fromId].indexOf(id);
+    	var i = env.followsId[env.fromId].indexOf(id);
         if(i != -1) {
-            env.follows[env.fromId].splice(i, 1);
+            env.followsId[env.fromId].splice(i, 1);
+            env.followsLogin[env.fromId].splice(i, 1);
         }
         makeProfilPanel(env.all_users[id]);
     }
@@ -760,24 +752,31 @@ function mainProfil(login, id, path){
     ajout="";
     if(env.fromId!=-1){
         if(id!=env.fromId){
-            if(env.follows[env.fromId] == [] ){
-                
+            if(env.followsId[env.fromId] == [] ){
                 ajout = "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
-                console.log('1 '+ ajout );
             }
-            else if(env.follows[env.fromId].includes(id)){
-
+            else if(env.followsId[env.fromId].includes(id)){
                 ajout = "<input type=\"button\" id=\"friends\" value = \"Se désabonner\" onclick=\"removeFriend("+id+")\" >";
-                console.log('2 '+ ajout );
             }
-            else{
-                
+            else{                
                 ajout = "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
-                console.log('3 '+ ajout );
             }
         }
-
-        document.getElementById("profil").innerHTML+=ajout;
+        // On affiche la liste des amis
+        else{
+        	if (env.followsLogin[env.fromId].length > 0){
+        		$("#liste_follow").html("Personnes que vous suivez : ");
+        		for(var index in env.followsLogin[env.fromId]){
+            		$("#liste_follow").append(friendLoginToHTML(env.followsLogin[env.fromId][index]));
+            		$("#liste_follow").append(", ");
+            	}
+        		$("#liste_follow").html( $("#liste_follow").html().slice(0, -1) );
+    		}
+        	else{
+        		$("#liste_follow").html("Vous ne suivez actuellement personne");
+        	}
+        }
+        document.getElementById("profil").innerHTML += ajout;
     }
     
     
@@ -787,8 +786,6 @@ function mainProfil(login, id, path){
     ///////////////////////////////////////
     /*console.log("path : " + path)
     $("#profil_img").attr("src", "file:/"+path);*/
-    
-    
 }
 
 function reponseProfil(rep, login){
@@ -806,9 +803,12 @@ function reponseProfil(rep, login){
 	}
 	else
 	{
-		console.log("je suis dans reponse Profil")
 		alert(repD.message);
 	}
+}
+
+function friendLoginToHTML(login){
+	return "<span onclick=\"makeProfilPanel('"+login+"')\" class=\"auteur\">"+login+"</span>";
 }
 
 function makeConnexionPanel(){
@@ -875,7 +875,6 @@ function setUpMessages(id){
             reponseSetUpMessages(rep);
         },
         error: function(XHR , textStatus , errorThrown){
-        	console.log("dans setUpMessage")
             alert(textStatus);
         } 
     })
@@ -883,7 +882,6 @@ function setUpMessages(id){
 
 function reponseSetUpMessages(rep){
     var repD = JSON.parse(rep, revival);
-    console.log(repD);
     if (!isConnexion(repD))
 	{
 		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
@@ -918,7 +916,6 @@ function displayMessages(messages){
 }
 
 function setUpStats(){
-	console.log("mise en place des stats");
 	$.ajax({
         type: "POST",
         url: "user/listStats",
@@ -936,7 +933,6 @@ function setUpStats(){
 
 function reponseSetUpStats(rep){
 	var repD = JSON.parse(rep);
-	console.log(repD)
 	if (repD.status == "ko"){
 		console.log("error set up stats : " + repD.message);
 	}
@@ -958,8 +954,8 @@ function statToHTML(name, value){
 
 function getFriendList(id){
     res = ""
-    for(var index in env.follows[id]){
-        res += env.follows[id][index]+"-";
+    for(var index in env.followsId[id]){
+        res += env.followsId[id][index]+"-";
     }
     return res;
 }
@@ -1140,9 +1136,7 @@ function dateToString(date){
 }
 
 function encodeInput(string){
-	console.log("avant : " + string);
 	var tmp = escapeHTMLEncode(string);
 	var tmp2 =  encodeURIComponent(tmp);
-	console.log("après : " + tmp2);
 	return tmp2;
 }
