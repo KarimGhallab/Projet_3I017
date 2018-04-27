@@ -61,6 +61,7 @@ function reponseRemoveMessage(response){
 	}
 	else{
 		 refreshMessages();
+		 setUpStats();
 	}
 }
 
@@ -150,6 +151,7 @@ function reponseAddMessage(rep)
         
         // Scroll jusqu'au top de la page
         $("html, body").animate({ scrollTop: 0 }, "slow");
+        setUpStats();
 	}
 }
 
@@ -288,8 +290,8 @@ function mainChangePwd(){
 function reponseChangePwd(rep){
 	
 	var repD = JSON.parse(rep);
-	if(repD.status=="ko"){
-		alert("error : "+repD.message);
+	if(repD.status == "ko"){
+		$("#error_change_mdp").html(repD.message);
 	}
 	else{
 		alert("Votre mot de passe à été modifié avec succès !");
@@ -298,30 +300,33 @@ function reponseChangePwd(rep){
 }
 
 /* Inscription */
-function verif_egalite_pwd(){
+function verif_egalite_pwd_inscription(){
     if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
     {
+    	console.log("1");
     	$("#error_inscription").html("Attention, tout les champs doivent etre remplis !!"); 
         return false;
     }
     else if (document.getElementById("pwd").value != document.getElementById("pwd2").value ){
-    	$("#error_inscription").html("Attention, deux mot de passe ne correspondent pas"); 
+    	console.log("2");
+    	$("#error_inscription").html("Attention, les deux mot de passe ne correspondent pas"); 
         return false;
     }
     else {
+    	console.log("3");
     	$("#error_inscription").html("");
         return true;
     }
 }
 /* Pour le changement de mot de passe */
-function verif_egalite_pwd(){
+function verif_egalite_pwd_change_mdp(){
     if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
     {
     	$("#error_change_mdp").html("Attention, tout les champs doivent etre remplis !!"); 
         return false;
     }
     else if (document.getElementById("pwd").value != document.getElementById("pwd2").value ){
-    	$("#error_change_mdp").html("Attention, deux mot de passe ne correspondent pas"); 
+    	$("#error_change_mdp").html("Attention, les deux mot de passe ne correspondent pas"); 
         return false;
     }
     else {
@@ -338,7 +343,8 @@ function validateMail(mail){
 
 function mainInscription()
 {
-    if(verif_egalite_pwd())
+	console.log("Inscrire")
+    if(verif_egalite_pwd_inscription())
     {
     	if (validateMail(document.getElementById("input_mail").value))
 		{
@@ -366,6 +372,8 @@ function  inscrire (nom , prenom ,login , pwd , mail)
 	prenom = encodeInput(prenom);
 	pwd = encodeInput(pwd);
 	mail = encodeInput(mail);
+	
+	console.log("nom="+nom+"&prenom="+prenom+"&login="+login+"&pwd="+pwd+"&email="+mail)
 	
     if(!noConnection){
         $.ajax({
@@ -929,12 +937,18 @@ function setUpStats(){
 function reponseSetUpStats(rep){
 	var repD = JSON.parse(rep);
 	console.log(repD)
-	$("#stat").append(statToHTML("Nombre d'utilisateur", repD.stats.nb_user));
-	$("#stat").append(statToHTML("Nombre d'utilisateur connecté", repD.stats.nb_user_co));
-	$("#stat").append(statToHTML("Nombre de message publié", repD.stats.nb_msg));
-	if (env.fromId != -1){
-		$("#stat").append(statToHTML("Nombre personne que vous suivez" ,repD.stats.nb_friend));
-		$("#stat").append(statToHTML("Nombre de message que vous avez publié", repD.stats.nb_owned_msg));
+	if (repD.status == "ko"){
+		console.log("error set up stats : " + repD.message);
+	}
+	else{
+		$("#stat").html("");
+		$("#stat").append(statToHTML("Nombre d'utilisateur", repD.stats.nb_user));
+		$("#stat").append(statToHTML("Nombre d'utilisateur connecté", repD.stats.nb_user_co));
+		$("#stat").append(statToHTML("Nombre de message publié", repD.stats.nb_msg));
+		if (env.fromId != -1){
+			$("#stat").append(statToHTML("Nombre personne que vous suivez" ,repD.stats.nb_friend));
+			$("#stat").append(statToHTML("Nombre de message que vous avez publié", repD.stats.nb_owned_msg));
+		}
 	}
 }
 
@@ -965,7 +979,7 @@ function mainDeconnexion()
                 reponseLogout(rep);
             },
             error: function(XHR , textStatus , errorThrown){
-                alert(textStatus);
+                //alert("error logout : " + textStatus + errorThrown);
             } 
         })
     }
@@ -1126,7 +1140,9 @@ function dateToString(date){
 }
 
 function encodeInput(string){
+	console.log("avant : " + string);
 	var tmp = escapeHTMLEncode(string);
 	var tmp2 =  encodeURIComponent(tmp);
+	console.log("après : " + tmp2);
 	return tmp2;
 }

@@ -23,5 +23,16 @@
                 </svg>
             </div>
     </footer>
+    <script>
+    
+    window.addEventListener('beforeunload', function(event) {
+    	if (env.fromId != -1){
+      	   mainDeconnexion();
+         }
+    	}, false);
+    
+    
+    
+    </script>
 </body>
 </html>

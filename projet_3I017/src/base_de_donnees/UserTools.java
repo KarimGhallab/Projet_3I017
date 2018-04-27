@@ -44,7 +44,7 @@ public class UserTools
 	 */
 	public static boolean userExistsLogin (String login)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -60,6 +60,18 @@ public class UserTools
 			System.err.println("Error userExists : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -70,7 +82,7 @@ public class UserTools
 	
 	public static boolean userExistsId (int id)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -86,6 +98,18 @@ public class UserTools
 			System.err.println("Error userExists : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -95,7 +119,7 @@ public class UserTools
 	 */
 	public static int mailExists (String mail)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -111,6 +135,18 @@ public class UserTools
 			System.err.println("Error mailExists : " + e.getMessage());
 			return -1;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -125,11 +161,13 @@ public class UserTools
 	
 	public static boolean insererUser(String login , String pwd , String prenom , String nom , String email)
 	{
+		Connection c = null;
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "INSERT INTO user(login, pwd, nom, prenom, mail) VALUES(\""+login+"\", PASSWORD(\""+pwd+"\"), \""+nom+"\", \""+prenom+"\", \""+email+"\");";
+			System.out.println("insertion : " + query);
 			int res = st.executeUpdate(query);
 			 
 			if (res == 0)
@@ -142,6 +180,18 @@ public class UserTools
 			System.err.println("Error insererUser : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -152,9 +202,10 @@ public class UserTools
 	 */
 	public static String insererConnexion(String login , String pwd, int root)
 	{
+		Connection c = null;
 		try 
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			if(checkPwd(login, pwd))
 			{
@@ -191,7 +242,18 @@ public class UserTools
 			System.err.println("Error insererConnecion : " + e.getMessage());
 			return null;
 		}
-		
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -201,7 +263,7 @@ public class UserTools
 	 */
 	public static boolean updateDateSessionById(int idUser)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -216,6 +278,18 @@ public class UserTools
 			System.err.println("Error updateDateSessionById : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -225,7 +299,7 @@ public class UserTools
 	 */
 	public static boolean updateDateSessionByKey(String key)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -240,6 +314,18 @@ public class UserTools
 			System.err.println("Error updateDateSessionByKey : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -249,7 +335,7 @@ public class UserTools
 	 */
 	public static String getKey(int idUser)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -267,6 +353,18 @@ public class UserTools
 			System.err.println("Error getKey : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -276,7 +374,7 @@ public class UserTools
 	 */
 	public static boolean hasSession(int idUser)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -294,6 +392,18 @@ public class UserTools
 			System.err.println("Error hasSession : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -304,7 +414,7 @@ public class UserTools
 	public static boolean keyExists(String key)
 	{
 	
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -322,6 +432,18 @@ public class UserTools
 			System.err.println("Error keyExists : " + e.getMessage());
 			return true;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -332,7 +454,7 @@ public class UserTools
 	 */
 	public static boolean checkPwd(String login , String pwd)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -350,6 +472,18 @@ public class UserTools
 			System.err.println("Error checkPwd : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -359,7 +493,7 @@ public class UserTools
 	 */
 	public static String getIdUserFromKey(String key)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -376,6 +510,18 @@ public class UserTools
 			System.err.println("Error getLogin : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -385,7 +531,7 @@ public class UserTools
 	 */
 	public static int getIdUserFromLogin(String login)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -402,6 +548,18 @@ public class UserTools
 			System.err.println("Error getIdUser : " + e.getMessage());
 			return -1;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -412,11 +570,12 @@ public class UserTools
 	 */
 	public static boolean addFriend(String idUser, String idFriend)
 	{
+		Connection c = null;
 		try
 		{
 			if(!areFriends(idUser, idFriend))
 			{
-				Connection c = DataBase.getMySQLConnection();
+				c = DataBase.getMySQLConnection();
 				Statement st = c.createStatement();
 				String query = "INSERT INTO friend(id_user, id_friend) VALUES(\""+idUser+"\", \""+idFriend+"\");";
 				int res = st.executeUpdate(query); 
@@ -433,6 +592,18 @@ public class UserTools
 			System.err.println("Error addFriend : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -444,9 +615,10 @@ public class UserTools
 
 	public static boolean removeFriend(String idUser, String idFriend)
 	{
+		Connection c = null;
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "DELETE FROM friend WHERE id_user=\""+idUser+"\" AND id_friend =\""+idFriend+"\";";
 			int res = st.executeUpdate(query); 
@@ -460,7 +632,18 @@ public class UserTools
 			System.err.println("Error RemoveFriend : " + e.getMessage());
 			return false;
 		}
-		
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -470,9 +653,10 @@ public class UserTools
 	 */
 	public static List<Integer> listFriend(String idUser)
 	{
+		Connection c = null;
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
 			ResultSet cursor = st.executeQuery(query);
@@ -492,6 +676,18 @@ public class UserTools
 			System.err.println("Error listFriend : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -501,7 +697,7 @@ public class UserTools
 	 */
 	public static boolean isConnection(String key)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -536,6 +732,18 @@ public class UserTools
 			System.err.println("Error isConnexion : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -545,9 +753,10 @@ public class UserTools
 	 */
 	public static boolean removeConnection(String key)
 	{
+		Connection c = null;
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			
 			String query = "DELETE FROM session WHERE skey=\""+key+"\" ;";
@@ -560,6 +769,18 @@ public class UserTools
 		{
 			System.err.println("Error removeConnecion : " + e.getMessage());
 			return false;
+		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
 		}
 	}
 	
@@ -581,7 +802,7 @@ public class UserTools
 	 */
 	private static boolean isRoot(String key)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -604,6 +825,18 @@ public class UserTools
 			System.err.println("Error isRoot : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -613,9 +846,10 @@ public class UserTools
 	 */
 	public static JSONArray searchUserByLogin(String login)
 	{
+		Connection c = null;
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM user WHERE login LIKE \"%"+login+"%\";";
 			ResultSet cursor = st.executeQuery(query);
@@ -635,6 +869,18 @@ public class UserTools
 			System.err.println("Error User_Search : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -644,9 +890,11 @@ public class UserTools
 	 */
 	public static String listFriendString(String idUser)
 	{
+		
+		Connection c = null;
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\";";
 			ResultSet cursor = st.executeQuery(query);
@@ -661,6 +909,18 @@ public class UserTools
 			System.err.println("Error listFriend string: " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -671,9 +931,10 @@ public class UserTools
 	 */
 	public static boolean areFriends(String idUser, String idFriend)
 	{
+		Connection c = null;
 		try
 		{
-			Connection c = DataBase.getMySQLConnection();
+			c = DataBase.getMySQLConnection();
 			Statement st = c.createStatement();
 			String query = "SELECT * FROM friend WHERE id_user=\""+idUser+"\" AND id_friend=\""+idFriend+"\";";
 			ResultSet cursor = st.executeQuery(query);
@@ -690,6 +951,18 @@ public class UserTools
 			System.err.println("Error areFriend : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -699,7 +972,7 @@ public class UserTools
 	 */
 	public static String getLoginFromId(String id)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -716,6 +989,18 @@ public class UserTools
 			System.err.println("Error getLoginFromId : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -725,7 +1010,7 @@ public class UserTools
 	 */
 	public static String getMailFromId(String id)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -742,6 +1027,18 @@ public class UserTools
 			System.err.println("Error getMailFromId : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -751,7 +1048,7 @@ public class UserTools
 	 */
 	public static String getPassword(String id)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -767,6 +1064,18 @@ public class UserTools
 			System.err.println("Error getPassword : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -777,7 +1086,7 @@ public class UserTools
 	 */
 	public static boolean setNewPwd(String id, String newPwd)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -792,6 +1101,18 @@ public class UserTools
 			System.err.println("Error setNewPwd : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 	
 	/**
@@ -802,7 +1123,7 @@ public class UserTools
 	 */
 	public static boolean setFormerPwd(String id, String formerPwd)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -816,6 +1137,18 @@ public class UserTools
 		{
 			System.err.println("Error setFormerPwd : " + e.getMessage());
 			return false;
+		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
 		}
 	}
 	
@@ -899,7 +1232,7 @@ public class UserTools
 
 	public static HashMap<Integer , String> getAllLogins()
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -920,10 +1253,23 @@ public class UserTools
 			System.err.println("Error getAllLogins : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 
-	public static boolean updateImage(String login, String pathImage) {
-		Connection c;
+	public static boolean updateImage(String login, String pathImage)
+	{
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -938,11 +1284,23 @@ public class UserTools
 			System.err.println("Error updateImage : " + e.getMessage());
 			return false;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 
 	public static String getPathUserFromLogin(String login)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -958,6 +1316,18 @@ public class UserTools
 		{
 			System.err.println("Error getPathFromLogin : " + e.getMessage());
 			return null;
+		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
 		}
 	}
 	
@@ -1017,7 +1387,7 @@ public class UserTools
 	 */
 	private static Double getNbFriend(int idUser)
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -1033,6 +1403,18 @@ public class UserTools
 		{
 			System.err.println("Error getNbFriend : " + e.getMessage());
 			return null;
+		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
 		}
 	}
 
@@ -1053,7 +1435,7 @@ public class UserTools
 	 */
 	private static Double getNbUserCo()
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -1070,6 +1452,18 @@ public class UserTools
 			System.err.println("Error getNbUserCo : " + e.getMessage());
 			return null;
 		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
 	}
 
 	/**
@@ -1078,7 +1472,7 @@ public class UserTools
 	 */
 	private static Double getNbUser()
 	{
-		Connection c;
+		Connection c = null;
 		try 
 		{
 			c = DataBase.getMySQLConnection();
@@ -1094,6 +1488,18 @@ public class UserTools
 		{
 			System.err.println("Error getNbUser : " + e.getMessage());
 			return null;
+		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
 		}
 	}
 }
