@@ -2,13 +2,13 @@
     <header>
         <div id="header">
             <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
-            <div id="connexion">
-                
-            </div>
             <div id="search">
                 <label class="hidden" for="input_search"></label>
                 <input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message"/>
                    <input type="button" value="Search" onclick="doSearch()"/>
+            </div>
+            <div id="connexion">
+                
             </div>
         </div>
     </header>
@@ -59,8 +59,6 @@
         /* Mise en place des suggestions de la barre de recherche */
         function setUpSearchBar()
         {
-        	console.log(env.all_users);
-            console.log(env.users)
             
             $("#input_search").autocomplete({
                 source: env.users
@@ -87,7 +85,6 @@
         function reponseGetLogins(rep)
         {
         	var repD = JSON.parse(rep);
-        	console.log(repD);
             env.all_users = repD.logins;
             if(env.users[0] == undefined){
                 for( var i in env.all_users){

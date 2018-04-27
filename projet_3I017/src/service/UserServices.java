@@ -298,6 +298,10 @@ public class UserServices
 					return ServiceTools.serviceAccepted();
 			}
 		}
+		else
+		{
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_INCORRECT_LOGIN_PASSWORD, Data.CODE_INCORRECT_LOGIN_PASSWORD);
+		}
 		return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
 		
 	}

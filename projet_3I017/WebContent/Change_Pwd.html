@@ -5,11 +5,10 @@
     <div id="main_connexion">
         <form id="mon_form" method="POST" action="javascript:(function (){return;})()">
             <h1>Changement de mot de passe</h1>
-            <label id="error_Inscription" style="color:DarkRed;"></label>
-            <label id="error_different" style="color:DarkRed;"></label>
-            <div class="ids" id="ancien" ><span>Entrez votre ancien mot de passe</span><input type="text" name="ancien" id="ancien_pwd" value =""   /></div>
-            <div class="ids" id="nouveau1" ><span>Entrez votre nouveau mot de passe</span><input type="text" name="nouveau" id="pwd" value =""   /></div>
-            <div class="ids" id="nouveau2" ><span>confirmez votre nouveau mot de passe</span><input type="text" name="nouveau"  id="pwd2"  value ="" /></div>
+            <label id="error_change_mdp" style="color:DarkRed;"></label>
+            <div class="ids" id="ancien" ><span>Entrez votre ancien mot de passe</span><input type="password" name="ancien" id="ancien_pwd" value =""   /></div>
+            <div class="ids" id="nouveau1" ><span>Entrez votre nouveau mot de passe</span><input type="password" name="nouveau" id="pwd" value =""   /></div>
+            <div class="ids" id="nouveau2" ><span>Confirmez votre nouveau mot de passe</span><input type="password" name="nouveau"  id="pwd2"  value ="" /></div>
             <div class="button"><input type="submit" value="Confirmer" onclick="javascript:(function (){if(verif_egalite_pwd()){ mainChangePwd();}})()"/></div>
             <div id="links">
                 <div class="button" style="float:left"><input type="submit" value="Connexion" onclick="javascript:(function (){makeConnexionPanel()})()"/></div>

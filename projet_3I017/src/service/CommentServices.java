@@ -65,7 +65,7 @@ public class CommentServices
 			
 			BasicDBList listeCommentaire = CommentTools.listComment(idMessage);
 			
-			return ServiceTools.serviceAccepted().put("comments", listeCommentaire);
+			return ServiceTools.serviceAccepted().put("comments", listeCommentaire).put("idMessage", idMessage);
 		}
 		catch(JSONException e)
 		{

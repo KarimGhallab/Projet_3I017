@@ -42,13 +42,11 @@ function removeMessage(id){
 	console.log("Je supprime le message : " + id);
 	var query = "message="+id+"&key="+env.key
 	
-	console.log(query);
 	$.ajax({
 	       url: "message/removeMessage",
 	       type: "POST",
 	       data: query ,
 	       success: function(response) {
-	           console.log("success : " + response);
 	           reponseRemoveMessage(response);
 	       },
 	       error: function(jqXHR, textStatus, errorMessage) {
@@ -58,7 +56,6 @@ function removeMessage(id){
 }
 function reponseRemoveMessage(response){
 	var repD = JSON.parse(response);
-	console.log("reponse remove message: " + repD)
 	if(repD.status == "ko"){
 		alert("erreur lors de la suppression du message: "+repD.message);
 	}
@@ -69,7 +66,7 @@ function reponseRemoveMessage(response){
 
 /* Suppression de commentaire*/
 function removeComment(id , idMessage){
-	console.log("Je supprime le commentaire : " + id);
+	console.log("Je supprime le commentaire : " + id + "appartenant au message  : " + idMessage);
 	var query = "idCommentaire="+id+"&key="+env.key+"&idMessage="+idMessage;
 	
 	console.log(query);
@@ -78,7 +75,6 @@ function removeComment(id , idMessage){
 	       type: "POST",
 	       data: query ,
 	       success: function(response) {
-	           console.log("success : " + response);
 	           reponseRemoveComment(response , id);
 	       },
 	       error: function(jqXHR, textStatus, errorMessage) {
@@ -87,12 +83,7 @@ function removeComment(id , idMessage){
 	    });
 }
 function reponseRemoveComment(response , id){
-	console.log("response : ");
-	console.log (response);
-	console.log('id =' + id)
 	var repD = JSON.parse(response);
-	console.log("reponse remove Comment: " );
-	console.log(repD)
 	if(repD.status == "ko"){
 		alert("erreur lors de la suppression du commentaire : "+repD.message);
 		if (!isConnexion(repD))
@@ -189,8 +180,6 @@ function addComment(id){
 
 function reponseAddComment(rep, id)
 {
-	console.log("rep")
-	console.log(rep)
 	var repD = JSON.parse(rep, revival);   
     if (repD.status == "ko")
 	{
@@ -202,11 +191,8 @@ function reponseAddComment(rep, id)
 	}
     else
 	{
-    	console.log("addComment")
-    	console.log(repD);
     	$("#input_comment_"+id).val("");
     	var new_comment = repD.added_comment;
-    	console.log(new_comment);
         env.messages[id].comments.push(new_comment)			// On ajoute le commentaire au message
         
         var el = $("#message_"+id+" .comments");
@@ -257,7 +243,6 @@ function connecte (login, pwd , save)
 function reponseConnexion(rep){
 	var repD = JSON.parse(rep);
     if(repD.status == "ko"){
-    	console.log(repD)
         $("#error_connexion").html("Connexion error : " + repD.message);
     	env.fromId = -1;
     }
@@ -286,9 +271,6 @@ function mainChangePwd(){
 	pwd1 = encodeInput(pwd1);
 	pwd2 = encodeInput(pwd2);
 	
-	console.log(ancien);
-	console.log(pwd1);
-	console.log(pwd2);
 	 $.ajax({
          type: "POST",
          url: "user/changePwd",
@@ -304,13 +286,13 @@ function mainChangePwd(){
 }
 
 function reponseChangePwd(rep){
-	console.log(rep)
 	
 	var repD = JSON.parse(rep);
 	if(repD.status=="ko"){
 		alert("error : "+repD.message);
 	}
 	else{
+		alert("Votre mot de passe à été modifié avec succès !");
 		makeConnexionPanel();
 	}
 }
@@ -328,6 +310,22 @@ function verif_egalite_pwd(){
     }
     else {
     	$("#error_inscription").html("");
+        return true;
+    }
+}
+/* Pour le changement de mot de passe */
+function verif_egalite_pwd(){
+    if( document.getElementById("pwd").value===""||  document.getElementById("pwd2").value==="")
+    {
+    	$("#error_change_mdp").html("Attention, tout les champs doivent etre remplis !!"); 
+        return false;
+    }
+    else if (document.getElementById("pwd").value != document.getElementById("pwd2").value ){
+    	$("#error_change_mdp").html("Attention, deux mot de passe ne correspondent pas"); 
+        return false;
+    }
+    else {
+    	$("#error_change_mdp").html("");
         return true;
     }
 }
@@ -444,7 +442,6 @@ function verif_egalite_mail(){
 function reponseForgottenPwd(rep, mail)
 {
 	var repD = JSON.parse(rep);
-	console.log(repD);
 	if (repD.status == "ko")
 	{
 		$("#dialog").dialog("close");
@@ -553,6 +550,7 @@ function revival(key, value) {
         return new Message(value.id , value.author, value.content , value.comments , value.date);
     }
     else if(value.content != undefined){
+    	console.log(value);
         return new Commentaire(value.id_comment , value.author ,value.content, value.date , value.idMessage);
     }
     if(key == "author") {
@@ -826,9 +824,9 @@ function callbackMainPanel(){
     }
     else
     {   
-        ajout +='<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\''+env.login+'\')})()"/>'
+        ajout += '<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\''+env.login+'\')})()"/>'
         ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>'
-        ajout += '<input type="button" value="Changer Mdp" onclick="javascript:(function (){makeChangePwdPanel()})()"/>';
+        ajout += '<input type="button" value="Changer password" onclick="javascript:(function (){makeChangePwdPanel()})()"/>';
         
         $("#new_msg").focus();
         $("#new_msg").keydown(enterHandlerAddMessage);
@@ -876,6 +874,7 @@ function setUpMessages(id){
 
 function reponseSetUpMessages(rep){
     var repD = JSON.parse(rep, revival);
+    console.log(repD);
     if (!isConnexion(repD))
 	{
 		alert("Vous avez été inactif trop longtemps, vous allez être déconnecté")
@@ -966,7 +965,6 @@ function isConnexion(repD){
 function developpeMessage(id)
 {
     var m = env.messages[id];
-    console.log(m);
     var el = $("#message_"+id+" .comments");
     
     el.html("");						// Au cas ou un nouveau commentaire aurait été écrit et affiché
@@ -975,8 +973,6 @@ function developpeMessage(id)
     {
     	
         var c = m.comments[index];
-        console.log(c.getHTML());
-    	console.log(c);
         el.append(c.getHTML());
     }
 

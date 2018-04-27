@@ -2,10 +2,10 @@
     <header>
        <div id="header">
            <div id="logo" onclick="makeMainPanel()"><img id="logo_img" src="image/logo.png" alt="logo" /><span id="title">Twister</span></div>
-           <div id="connexion_profil"><input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel()})()"/><input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/></div>
            <div id="search"><label class="hidden" for="input_search"></label><input id="input_search" type="text" name="search" placeholder="Rechercher un ami ou un message" autocomplete="on"/>
                <input type="button" value="Search" onclick="doSearch()"/>
            </div>
+           <div id="connexion_profil"><input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel()})()"/><input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/></div>
        </div>
    </header>
  
@@ -52,14 +52,13 @@
      function reponseGetLogins(rep)
      {
      	var repD = JSON.parse(rep);
-     	console.log(repD);
-         env.all_users = repD.logins;
-         if(env.users[0] == undefined){
-             for( var i in env.all_users){
-                 if( env.all_users.hasOwnProperty( i ) ) 
-                     env.users.push(env.all_users[i])   
-             }
-         }	
+        env.all_users = repD.logins;
+        if(env.users[0] == undefined){
+            for( var i in env.all_users){
+                if( env.all_users.hasOwnProperty( i ) ) 
+                    env.users.push(env.all_users[i])   
+            }
+        }	
      }
 </script>
 </div> <!-- Conteneur du profil -->
