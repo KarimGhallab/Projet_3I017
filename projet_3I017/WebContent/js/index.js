@@ -550,6 +550,7 @@ function revival(key, value) {
         return new Message(value.id , value.author, value.content , value.comments , value.date);
     }
     else if(value.content != undefined){
+    	console.log("Commentaire");
     	console.log(value);
         return new Commentaire(value.id_comment , value.author ,value.content, value.date , value.idMessage);
     }

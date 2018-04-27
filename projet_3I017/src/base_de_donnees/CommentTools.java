@@ -39,6 +39,7 @@ public class CommentTools
 		auteur.put("login", UserTools.getLoginFromId(auteurId));
 		comments.put("author",auteur);
 		comments.put("content", commentaire);
+		comments.put("idMessage", idMessage);
 		BasicDBObject content = new BasicDBObject();
 		content.put("comments", comments);
 		
