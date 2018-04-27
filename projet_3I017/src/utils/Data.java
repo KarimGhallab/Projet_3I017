@@ -18,7 +18,6 @@ public abstract class Data
 	//Karim casa
 	public static String FILEPATH = "/home/coach/twister_images/";
 	
-	
 	public static String FILEPATH_ANON = FILEPATH+"anon.png";
 	
 	public static String MAIL_ADDRESS = "twister.socialnetwork@gmail.com";
@@ -61,5 +60,12 @@ public abstract class Data
 	public static String MESSAGE_USER_NOT_FIND= "We cannot find this user.";
 	
 	public static long DUREE_AVANT_DECO = 3600000;		//1 Heure
+	
+	// CLÉS POUR LE DICTIONNAIRE DES STATS
+	public static int CLE_NB_UTIL = 0;
+	public static int CLE_NB_UTIL_CO = 1;
+	public static int CLE_NB_MSG = 2;
+	public static int CLE_NB_FRIEND = 3;
+	public static int CLE_NB_OWNED_MSG = 4;
 
 }

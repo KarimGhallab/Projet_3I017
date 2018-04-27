@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,10 @@ import javax.mail.internet.MimeMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mysql.jdbc.StringUtils;
 
 import utils.Data;
@@ -955,5 +960,140 @@ public class UserTools
 			return null;
 		}
 	}
+	
+	/**
+	 * Renvoie une hashmap contenant les statistiques de l'application.
+	 * @return une hashmap contenant les statistiques de l'application.
+	 */
+	public static HashMap<Integer, Double> listStats(int idUser)
+	{
+		HashMap<Integer, Double> res = new HashMap<Integer, Double>();
+		Double tmp = getNbUser();
+		if (tmp != null)
+			res.put(Data.CLE_NB_UTIL, tmp);
+		
+		tmp = getNbUserCo();
+		if (tmp != null)
+			res.put(Data.CLE_NB_UTIL_CO, tmp);
+		
+		tmp = getNbMsg();
+		if (tmp != null)
+			res.put(Data.CLE_NB_MSG, tmp);
+		
+		if (idUser != -1)
+		{
+			tmp = getNbFriend(idUser);
+			if (tmp != null)
+				res.put(Data.CLE_NB_FRIEND, tmp);
+			
+			tmp = getNbOwnedMsg(idUser);
+			if (tmp != null)
+				res.put(Data.CLE_NB_OWNED_MSG, tmp);
+		}
+		
+		
+		return res;
+	}
 
+	/**
+	 * Retourne le nombre de message posté par l'utilisateur.
+	 * @param idUser L'id de l'utilisateur connecté.
+	 * @return Le nombre de message posté par l'utilisateur.
+	 */
+	private static Double getNbOwnedMsg(int idUser)
+	{
+		DBCollection msg = DataBase.getMongoCollection("Message");
+		
+		BasicDBObject cond = new BasicDBObject();
+		cond.put("user_id", String.valueOf(idUser));
+		
+		return (double) msg.count(cond);
+	}
+
+	/**
+	 * Retourne le nombre d'ami de l'utilisateur connecté.
+	 * @param idUser L'id de l'utilisateur connecté.
+	 * @return Le nombre d'ami de l'utilisateur connecté.
+	 */
+	private static Double getNbFriend(int idUser)
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT count(*) FROM friend where id_user = "+idUser+";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getDouble(1);
+			else
+				return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getNbFriend : " + e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * Retourne le nombre de message présent dans la base de données Mongo.
+	 * @return Le nombre de message présent dans la base de données Mongo.
+	 */
+	private static Double getNbMsg()
+	{
+		DBCollection msg = DataBase.getMongoCollection("Message");
+		
+		return (double) msg.count();
+	}
+
+	/**
+	 * Retourne le nombre d'utilisateur actuellement connecté.
+	 * @return Le nombre d'utilisateur actuellement connecté.
+	 */
+	private static Double getNbUserCo()
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT count(*) FROM session ;";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getDouble(1);
+			else
+				return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getNbUserCo : " + e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * Retourne le nombre total d'utilisateur inscrit à l'application.
+	 * @return Le nombre total d'utilisateur inscrit à l'application.
+	 */
+	private static Double getNbUser()
+	{
+		Connection c;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT count(*) FROM user ;";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getDouble(1);
+			else
+				return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getNbUser : " + e.getMessage());
+			return null;
+		}
+	}
 }

@@ -575,7 +575,6 @@ function init()
     env = new Object();
     env.login="";
     env.key = "abcd";
-    env.idUser = 1;
     env.fromId = -1;
     env.follows = {};
     env.containers = {};
@@ -794,7 +793,7 @@ function reponseProfil(rep, login){
 	    	
 	    	env.fromMessage = 0;
 	    	setUpMessages(repD.idUser);
-	    	
+	    	setUpStats();
 	    });
 	}
 	else
@@ -837,6 +836,7 @@ function callbackMainPanel(){
     $("#connexion").html(ajout);
     env.fromMessage = 0;
     setUpMessages();
+    setUpStats();
     
 }
 
@@ -907,6 +907,35 @@ function displayMessages(messages){
         $("#messages").append(messages[index].getHTML());
         $("#input_comment_"+messages[index].id).keydown(enterHandlerAddComment);
     }
+}
+
+function setUpStats(){
+	console.log("mise en place des stats");
+	$.ajax({
+        type: "POST",
+        url: "user/listStats",
+        data: "idUser="+env.fromId,
+        dataType:"text",
+        success: function(rep){
+            reponseSetUpStats(rep);
+        },
+        error: function(XHR , textStatus , errorThrown){
+            alert(textStatus);
+        } 
+    })
+	
+}
+
+function reponseSetUpStats(rep){
+	var repD = JSON.parse(rep);
+	console.log(repD)
+	var nbUser = repD.stats.nb_user;
+	var nbUserCo = repD.stats.nb_user_co;
+	var nbMsg = repD.stats.nb_msg;
+	if (env.fromId != -1){
+		var nbFriend = repD.stats.nb_friend;
+		var nbMsg = repD.stats.nb_msg;
+	}
 }
 
 function getFriendList(id){

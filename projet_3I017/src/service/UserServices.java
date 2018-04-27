@@ -256,8 +256,7 @@ public class UserServices
 	 * @return L'id de l'utilisateur.
 	 */
 	public static JSONObject getProfilFromLogin(String login)
-	{
-		
+	{	
 			if(login == null)
 				return ErrorJSON.defaultJsonError(Data.MESSAGE_MISSING_PARAMETERS, Data.CODE_MISSING_PARAMETERS);
 			int id = UserTools.getIdUserFromLogin(login);
@@ -304,6 +303,34 @@ public class UserServices
 		}
 		return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
 		
+	}
+
+	/**
+	 * Service pour lister les stats de l'application
+	 * @return Un JSON avec les stats de l'application
+	 */
+	public static JSONObject listStats(String idUser)
+	{
+		int idUserInt = Integer.parseInt(idUser);
+		HashMap<Integer, Double> stats = base_de_donnees.UserTools.listStats(idUserInt);
+		JSONObject json = new JSONObject();
+		try
+		{
+			json.put("nb_user", stats.get(Data.CLE_NB_UTIL));
+			json.put("nb_user_co", stats.get(Data.CLE_NB_UTIL_CO));
+			json.put("nb_msg", stats.get(Data.CLE_NB_MSG));
+			if(!idUser.equals("-1"))
+			{
+				json.put("nb_friend", stats.get(Data.CLE_NB_FRIEND));
+				json.put("nb_owned_msg", stats.get(Data.CLE_NB_OWNED_MSG));
+			}
+			return ServiceTools.serviceAccepted().put("stats", json);
+		}
+		catch (JSONException e)
+		{
+			System.err.println("Error listStats : " + e.getMessage());
+			return ErrorJSON.defaultJsonError(Data.MESSAGE_ERROR_JSON, Data.CODE_ERROR_JSON);
+		}
 	}
 
 }

@@ -36,6 +36,10 @@
 		<servlet-name>changePwd</servlet-name>
 		<servlet-class>servlet.user.ChangePwd</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>listStats</servlet-name>
+		<servlet-class>servlet.user.ListStats</servlet-class>
+	</servlet>
 
 	<!-- Servlet Friend -->  
 	<servlet> 
@@ -111,6 +115,10 @@
 	<servlet-mapping>
 		<servlet-name>changePwd</servlet-name>
 		<url-pattern>/user/changePwd</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>listStats</servlet-name>
+		<url-pattern>/user/listStats</url-pattern>
 	</servlet-mapping>
 
 	<!-- Servlet-mapping Friend -->
