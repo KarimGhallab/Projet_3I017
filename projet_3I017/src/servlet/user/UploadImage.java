@@ -22,34 +22,28 @@ import utils.ErrorJSON;
 
 public class UploadImage extends HttpServlet
 {
-   
-
-   
-   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, java.io.IOException {
-   
-      // Check that we have a file upload request
-    
+   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException
+   {    
       response.setContentType("text/plain");
       java.io.PrintWriter out = response.getWriter( );
       
       DiskFileItemFactory factory = new DiskFileItemFactory();
       
-      // Create a new file upload handler
-
-      
       ServletFileUpload upload = new ServletFileUpload(factory);
-      try {
+      try
+      {
 		List<FileItem> fileItems = upload.parseRequest(request);
 		out.println(service.UserServices.uploadImage(fileItems).toString());
 	
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		out.println(ErrorJSON.defaultJsonError(e.getMessage(), Data.CODE_ERROR_DB));
-	}
       }
+      catch (Exception e)
+      {
+    	  out.println(ErrorJSON.defaultJsonError(e.getMessage(), Data.CODE_ERROR_DB));
+      }
+   }
       
-      public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException {
+      public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException
+      {
         doGet(request, response);
       }
 }

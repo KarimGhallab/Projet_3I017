@@ -937,13 +937,12 @@ function reponseSetUpStats(rep){
 		console.log("error set up stats : " + repD.message);
 	}
 	else{
+		console.log("Liste stats");
+		console.log(repD);
 		$("#stat").html("");
-		$("#stat").append(statToHTML("Nombre d'utilisateur", repD.stats.nb_user));
-		$("#stat").append(statToHTML("Nombre d'utilisateur connecté", repD.stats.nb_user_co));
-		$("#stat").append(statToHTML("Nombre de message publié", repD.stats.nb_msg));
-		if (env.fromId != -1){
-			$("#stat").append(statToHTML("Nombre personne que vous suivez" ,repD.stats.nb_friend));
-			$("#stat").append(statToHTML("Nombre de message que vous avez publié", repD.stats.nb_owned_msg));
+		
+		for (var index in repD.stats){
+			$("#stat").append(statToHTML(repD.stats[index].nomStat, repD.stats[index].valeurStat));
 		}
 	}
 }

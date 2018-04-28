@@ -59,6 +59,9 @@ public abstract class Data
 	public static int CODE_USER_NOT_FIND = 1009;
 	public static String MESSAGE_USER_NOT_FIND= "We cannot find this user.";
 	
+	public static int CODE_INCORRECT_FORMER_PWD = 1010;
+	public static String MESSAGE_INCORRECT_FORMER_PWD = "Incorrect former password.";
+	
 	public static long DUREE_AVANT_DECO = 3600000;		//1 Heure
 	
 	// CLÉS POUR LE DICTIONNAIRE DES STATS

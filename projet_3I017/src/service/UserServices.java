@@ -315,17 +315,35 @@ public class UserServices
 		int idUserInt = Integer.parseInt(idUser);
 		HashMap<Integer, Double> stats = base_de_donnees.UserTools.listStats(idUserInt);
 		JSONObject json = new JSONObject();
+		JSONArray statsArray = new JSONArray();
 		try
 		{
-			json.put("nb_user", stats.get(Data.CLE_NB_UTIL));
-			json.put("nb_user_co", stats.get(Data.CLE_NB_UTIL_CO));
-			json.put("nb_msg", stats.get(Data.CLE_NB_MSG));
+			json.put("nomStat", "Nombre d'utilisateur");
+			json.put("valeurStat", stats.get(Data.CLE_NB_UTIL));
+			statsArray.put(json);
+			
+			json = new JSONObject();
+			json.put("nomStat", "Nombre d'utilisateur connecté");
+			json.put("valeurStat", stats.get(Data.CLE_NB_UTIL_CO));
+			statsArray.put(json);
+			
+			json = new JSONObject();
+			json.put("nomStat", "Nombre de message publié");
+			json.put("valeurStat", stats.get(Data.CLE_NB_MSG));
+			statsArray.put(json);
 			if(!idUser.equals("-1"))
 			{
-				json.put("nb_friend", stats.get(Data.CLE_NB_FRIEND));
-				json.put("nb_owned_msg", stats.get(Data.CLE_NB_OWNED_MSG));
+				json = new JSONObject();
+				json.put("nomStat", "Nombre de personne que vous suivez");
+				json.put("valeurStat", stats.get(Data.CLE_NB_FRIEND));
+				statsArray.put(json);
+				
+				json = new JSONObject();
+				json.put("nomStat", "Nombre de message que vous avez publié");
+				json.put("valeurStat", stats.get(Data.CLE_NB_OWNED_MSG));
+				statsArray.put(json);
 			}
-			return ServiceTools.serviceAccepted().put("stats", json);
+			return ServiceTools.serviceAccepted().put("stats", statsArray);
 		}
 		catch (JSONException e)
 		{
