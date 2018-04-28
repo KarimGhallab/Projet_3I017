@@ -62,7 +62,7 @@ public abstract class Data
 	public static int CODE_INCORRECT_FORMER_PWD = 1010;
 	public static String MESSAGE_INCORRECT_FORMER_PWD = "Incorrect former password.";
 	
-	public static long DUREE_AVANT_DECO = 3600000;		//1 Heure
+	public static long DUREE_AVANT_DECO = 600000;		//1 Heure
 	
 	// CLÉS POUR LE DICTIONNAIRE DES STATS
 	public static int CLE_NB_UTIL = 0;

@@ -95,7 +95,7 @@ input[type=submit]:hover
 
 #friends{
 	position: absolute;
-	transform: translate( -50%, +150%);
+	transform: translate( -50%, +160%);
 	display: inline-block;
 	left:90%;
 	height:36px;
@@ -168,6 +168,7 @@ input[type=submit]:hover
     margin:auto;  
     background-color: rgba(255, 255, 255, 0.7);
     position: relative;
+    transform: translate(8% , 0%);
 }
 
 #profil{
@@ -251,6 +252,24 @@ font-size: 3em;
 	margin-top: 40px;
 	margin-bottom: 50px;
 }
+
+#followers{
+	display: inline-block;
+	background: #2883c9;
+	margin: auto;
+	position: absolute;
+	transform: translate(180% , 94%);
+	width: 150px;
+	height: 56px;
+}
+
+#followers_span{
+	position: absolute;
+	transform: translate(15% , 73%);
+	color: white;
+	font-size: 19px;
+}
+
 
 #stat{
 	position: fixed;

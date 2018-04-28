@@ -750,21 +750,23 @@ function mainProfil(login, id, path){
     $("#principale").append(toAddButton);
     
     // gestion de la fonctionnalité follow/unfollow
-    ajout="";
+    ajout="<div id=\"followers\"><span id=\"followers_span\">"+ env.followsId[env.fromId].length +" Abonnements </span></div>";
     if(env.fromId!=-1){
         if(id!=env.fromId){
             if(env.followsId[env.fromId] == [] ){
-                ajout = "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
+                ajout += "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
             }
             else if(env.followsId[env.fromId].includes(id)){
-                ajout = "<input type=\"button\" id=\"friends\" value = \"Se désabonner\" onclick=\"removeFriend("+id+")\" >";
+                ajout += "<input type=\"button\" id=\"friends\" value = \"Se désabonner\" onclick=\"removeFriend("+id+")\" >";
             }
             else{                
-                ajout = "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
+                ajout += "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
             }
         }   
-        $("#nouveau_msg").html("<input id=\"new_msg\" type=\"text\" name=\"new_message\" placeholder=\"Ecrire un nouveau message\"/><input type=\"button\" onclick=\"mainAddMessage()\" value=\"Publier\"/>");
-        $("#new_msg").keydown(enterHandlerAddMessage);
+        else{
+		        $("#nouveau_msg").html("<input id=\"new_msg\" type=\"text\" name=\"new_message\" placeholder=\"Ecrire un nouveau message\"/><input type=\"button\" onclick=\"mainAddMessage()\" value=\"Publier\"/>");
+		        $("#new_msg").keydown(enterHandlerAddMessage);
+        }
         document.getElementById("profil").innerHTML += ajout;
     }
     
