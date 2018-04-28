@@ -143,8 +143,10 @@ input[type=submit]:hover
 {
 	position: absolute;
 	top :22%;
-	width: 98%;
+	width: 75%;
 	margin-bottom: 50px;
+	width: 75%;
+	transform: translate(9.7%,0%);
 }
 
 .msg
@@ -173,9 +175,9 @@ input[type=submit]:hover
 
 .auteur
 {
-	font-style:italic;
     color: #0c6cd7;
     cursor:pointer;
+    font-size: 25px;
 }
 
 .date
@@ -211,7 +213,7 @@ input[type=submit]:hover
 #stat{
 	position: fixed;
 	left:8px;
-	width: 15%;
+	width: 16%;
 	height: 100%;
 	background-color: rgba(255, 255, 255, 0.7);
 	border-radius: 10px;

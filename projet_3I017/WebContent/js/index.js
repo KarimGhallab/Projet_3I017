@@ -742,6 +742,7 @@ function mainProfil(login, id, path){
     
     $("#input_search").focus();
     $("#input_search").keydown(enterHandlerSearch);
+    
     $("#connexion_profil").html(ajout);
     
     // Gestion du bouton pour raffraichir les messages
@@ -761,21 +762,9 @@ function mainProfil(login, id, path){
             else{                
                 ajout = "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
             }
-        }
-        // On affiche la liste des amis
-        else{
-        	if (env.followsLogin[env.fromId].length > 0){
-        		$("#liste_follow").html("Personnes que vous suivez : ");
-        		for(var index in env.followsLogin[env.fromId]){
-            		$("#liste_follow").append(friendLoginToHTML(env.followsLogin[env.fromId][index]));
-            		$("#liste_follow").append(", ");
-            	}
-        		$("#liste_follow").html( $("#liste_follow").html().slice(0, -1) );
-    		}
-        	else{
-        		$("#liste_follow").html("Vous ne suivez actuellement personne");
-        	}
-        }
+        }   
+        $("#nouveau_msg").html("<input id=\"new_msg\" type=\"text\" name=\"new_message\" placeholder=\"Ecrire un nouveau message\"/><input type=\"button\" onclick=\"mainAddMessage()\" value=\"Publier\"/>");
+        $("#new_msg").keydown(enterHandlerAddMessage);
         document.getElementById("profil").innerHTML += ajout;
     }
     
@@ -795,7 +784,6 @@ function reponseProfil(rep, login){
 		$("#changableLink").attr("href", "css/Profil.css");
 	    $("#container").load("Profil.html", function (){
 	    	mainProfil(login, repD.idUser, repD.path);
-	    	
 	    	env.fromMessage = 0;
 	    	setUpMessages(repD.idUser);
 	    	setUpStats();
@@ -808,7 +796,7 @@ function reponseProfil(rep, login){
 }
 
 function friendLoginToHTML(login){
-	return "<span onclick=\"makeProfilPanel('"+login+"')\" class=\"auteur\">"+login+"</span>";
+	return "<div><span style=\" font-size:20px\" onclick=\"makeProfilPanel('"+login+"')\" class=\"auteur\">"+login+"</span></div>";
 }
 
 function makeConnexionPanel(){
@@ -940,9 +928,27 @@ function reponseSetUpStats(rep){
 		console.log("Liste stats");
 		console.log(repD);
 		$("#stat").html("");
+		$("#stat").append("<div><span style=\"font-size:21px ; font-style: oblique; text-decoration: underline;\">Statistiques :</span></div>")
 		
 		for (var index in repD.stats){
 			$("#stat").append(statToHTML(repD.stats[index].nomStat, repD.stats[index].valeurStat));
+		}
+		
+		$("#stat").append("<hr>");
+		
+		if(env.fromId != -1){
+			// On affiche la liste des amis
+        	if (env.followsLogin[env.fromId].length > 0){
+        		$("#stat").append("<div><span style=\" font-size : 22px; font-style: oblique; text-decoration: underline;\">Personnes que vous suivez : </span></div>");
+        		for(var index in env.followsLogin[env.fromId]){
+            		$("#stat").append(friendLoginToHTML(env.followsLogin[env.fromId][index]));
+            		//$("#liste_follow").append(", ");
+            	}
+        		$("#stat").html( $("#stat").html().slice(0, -1) );
+    		}
+        	else{
+        		$("#stat").html("Vous ne suivez actuellement personne");
+        	}
 		}
 	}
 }

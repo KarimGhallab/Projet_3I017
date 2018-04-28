@@ -128,9 +128,9 @@ input[type=submit]:hover
 
 .auteur
 {
-	font-style:italic;
-    color: #0c6cd7;
+	 color: #0c6cd7;
     cursor:pointer;
+    font-size: 25px;
 }
 
 .date
@@ -255,7 +255,7 @@ font-size: 3em;
 #stat{
 	position: fixed;
 	left:8px;
-	width: 15%;
+	width: 16%;
 	height: 100%;
 	background-color: rgba(255, 255, 255, 0.7);
 	border-radius: 10px;
@@ -272,6 +272,7 @@ font-size: 3em;
 
 #nouveau_msg
 {
+	padding-top: 10px;
 	text-align: center;
 }
 

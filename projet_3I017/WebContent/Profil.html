@@ -16,9 +16,8 @@
        			<img  id="profil_img" src="image/profil.png"  alt="profil"/>
        			<label id="login_profil"> </label>
    			</div>
-   			<div style="padding:5px;" id="liste_follow"></div>
-   			
 		</div>
+		<div id="nouveau_msg"></div>
 		<div id="messages"></div>
 		
 	</div>
@@ -33,6 +32,7 @@
 		           source: env.users
 		       });
 	    }
+   		
    	 function initializeAllLogins()
      {
          $.ajax({
