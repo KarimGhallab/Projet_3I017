@@ -328,7 +328,7 @@ public class UserServices
 			statsArray.put(json);
 			
 			json = new JSONObject();
-			json.put("nomStat", "Nombre de message publie");
+			json.put("nomStat", "Nombre de message publié");
 			json.put("valeurStat", stats.get(Data.CLE_NB_MSG));
 			statsArray.put(json);
 			if(!idUser.equals("-1"))
@@ -339,7 +339,7 @@ public class UserServices
 				statsArray.put(json);
 				
 				json = new JSONObject();
-				json.put("nomStat", "Nombre de message que vous avez publie");
+				json.put("nomStat", "Nombre de message que vous avez publié");
 				json.put("valeurStat", stats.get(Data.CLE_NB_OWNED_MSG));
 				statsArray.put(json);
 			}

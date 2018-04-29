@@ -254,13 +254,14 @@ font-size: 3em;
 }
 
 #followers{
-	display: inline-block;
-	background: #2883c9;
-	margin: auto;
-	position: absolute;
-	transform: translate(180% , 94%);
-	width: 150px;
-	height: 56px;
+    background: #2883c9;
+    margin: auto;
+    position: absolute;
+    transform: translate(0% , -50%);
+    width: 150px;
+    height: 56px;
+    right: 0px;
+    top: 50%;
 }
 
 #followers_span{
