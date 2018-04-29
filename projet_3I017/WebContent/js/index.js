@@ -615,6 +615,12 @@ function setVirtualdb()
 ////////////////////////////////////
 // Fonctions de création de panel //
 ////////////////////////////////////
+function makeAbout(){
+	 $("#container").load("About.html");
+	 $("#changableLink").attr("href", "css/About.css")    
+}
+
+
 function makeChangePwdPanel(){
 	 $("#container").load("Change_Pwd.html", function(){
 	        $("#ancien_pwd").focus();
@@ -750,9 +756,11 @@ function mainProfil(login, id, path){
     $("#principale").append(toAddButton);
     
     // gestion de la fonctionnalité follow/unfollow
-    ajout="<div id=\"followers\"><span id=\"followers_span\">"+ env.followsId[env.fromId].length +" Abonnements </span></div>";
+    
+    ajout="";
     if(env.fromId!=-1){
         if(id!=env.fromId){
+        	
             if(env.followsId[env.fromId] == [] ){
                 ajout += "<input type=\"button\" id=\"friends\" value = \"S'abonner\" onclick=\"addFriend("+id+")\" >";
             }
@@ -764,6 +772,8 @@ function mainProfil(login, id, path){
             }
         }   
         else{
+        		var s = ajout;
+        		ajout  = "<div id=\"followers\"><span id=\"followers_span\">"+ env.followsId[env.fromId].length +" Abonnements </span></div>" + s;
 		        $("#nouveau_msg").html("<input id=\"new_msg\" type=\"text\" name=\"new_message\" placeholder=\"Ecrire un nouveau message\"/><input type=\"button\" onclick=\"mainAddMessage()\" value=\"Publier\"/>");
 		        $("#new_msg").keydown(enterHandlerAddMessage);
         }

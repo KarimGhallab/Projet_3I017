@@ -1,0 +1,99 @@
+html
+{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body
+{
+    background-image: url("../image/background_blue.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+
+/* L'header */
+#header{
+    border-radius: 3px;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100%;
+	position: relative;
+	margin-bottom: 10px;
+	display: inline-flex;
+}
+
+#title{
+	position: absolute;
+	left:70px;
+	transform: translate(0,-50%);
+	top: 50%;
+	font-family: Georgia;
+	font-size: 3em;
+}
+
+#logo{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+#logo_img{
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+#zaki{
+	float : left;
+}
+
+
+#karim{
+	float : right;
+}
+
+#div_about{
+	width: 55%;
+    margin: 0 auto;
+}
+
+.elem_center{
+	cursor: pointer;
+	margin: 0 auto;
+	width: 79%;
+}
+/* Le footer */
+footer
+{
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+#logo_github:hover
+{
+    fill:#fff;
+}
+
+.lien_github
+{
+    float: right;
+	cursor: pointer;
+	margin-bottom: 12px;
+	margin-left: 20px;
+}
+
+#about{
+	width: 28px;
+	height: 28px;
+	transform: translate(-18%,-6%);
+	padding-left: 14px;
+}
+
+#about_img{
+	width: inherit;
+	height: inherit;
+}
