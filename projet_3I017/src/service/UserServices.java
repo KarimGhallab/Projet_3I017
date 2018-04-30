@@ -342,6 +342,12 @@ public class UserServices
 				json.put("nomStat", "Nombre de message que vous avez publié");
 				json.put("valeurStat", stats.get(Data.CLE_NB_OWNED_MSG));
 				statsArray.put(json);
+				
+				json = new JSONObject();
+				json.put("nomStat", "Nombre de Followers");
+				json.put("valeurStat", stats.get(Data.CLE_NB_FOLLOWERS));
+				statsArray.put(json);
+				
 			}
 			return ServiceTools.serviceAccepted().put("stats", statsArray);
 		}

@@ -1393,6 +1393,11 @@ public class UserTools
 			tmp = getNbOwnedMsg(idUser);
 			if (tmp != null)
 				res.put(Data.CLE_NB_OWNED_MSG, tmp);
+			
+			tmp = getNbFollowers(idUser);
+			if (tmp != null)
+				res.put(Data.CLE_NB_FOLLOWERS, tmp);
+			
 		}
 		
 		
@@ -1521,6 +1526,40 @@ public class UserTools
 		catch (Exception e) 
 		{
 			System.err.println("Error getNbUser : " + e.getMessage());
+			return null;
+		}
+		finally
+		{
+			try
+			{
+				if ((!DBStatic.mysql_pooling) && (c != null))
+					c.close();
+			}
+			catch(SQLException e)
+			{
+				System.err.println("Error closing connexion : " + e.getMessage());
+			}
+		}
+	}
+	
+	
+	private static Double getNbFollowers(int idUser)
+	{
+		Connection c = null;
+		try 
+		{
+			c = DataBase.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT count(*) FROM friend where id_friend = "+idUser+";";
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next())
+				return rs.getDouble(1);
+			else
+				return null;
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Error getNbFriend : " + e.getMessage());
 			return null;
 		}
 		finally

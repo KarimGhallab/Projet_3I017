@@ -70,5 +70,6 @@ public abstract class Data
 	public static int CLE_NB_MSG = 2;
 	public static int CLE_NB_FRIEND = 3;
 	public static int CLE_NB_OWNED_MSG = 4;
+	public static int CLE_NB_FOLLOWERS = 5;
 
 }

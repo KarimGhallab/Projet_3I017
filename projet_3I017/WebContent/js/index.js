@@ -584,7 +584,9 @@ function init()
     env.nbMessage = 8;
     env.keepListingMessage = true;
     env.refreshing = false;
-    
+    env.stats={};
+    env.following=0;
+    env.publications =0;
     // Dictionnaire pour la conversion de la date
     env.monthConversion = {"Jan": "Janvier", "Feb": "Fevrier", "Mar": "Mars", "Apr": "Avril", "May": "May", "Jun": "Juin", "Jul": "Juillet", "Aug": "Aout", "Sep": "Septembre", "Oct": "Octobre", "Nov": "Novembre", "Dec": "Decembre"};
     env.dayConversion = {"Mon": "Lundi", "Tue": "Mardi", "Wed": "Mercredi", "Thu": "Jeudi", "Fri": "Vendredi", "Sat": "Samedi", "Sun": "Dimanche"};
@@ -773,7 +775,7 @@ function mainProfil(login, id, path){
         }   
         else{
         		var s = ajout;
-        		ajout  = "<div id=\"followers\"><span id=\"followers_span\">"+ env.followsId[env.fromId].length +" Abonnements </span></div>" + s;
+        		ajout  = "<div id=\"posts\"><span id=\"followers_span\">"+ env.publications +" publications </span></div><div id=\"following\"><span id=\"following_span\">"+ env.followers +" Abonnés </span></div><div id=\"followers\"><span id=\"followers_span\">"+ env.followsId[env.fromId].length +" Abonnements </span></div>" + s;
 		        $("#nouveau_msg").html("<input id=\"new_msg\" type=\"text\" name=\"new_message\" placeholder=\"Ecrire un nouveau message\"/><input type=\"button\" onclick=\"mainAddMessage()\" value=\"Publier\"/>");
 		        $("#new_msg").keydown(enterHandlerAddMessage);
         }
@@ -795,10 +797,12 @@ function reponseProfil(rep, login){
 	{
 		$("#changableLink").attr("href", "css/Profil.css");
 	    $("#container").load("Profil.html", function (){
+	    	setUpStats();
+	    	env.following = repD.following;
 	    	mainProfil(login, repD.idUser, repD.path);
 	    	env.fromMessage = 0;
 	    	setUpMessages(repD.idUser);
-	    	setUpStats();
+	    	
 	    });
 	}
 	else
@@ -939,6 +943,7 @@ function reponseSetUpStats(rep){
 	else{
 		console.log("Liste stats");
 		console.log(repD);
+		env.stats = repD.stats ;
 		$("#stat").html("");
 		$("#stat").append("<div><span style=\"font-size:21px ; font-style: oblique; text-decoration: underline;\">Statistiques :</span></div>")
 		
@@ -961,6 +966,9 @@ function reponseSetUpStats(rep){
         	else{
         		$("#stat").html("Vous ne suivez actuellement personne");
         	}
+        	
+        	env.publications = repD.stats[4].valeurStat;
+        	env.followers = repD.stats[5].valeurStat;
 		}
 	}
 }

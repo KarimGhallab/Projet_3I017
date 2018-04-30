@@ -259,8 +259,8 @@ font-size: 3em;
     position: absolute;
     width: 150px;
     height: 56px;
-    right: 0px;
-    top: 35%;
+    right: 3px;
+    top: 2%;
 }
 
 #followers_span{
@@ -268,6 +268,33 @@ font-size: 3em;
 	transform: translate(15% , 73%);
 	color: white;
 	font-size: 19px;
+}
+
+#following_span{
+position: absolute;
+transform: translate(40% , 73%);
+color: white;
+font-size: 19px;
+}
+
+#following{
+	 background: #2883c9;
+    margin: auto;
+    position: absolute;
+    width: 150px;
+    height: 56px;
+    right: 156px;
+    top: 2%;
+}
+
+#posts{
+	 background: #2883c9;
+    margin: auto;
+    position: absolute;
+    width: 150px;
+    height: 56px;
+    right: 309px;
+    top: 2%;
 }
 
 
