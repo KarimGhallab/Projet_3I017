@@ -79,7 +79,7 @@ input[type=submit]
 {
     border: none;
     padding: 8px 15px 8px 15px;
-    background: #0099ff;
+    background: #2883c9;
     color: #fff;
     border-radius: 5px;
     transition: 0.5s;
@@ -128,7 +128,7 @@ input[type=submit]:hover
 
 .auteur
 {
-	color: #8bbef8;
+	color: #348aed;
     cursor:pointer;
     font-size: 25px;
 }
@@ -156,9 +156,12 @@ input[type=submit]:hover
 	margin-top:5px;
 }
 
+
 .comments{
     width: 95%;
     margin: auto;
+    background: white;
+	padding: 8px;
 }
 
 #infos_user{	

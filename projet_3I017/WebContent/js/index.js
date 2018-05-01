@@ -749,7 +749,7 @@ function mainProfil(login, id, path){
     else
     {   
         ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\''+env.login+'\')})()"/>';
-        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>';
+        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){if(confirm(\'etes vous sur de vouloir vous dèconnecter !\')){mainDeconnexion()}})()"/>';
     }
     
     $("#input_search").focus();
@@ -844,7 +844,7 @@ function callbackMainPanel(){
     else
     {   
         ajout += '<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\''+env.login+'\')})()"/>'
-        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){mainDeconnexion()})()"/>'
+        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){if(confirm(\'etes vous sur de vouloir vous dèconnecter !\')){mainDeconnexion()}})()"/>'
         ajout += '<input type="button" value="Changer password" onclick="javascript:(function (){makeChangePwdPanel()})()"/>';
         
         $("#new_msg").focus();
@@ -1061,6 +1061,7 @@ function isConnexion(repD){
 
 function developpeMessage(id)
 {
+
     var m = env.messages[id];
     var el = $("#message_"+id+" .comments");
     
@@ -1072,7 +1073,8 @@ function developpeMessage(id)
         var c = m.comments[index];
         el.append(c.getHTML());
     }
-
+    
+    
     $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer; position: relative ; left: 80%;\" class=\"expand\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage('"+id+"')\"/>")
     $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments")
     $("#message_"+id+" .nbr_comments" ).attr("onclick", "replieMessage(\""+id+"\")");
@@ -1080,6 +1082,7 @@ function developpeMessage(id)
 
 function replieMessage(id)
 {
+	
     var el = $("#message_"+id+" .comments");
     el.html("");
     $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer;position: relative ; left: 80%;\" class=\"expand\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
