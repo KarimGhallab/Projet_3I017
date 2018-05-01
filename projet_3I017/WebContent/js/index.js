@@ -966,7 +966,7 @@ function reponseSetUpStats(rep){
         		$("#stat").html( $("#stat").html().slice(0, -1) );
     		}
         	else{
-        		$("#stat").html("Vous ne suivez actuellement personne");
+        		$("#stat").append("Vous ne suivez actuellement personne");
         	}
         	
         	env.publications = repD.stats[4].valeurStat;
