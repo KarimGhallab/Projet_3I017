@@ -5,10 +5,8 @@ html
 }
 body
 {
-	background-image: url("../image/background_blue.jpg");
-	background-size: cover;
-	background-attachment: fixed;
 	height:80%;
+	background: #92b8d8;
 }
 
 .sticky
@@ -35,7 +33,7 @@ input[type=text], input[type=password], input[type=email]
     outline: none;
 }
 
-input[type=text]:focus
+input[type=text]
 {
     border: 2px solid #007acc;
     border-radius: 4px;
@@ -95,7 +93,7 @@ input[type=submit]:hover
 
 #friends{
 	position: absolute;
-    transform: translate( -50%, 50%);
+   	transform: translate( -167%, 102%);
     height: 36px;
     top: 43px;
     right: 0px;
@@ -106,10 +104,12 @@ input[type=submit]:hover
 {
 	width:50%;
     margin:auto;  
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255);
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 10px;
+    border-radius: 4px;
+	box-shadow: 1px 1px 3px #999;
 }
 
 .text_msg
@@ -128,7 +128,7 @@ input[type=submit]:hover
 
 .auteur
 {
-	 color: #0c6cd7;
+	color: #8bbef8;
     cursor:pointer;
     font-size: 25px;
 }
@@ -145,14 +145,12 @@ input[type=submit]:hover
     border-radius: 5px;
     transition: 0.5s;
     outline: none;
-}
-
-.input_comment:focus
-{
     border: 2px solid #007acc;
     border-radius: 4px;
     box-shadow:1px 1px 3px #999;
 }
+
+
 
 .new_comment{
 	margin-top:5px;
@@ -164,11 +162,13 @@ input[type=submit]:hover
 }
 
 #infos_user{	
-	width:65%;
-    margin:auto;  
-    background-color: rgba(255, 255, 255, 0.7);
-    position: relative;
-    transform: translate(8% , 0%);
+	width: 65%;
+	margin: auto;
+	background-color: #3b6184;
+	position: relative;
+	transform: translate(8% , 0%);
+	border-radius: 4px;
+	box-shadow: 2px 2px 3px #544f4f;
 }
 
 #profil{
@@ -185,20 +185,24 @@ input[type=submit]:hover
 #login_profil{
 	position: absolute;
 	left:4em;
-transform: translate(0,-50%);
-top: 50%;
-font-family: Georgia;
-font-size: 3em;
+	transform: translate(0,-50%);
+	top: 50%;
+	font-family: Georgia;
+	font-size: 3em;
+	color:white;
  }
 
 /* Le header */
 #header{
     border-radius: 3px;
-	background-color: rgba(255, 255, 255, 0.7);
+	background-color: rgba(255, 255, 255);
 	width: 100%;
 	position: relative;
 	margin-bottom: 10px;
 	display: inline-flex;
+	border: 2px solid #007acc;
+	border-radius: 4px;
+	box-shadow: 1px 1px 3px #999;
 }
 
 #title{
@@ -257,44 +261,55 @@ font-size: 3em;
     background: #2883c9;
     margin: auto;
     position: absolute;
-    width: 150px;
-    height: 56px;
+    width: 132px;
+	height: 47px;
     right: 3px;
     top: 2%;
+    border-radius:3px;
 }
 
 #followers_span{
 	position: absolute;
-	transform: translate(15% , 73%);
+	transform: translate(29% , 50%);
+	color: white;
+	font-size: 19px;
+}
+
+
+#post_span{
+	position: absolute;
+	transform: translate(12% , 50%);
 	color: white;
 	font-size: 19px;
 }
 
 #following_span{
-position: absolute;
-transform: translate(40% , 73%);
-color: white;
-font-size: 19px;
+	position: absolute;
+	transform: translate(6% , 50%);
+	color: white;
+	font-size: 19px;
 }
 
 #following{
-	 background: #2883c9;
+	background: #2883c9;
     margin: auto;
     position: absolute;
-    width: 150px;
-    height: 56px;
+    width: 132px;
+	height: 47px;
     right: 156px;
     top: 2%;
+    border-radius:3px;
 }
 
 #posts{
-	 background: #2883c9;
+	background: #2883c9;
     margin: auto;
     position: absolute;
-    width: 150px;
-    height: 56px;
+    width: 132px;
+	height: 47px;
     right: 309px;
     top: 2%;
+    border-radius:3px;
 }
 
 
@@ -303,9 +318,9 @@ font-size: 19px;
 	left:8px;
 	width: 16%;
 	height: 100%;
-	background-color: rgba(255, 255, 255, 0.7);
-	border-radius: 10px;
+	background: #3b6184;
     padding: 5px;
+    color: white;
 }
 
 #new_msg{

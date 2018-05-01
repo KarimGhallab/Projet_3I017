@@ -5,10 +5,8 @@ html
 }
 body
 {
-	background-image: url("../image/background_blue.jpg");
-	background-size: cover;
-	background-attachment: fixed;
 	height:80%;
+	background: #92b8d8;
 }
 
 .sticky
@@ -30,7 +28,7 @@ input[type=text], input[type=password], input[type=email]
     outline: none;
 }
 
-input[type=text]:focus
+input[type=text]
 {
     border: 2px solid #007acc;
     border-radius: 4px;
@@ -86,11 +84,14 @@ input[type=submit]:hover
 /* Le header */
 #header{
     border-radius: 3px;
-	background-color: rgba(255, 255, 255, 0.7);
+	background-color: rgba(255, 255, 255);
 	width: 100%;
 	position: relative;
 	margin-bottom: 10px;
 	display: inline-flex;
+	border: 2px solid #007acc;
+	border-radius: 4px;
+	box-shadow: 1px 1px 3px #999;
 }
 
 #title{
@@ -153,10 +154,12 @@ input[type=submit]:hover
 {
 	width:50%;
     margin:auto;  
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255);
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 10px;
+    border-radius: 4px;
+	box-shadow: 1px 1px 3px #999;
 }
 
 .text_msg
@@ -192,14 +195,12 @@ input[type=submit]:hover
     border-radius: 5px;
     transition: 0.5s;
     outline: none;
-}
-
-.input_comment:focus
-{
-    border: 2px solid #007acc;
+     border: 2px solid #007acc;
     border-radius: 4px;
     box-shadow:1px 1px 3px #999;
 }
+
+
 
 .new_comment{
 	margin-top:5px;
@@ -215,9 +216,9 @@ input[type=submit]:hover
 	left:8px;
 	width: 16%;
 	height: 100%;
-	background-color: rgba(255, 255, 255, 0.7);
-	border-radius: 10px;
+	background: #2c3f50;
     padding: 5px;
+    color: white;
 }
 
 #new_msg{

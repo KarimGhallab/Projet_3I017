@@ -585,8 +585,9 @@ function init()
     env.keepListingMessage = true;
     env.refreshing = false;
     env.stats={};
-    env.following=0;
+    env.followings=0;
     env.publications =0;
+    env.followers = 0;
     // Dictionnaire pour la conversion de la date
     env.monthConversion = {"Jan": "Janvier", "Feb": "Fevrier", "Mar": "Mars", "Apr": "Avril", "May": "May", "Jun": "Juin", "Jul": "Juillet", "Aug": "Aout", "Sep": "Septembre", "Oct": "Octobre", "Nov": "Novembre", "Dec": "Decembre"};
     env.dayConversion = {"Mon": "Lundi", "Tue": "Mardi", "Wed": "Mercredi", "Thu": "Jeudi", "Fri": "Vendredi", "Sat": "Samedi", "Sun": "Dimanche"};
@@ -733,8 +734,9 @@ function reponseRemoveFriend(rep , id){
     }
 }
 function mainProfil(login, id, path){
-	$("#login_profil").html(login);
 	
+	
+	$("#login_profil").html(login);
 	// Affiche des boutons dans le header
     var ajout = "";
     if (env.fromId == -1)
@@ -759,7 +761,7 @@ function mainProfil(login, id, path){
     
     // gestion de la fonctionnalité follow/unfollow
     
-    ajout="";
+    var ajout="";
     if(env.fromId!=-1){
         if(id!=env.fromId){
         	
@@ -774,11 +776,13 @@ function mainProfil(login, id, path){
             }
         }   
         else{
-        		var s = ajout;
-        		ajout  = "<div id=\"posts\"><span id=\"followers_span\">"+ env.publications +" publications </span></div><div id=\"following\"><span id=\"following_span\">"+ env.followers +" Abonnés </span></div><div id=\"followers\"><span id=\"followers_span\">"+ env.followsId[env.fromId].length +" Abonnements </span></div>" + s;
+        		
 		        $("#nouveau_msg").html("<input id=\"new_msg\" type=\"text\" name=\"new_message\" placeholder=\"Ecrire un nouveau message\"/><input type=\"button\" onclick=\"mainAddMessage()\" value=\"Publier\"/>");
 		        $("#new_msg").keydown(enterHandlerAddMessage);
         }
+        
+        var s = ajout;
+		ajout  = "<div id=\"posts\"><span id=\"post_span\">"+ env.publications +" publications </span></div><div id=\"following\"><span id=\"followers_span\">"+ env.followers +" Abonnés </span></div><div id=\"followers\"><span id=\"following_span\">"+ env.followings +" Abonnements </span></div>" + s;
         document.getElementById("profil").innerHTML += ajout;
     }
     
@@ -792,14 +796,15 @@ function mainProfil(login, id, path){
 }
 
 function reponseProfil(rep, login){
+	
 	var repD = JSON.parse(rep);
 	if(repD.status == "ok")
-	{
+	{	
+		
 		$("#changableLink").attr("href", "css/Profil.css");
 	    $("#container").load("Profil.html", function (){
-	    	setUpStats();
-	    	env.following = repD.following;
-	    	mainProfil(login, repD.idUser, repD.path);
+	    	
+	    	setUpStats(repD.idUser , login , repD.path);
 	    	env.fromMessage = 0;
 	    	setUpMessages(repD.idUser);
 	    	
@@ -919,23 +924,30 @@ function displayMessages(messages){
     }
 }
 
-function setUpStats(){
+function setUpStats(id , login , path){
+	console.log("l'id est :" + id);
+	if(id == undefined){
+		id=env.fromId;
+	}
+	
 	$.ajax({
         type: "POST",
         url: "user/listStats",
-        data: "idUser="+env.fromId,
+        data: "idUser="+id,
         dataType:"text",
+        asynch:false,
         success: function(rep){
-            reponseSetUpStats(rep);
+            reponseSetUpStats(rep , id , login , path);
         },
         error: function(XHR , textStatus , errorThrown){
             alert(textStatus);
         } 
     })
 	
+	
 }
 
-function reponseSetUpStats(rep){
+function reponseSetUpStats(rep , id , login , path){
 	var repD = JSON.parse(rep);
 	if (repD.status == "ko"){
 		console.log("error set up stats : " + repD.message);
@@ -943,12 +955,20 @@ function reponseSetUpStats(rep){
 	else{
 		console.log("Liste stats");
 		console.log(repD);
+		
 		env.stats = repD.stats ;
 		$("#stat").html("");
 		$("#stat").append("<div><span style=\"font-size:21px ; font-style: oblique; text-decoration: underline;\">Statistiques :</span></div>")
 		
-		for (var index in repD.stats){
-			$("#stat").append(statToHTML(repD.stats[index].nomStat, repD.stats[index].valeurStat));
+		if(id == env.fromId){
+			for (var index in repD.stats){
+				$("#stat").append(statToHTML(repD.stats[index].nomStat, repD.stats[index].valeurStat));
+			}
+		}
+		else{
+			for(var i=0 ; i < 3 ; i++ ){
+				$("#stat").append(statToHTML(repD.stats[i].nomStat, repD.stats[i].valeurStat));
+			}
 		}
 		
 		$("#stat").append("<hr>");
@@ -959,7 +979,7 @@ function reponseSetUpStats(rep){
         		$("#stat").append("<div><span style=\" font-size : 22px; font-style: oblique; text-decoration: underline;\">Personnes que vous suivez : </span></div>");
         		for(var index in env.followsLogin[env.fromId]){
             		$("#stat").append(friendLoginToHTML(env.followsLogin[env.fromId][index]));
-            		//$("#liste_follow").append(", ");
+            		
             	}
         		$("#stat").html( $("#stat").html().slice(0, -1) );
     		}
@@ -967,8 +987,14 @@ function reponseSetUpStats(rep){
         		$("#stat").html("Vous ne suivez actuellement personne");
         	}
         	
+        	env.followings = repD.stats[3].valeurStat;
         	env.publications = repD.stats[4].valeurStat;
         	env.followers = repD.stats[5].valeurStat;
+        	
+		}
+		
+		if(path != undefined && login!=undefined){
+			mainProfil(login , id , path);
 		}
 	}
 }
