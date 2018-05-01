@@ -195,6 +195,8 @@ function reponseAddComment(rep, id)
         var el = $("#message_"+id+" .comments");
         el.append(new_comment.getHTML());
         $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments");
+        console.log($("#message_"+id+" .nbr_comments" ));
+        console.log(env.messages[id].comments.length+" Comments");
         refreshReact(env.fromId);
 	}
 }
@@ -501,7 +503,7 @@ Message.prototype.getHTML = function() {
         	}
         }
         s += "</div>" +
-        "<label  style=\"color: #0c6cd7;\" class=\"nbr_comments\">"+env.messages[this.id].comments.length+" Comments</label><img class='expand' style='cursor:pointer; position: relative ; left: 80%;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
+        "<label  style=\"color: #0c6cd7;cursor:pointer;\" class=\"nbr_comments\" onclick='developpeMessage(\""+this.id+"\")'\">"+env.messages[this.id].comments.length+" Comments</label><img class='expand' style='cursor:pointer; position: relative ; left: 80%;' src='image/plus_logo.png' onclick='developpeMessage(\""+this.id+"\")'/>"+
         "<div class = \"comments\">"+
         "</div>" +
     "</div>";
@@ -1047,6 +1049,7 @@ function developpeMessage(id)
 
     $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer; position: relative ; left: 80%;\" class=\"expand\" src=\"image/minus_logo.png\" onclick=\"javascript:replieMessage('"+id+"')\"/>")
     $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments")
+    $("#message_"+id+" .nbr_comments" ).attr("onclick", "replieMessage(\""+id+"\")");
 }
 
 function replieMessage(id)
@@ -1054,7 +1057,8 @@ function replieMessage(id)
     var el = $("#message_"+id+" .comments");
     el.html("");
     $("#message_"+id+" .expand" ).replaceWith("<img style=\"cursor:pointer;position: relative ; left: 80%;\" class=\"expand\" src=\"image/plus_logo.png\" onclick=\"javascript:developpeMessage('"+id+"')\"/>")
-     $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments")
+    $("#message_"+id+" .nbr_comments" ).html(env.messages[id].comments.length+" Comments");
+    $("#message_"+id+" .nbr_comments" ).attr("onclick", "developpeMessage(\""+id+"\")");
 }
 
 function refreshMessages(id){
