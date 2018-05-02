@@ -93,9 +93,8 @@ input[type=submit]:hover
 
 #friends{
 	position: absolute;
-   	transform: translate( -167%, 102%);
     height: 36px;
-    top: 43px;
+    top: 50%;
     right: 0px;
 }
 

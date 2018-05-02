@@ -749,7 +749,7 @@ function mainProfil(login, id, path){
     else
     {   
         ajout += '<input type="button" value="Profil" onclick="javascript:(function (){makeProfilPanel(\''+env.login+'\')})()"/>';
-        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){if(confirm(\'etes vous sur de vouloir vous dèconnecter !\')){mainDeconnexion()}})()"/>';
+        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){if(confirm(\'Êtes-vous sur de vouloir vous déconnecter ?\')){mainDeconnexion()}})()"/>';
     }
     
     $("#input_search").focus();
@@ -844,7 +844,7 @@ function callbackMainPanel(){
     else
     {   
         ajout += '<input type="button" value="Profil" onclick="javascript:(function(){makeProfilPanel(\''+env.login+'\')})()"/>'
-        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){if(confirm(\'etes vous sur de vouloir vous dèconnecter !\')){mainDeconnexion()}})()"/>'
+        ajout += '<input type="button" value="Déconnexion" onclick="javascript:(function (){if(confirm(\'Êtes-vous sur de vouloir vous déconnecter ?\')){mainDeconnexion()}})()"/>'
         ajout += '<input type="button" value="Changer password" onclick="javascript:(function (){makeChangePwdPanel()})()"/>';
         
         $("#new_msg").focus();
