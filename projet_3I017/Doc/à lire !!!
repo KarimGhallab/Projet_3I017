@@ -1,0 +1,6 @@
+commande de creation de la bd Mongo:
+
+-> use ghallab_fodil
+
+-> db.createCollection("Message")
+

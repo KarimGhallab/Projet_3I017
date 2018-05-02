@@ -148,6 +148,7 @@ input[type=submit]:hover
     border: 2px solid #007acc;
     border-radius: 4px;
     box-shadow:1px 1px 3px #999;
+    width: 26em;
 }
 
 
@@ -260,16 +261,6 @@ input[type=submit]:hover
 	margin-bottom: 50px;
 }
 
-#followers{
-    background: #2883c9;
-    margin: auto;
-    position: absolute;
-    width: 132px;
-	height: 47px;
-    right: 3px;
-    top: 2%;
-    border-radius:3px;
-}
 
 #followers_span{
 	position: absolute;
@@ -293,13 +284,24 @@ input[type=submit]:hover
 	font-size: 19px;
 }
 
+#followers{
+    background: #2883c9;
+    margin: auto;
+    position: absolute;
+    width: 158px;
+	height: 47px;
+    right: 3px;
+    top: 2%;
+    border-radius:3px;
+}
+
 #following{
 	background: #2883c9;
     margin: auto;
     position: absolute;
-    width: 132px;
+    width: 158px;
 	height: 47px;
-    right: 156px;
+    right: 165px;
     top: 2%;
     border-radius:3px;
 }
@@ -308,9 +310,9 @@ input[type=submit]:hover
 	background: #2883c9;
     margin: auto;
     position: absolute;
-    width: 132px;
+    width: 158px;
 	height: 47px;
-    right: 309px;
+    right: 327px;
     top: 2%;
     border-radius:3px;
 }
@@ -319,7 +321,7 @@ input[type=submit]:hover
 #stat{
 	position: fixed;
 	left:8px;
-	width: 16%;
+	width: 17%;
 	height: 100%;
 	background: #3b6184;
     padding: 5px;

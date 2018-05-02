@@ -198,6 +198,7 @@ input[type=submit]:hover
      border: 2px solid #007acc;
     border-radius: 4px;
     box-shadow:1px 1px 3px #999;
+    width: 26em;
 }
 
 
@@ -217,7 +218,7 @@ input[type=submit]:hover
 #stat{
 	position: fixed;
 	left:8px;
-	width: 16%;
+	width: 17%;
 	height: 100%;
 	background: #2c3f50;
     padding: 5px;
