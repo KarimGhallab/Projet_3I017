@@ -5,7 +5,7 @@ Ce projet réalisé dans le cadre du cours de "Technologies du Web" consiste en 
 ## Composants du projet
 ### Partie Serveur
 
-Le serveur du projet à été programmé via J2EE et déployé sur Tomcat
+La programmation du server s'est faite avec JEE et les tests ont été efféctués sur un serveur Tomcat 9
 
 ### Partie Client
 
