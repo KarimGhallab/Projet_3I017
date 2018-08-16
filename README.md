@@ -15,7 +15,7 @@ La partie client du site à été réalisée avec HTML5/CSS3 et JavaScript
 
 ![Twister](doc/twister.png)
 
-## Authors
+## Auteurs
 
 * **Zaki Fodil** (https://github.com/ZakiFodil)
 * **Karim Ghallab** (https://github.com/KarimGhallab)
