@@ -18,4 +18,4 @@ La partie client du site à été réalisée avec HTML5/CSS3 et JavaScript
 ## Authors
 
 * **Zaki Fodil** (https://github.com/ZakiFodil)
-* **Karim Ghallab** (https://github.com/PaulMorgon)
+* **Karim Ghallab** (https://github.com/KarimGhallab)
